@@ -21,11 +21,11 @@ const Header = () => {
                 <IconButton>
                     <DarkModeIcon />
                 </IconButton>
-                <IconButton>
-                    <NotificationsIcon />
+                <IconButton href='/map-creation'>
+                    <MapIcon />
                 </IconButton>
                 <IconButton>
-                    <MapIcon />
+                    <NotificationsIcon />
                 </IconButton>
                 <IconButton>
                     <Avatar alt="Richard McKenna" src="" />
