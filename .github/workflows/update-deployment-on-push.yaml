@@ -56,7 +56,7 @@ jobs:
                       IdentityFile ~/.ssh/staging.key
                       StrictHostKeyChecking no
                     END
-                    ssh staging 'cd mint-maps/build-1/build-1 && git pull origin main'
+                    ssh staging 'cd mint-maps/build-2 && git pull origin main'
               env:
                   SSH_USER: ${{ secrets.USERNAME }}
                   SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -79,7 +79,7 @@ jobs:
                       IdentityFile ~/.ssh/staging.key
                       StrictHostKeyChecking no
                     END
-                    ssh staging 'cd mint-maps/build-1/build-1 && npm install'
+                    ssh staging 'cd mint-maps/build-2 && npm install'
               env:
                   SSH_USER: ${{ secrets.USERNAME }}
                   SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -102,7 +102,7 @@ jobs:
                       IdentityFile ~/.ssh/staging.key
                       StrictHostKeyChecking no
                     END
-                    ssh staging 'cd mint-maps/build-1/build-1 && npx cypress run'
+                    ssh staging 'cd mint-maps/build-2 && npx cypress run'
 
               env:
                   SSH_USER: ${{ secrets.USERNAME }}
@@ -125,7 +125,7 @@ jobs:
                       IdentityFile ~/.ssh/staging.key
                       StrictHostKeyChecking no
                     END
-                  ssh staging 'npx jest'
+                  ssh staging 'cd mint-maps/build-2 && npx jest'
 
               env:
                   SSH_USER: ${{ secrets.USERNAME }}
@@ -149,7 +149,7 @@ jobs:
                       IdentityFile ~/.ssh/staging.key
                       StrictHostKeyChecking no
                     END
-                  ssh staging 'cd mint-maps/build-1/build-1 && npm run build'
+                  ssh staging 'cd mint-maps/build-2 && npm run build'
 
               env:
                   SSH_USER: ${{ secrets.USERNAME }}
