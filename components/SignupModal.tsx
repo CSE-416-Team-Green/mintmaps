@@ -10,21 +10,19 @@ import {
     Button,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
-
 import styles from "@/styles/login.module.css";
-import LoginButton from "./LoginButton";
 import Link from "next/link";
 import GoogleSignInButton from "./GoogleSigninButton";
+import SignupButton from "./SignupButton";
 
 interface componentProps {
     setIsSigningUp: (isSigningUp: Boolean) => void;
 }
 
-const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
-    const handleSignUpClick = () => {
-        setIsSigningUp(true);
+const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
+    const handleLoginClick = () => {
+        setIsSigningUp(false);
     };
-
     return (
         <Grid
             container
@@ -35,7 +33,14 @@ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
         >
             <Grid item xs="auto">
                 <TextField
-                    sx={{ width: 300, mt: 15 }}
+                    sx={{ width: 300, mt: 5 }}
+                    label="Email"
+                    variant="standard"
+                />
+            </Grid>
+            <Grid item xs="auto">
+                <TextField
+                    sx={{ width: 300 }}
                     label="Username"
                     variant="standard"
                 />
@@ -57,17 +62,25 @@ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
                     }}
                 />
             </Grid>
-            <Grid item>
-                <Link
-                    className={styles.linkText}
-                    href="/"
-                    onClick={handleSignUpClick}
-                >
-                    Forgot Your Password?
-                </Link>
+            <Grid item xs="auto">
+                <TextField
+                    label="Confirm Password"
+                    type="password"
+                    variant="standard"
+                    sx={{ width: 300 }}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton>
+                                    <Visibility />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
             </Grid>
             <Grid item>
-                <LoginButton />
+                <SignupButton />
             </Grid>
             <Grid item>
                 <Divider sx={{ width: 300 }}>
@@ -85,10 +98,16 @@ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
                     alignItems="center"
                 >
                     <Grid item>
-                        <Typography variant="caption"> No Account?</Typography>
+                        <Typography variant="caption">
+                            {" "}
+                            Already have an account?
+                        </Typography>
                     </Grid>
                     <Grid item>
-                        <Button onClick={handleSignUpClick}> Sign Up</Button>
+                        <Button sx={{}} size="small" onClick={handleLoginClick}>
+                            {" "}
+                            Sign in
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>
@@ -96,4 +115,4 @@ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
     );
 };
 
-export default LoginModal;
+export default SignUpModal;

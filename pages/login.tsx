@@ -2,9 +2,12 @@ import Header from "@/components/Header";
 import LoginModal from "@/components/LoginModal";
 import LogoLarge from "@/components/LogoLarge";
 import styles from "@/styles/login.module.css";
+import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
+import SignUpModal from "@/components/SignupModal";
 
 export default function Login() {
+    const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
     return (
         <>
             <Grid
@@ -53,7 +56,11 @@ export default function Login() {
                         </Grid>
                         <Grid item sx={{ flexGrow: 1, mt: 5 }}>
                             <Container className={styles.grey} sx={{}}>
-                                <LoginModal />
+                                {isSigningUp ? (
+                                    <SignUpModal setIsSigningUp={setIsSigningUp} />
+                                ) : (
+                                    <LoginModal setIsSigningUp={setIsSigningUp} />
+                                )}
                             </Container>
                         </Grid>
                     </Grid>
