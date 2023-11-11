@@ -7,7 +7,7 @@ on:
     pull_request:
     branches:
       - main
-    types: [opened, closed]
+    types: [closed]
 
 jobs:
     checkout-repo:
