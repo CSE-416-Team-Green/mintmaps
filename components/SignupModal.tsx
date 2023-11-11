@@ -47,7 +47,7 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
             </Grid>
             <Grid item xs="auto">
                 <TextField
-                    label="Passsword"
+                    label="Password"
                     type="password"
                     variant="standard"
                     sx={{ width: 300 }}
