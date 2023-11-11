@@ -49,8 +49,8 @@ export default function MapUpload() {
                     <Chip label="Public" />
                 </Box>
                 <Box>
-                    <Button>Back</Button>
-                    <Button variant='contained'>Upload</Button>
+                    <Button href='/map-editing'>Back</Button>
+                    <Button variant='contained' href='/home'>Upload</Button>
                 </Box>
             </Box>
         </div>

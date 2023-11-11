@@ -10,12 +10,14 @@ import InputMap from '@/components/InputMap';
 import InputMapType from '@/components/InputMapType';
 import InputTitleTags from '@/components/InputTitleTags';
 import MapCreateLoading from '@/components/MapCreateLoading';
+import { useRouter } from 'next/navigation';
 
 const steps = ['Upload/Choose preset', 'Map type', 'Description'];
 
 export default function MapCreation() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
+    const router = useRouter();
 
     const isStepOptional = (step: number) => {
         return false;
@@ -34,6 +36,12 @@ export default function MapCreation() {
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
+
+        if(activeStep === steps.length - 1) {
+            setTimeout(() => {
+                router.push("/map-editing");
+            }, 1000);
+        }
     };
 
     const handleBack = () => {
@@ -51,10 +59,6 @@ export default function MapCreation() {
             newSkipped.add(activeStep);
             return newSkipped;
         });
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
     };
 
     return (
