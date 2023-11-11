@@ -1,5 +1,6 @@
 import Home from "@/pages/home";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Login from "./login";
 
 export default function App() {
     const theme = createTheme({
@@ -12,7 +13,7 @@ export default function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Home />
+            <Home/>
         </ThemeProvider>
     );
 }
