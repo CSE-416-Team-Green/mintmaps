@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.aboutText {
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.footerText {
+    font-size: 25px;
+    top: 15vh;
+    position:relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.grey {
+    background-color: #f1f1f1;
+    height: 100vh;
+}
+
+.linkText {
+    color: #27ae60;
+}
