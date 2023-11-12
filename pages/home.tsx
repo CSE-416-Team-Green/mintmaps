@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
@@ -22,7 +23,7 @@ export default function Home() {
                 <Container className={styles.grey}>
                     <Grid container direction={"column"} alignItems={"center"} justifyContent={"center"} >
                         <div className={styles.helpText}>
-                            home screen!!!!!!!
+                            <MapPreview />
                         </div>
                     </Grid>
                 </Container>
