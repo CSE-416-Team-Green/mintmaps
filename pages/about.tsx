@@ -37,7 +37,7 @@ export default function About() {
                             Ready to join us? <></>
                             <Link
                                 className={styles.linkText}
-                                href="/create"
+                                href="/login"
                             >
                                 Create an account
                             </Link> 

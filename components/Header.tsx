@@ -27,8 +27,8 @@ const Header = () => {
                 <IconButton>
                     <NotificationsIcon />
                 </IconButton>
-                <IconButton>
-                    <Avatar alt="Richard McKenna" src="" />
+                <IconButton href='/login'>
+                    <Avatar alt="Richard McKenna" src=""  />
                 </IconButton>
             </div>
         </div>
