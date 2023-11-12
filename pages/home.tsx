@@ -20,14 +20,92 @@ export default function Home() {
                 <Grid item sx={{ flexGrow: 1 }}>
                     <Header />
                 </Grid>
-                <Container className={styles.grey}>
-                    <Grid container direction={"column"} alignItems={"center"} justifyContent={"center"} >
-                        <div className={styles.helpText}>
-                            <MapPreview />
-                        </div>
-                    </Grid>
+                <Container>
+                    <div className={styles.homeText}>
+                        Featured
+                    </div>
+                    <div className={styles.homeBox}>
+                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className={styles.homeText} >
+                        Following
+                    </div>
+                    <div className={styles.homeBox}>
+                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className={styles.homeText}>
+                        Recently Uploaded
+                    </div>
+                    <div className={styles.homeBox}>
+                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                        </Grid>
+                    </div>
                 </Container>
+                
             </Grid>
+            <br />
+            <br />
+            <br />
+            <br />
         </>
     );
 }

@@ -12,7 +12,7 @@ const MapPreview = () => {
         <div >
             <Grid container sx={{width:300, height:230}} justifyContent="left" alignItems={"center"} spacing={0.5} rowSpacing={0.2}>
                 <Grid item xs={12}>
-                    <Container component={"img"} src={"/bi-choropleth-preview.png"} sx={{width:300, height:150, float:'left'}}></Container>
+                    <Container component={"img"} src={"/heatmap-preview.png"} sx={{width:300, height:150, float:'left'}}></Container>
                 </Grid>
                 <Grid item xs={1} > 
                 </Grid>
