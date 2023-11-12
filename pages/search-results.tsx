@@ -22,13 +22,10 @@ export default function SearchResults() {
                 </Grid>
                 <Container>
                     <div className={styles.homeText}>
-                        Results (32)
+                        Results (31)
                     </div>
                     <div className={styles.resultsBox}>
                         <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
                             <Grid item xs={3}>
                                 <MapPreview />
                             </Grid>
