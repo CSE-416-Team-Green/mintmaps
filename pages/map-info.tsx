@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
-import { Container, Grid, Typography, Box, IconButton, Button} from "@mui/material";
+import { Container, Grid, Typography, Box, IconButton, Button, TextField} from "@mui/material";
 import styles from '@/styles/about.module.css';
 import Link from "next/link";
 import dynamic from 'next/dynamic';
@@ -13,6 +13,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
 import Avatar from '@mui/material/Avatar';
+import InputAdornment from '@mui/material/InputAdornment';
+import SortIcon from '@mui/icons-material/Sort';
 
 export default function MapInfo() {
     const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
@@ -126,15 +128,192 @@ export default function MapInfo() {
                             </Grid>
                         </Grid>
 
-                        <Grid item xs={12} sx={{paddingTop: "30px"}}>
+                        <Grid item xs={12} sx={{paddingTop: "30px", paddingBottom: "30px"}}>
                             Description of the current map.
                         </Grid>
+
+                        <Grid item xs={.75}>
+                            Tag 1  
+                        </Grid>
+                        <Grid item xs={.75}>
+                            Tag 2 
+                        </Grid>
+                        <Grid item xs={.75}>
+                            Tag 3 
+                        </Grid>
+                        <Grid item xs={.75} sx={{paddingBottom: "20px"}}>
+                            Tag 4  
+                        </Grid>
+                        <Grid item xs={9}>
+                        </Grid>
+
+                        <Grid item xs={0.5}>
+                            <IconButton href="/user-profile">
+                                <Avatar />  
+                            </IconButton>    
+                        </Grid>
+                        <Grid item xs={10}>
+                            <TextField
+                                fullWidth
+                                size='small'
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">
+                                    </InputAdornment>,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={1.5} sx={{paddingLeft:"5px"}}>
+                            <Button sx={{ height:40, width: 120, fontSize:"12px"}} variant="contained">
+                                        COMMENT
+                            </Button>
+                        </Grid>
+
+                        <Grid item xs={2} sx={{fontSize: "25px", paddingBottom: "10px", paddingTop: "4px"}}>
+                            3 Comments
+                        </Grid>
+                        <Grid item xs={0.5} sx={{fontSize: "25px", paddingBottom: "10px", paddingTop: "4px"}}>
+                            <SortIcon />
+                        </Grid>
+                        <Grid item xs={9.5} sx={{fontSize: "25px", paddingBottom: "10px", paddingTop: "4px"}}>
+                            Sort By
+                        </Grid>
+
+                        <Grid item xs={0.5} sx={{paddingTop:"10px"}}>
+                            <IconButton href="/user-profile">
+                                <Avatar />  
+                            </IconButton>    
+                        </Grid>
+                        <Grid item xs={11.5} sx={{paddingTop:"10px"}}>
+                            <Grid
+                                container
+                                direction={"row"}
+                                sx={{ width: "100%", height: "100%"}}
+                                justifyContent="left"
+                                alignItems={"left"}
+                            >
+                                <Grid item xs={1} sx={{}}>
+                                    Username
+                                </Grid>
+                                <Grid item xs={11} sx={{fontSize:"12px", paddingTop:"4px"}}>
+                                    2 days ago
+                                </Grid>
+
+                                <Grid item xs={12} sx={{paddingBottom:"5px", paddingTop:"5px"}}>
+                                    This map is very interesting! I learned a lot!
+                                </Grid>
+
+                                <Grid item xs={.25}>
+                                    <Box sx={{float:"right", paddingRight:"10px"}}>
+                                        25
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <ThumbUpIcon />
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <Box sx={{float:"right", paddingRight:"10px"}}>
+                                        2
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <ThumbDownIcon /> 
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <Grid item xs={0.5} sx={{paddingTop:"10px"}}>
+                            <IconButton href="/user-profile">
+                                <Avatar />  
+                            </IconButton>    
+                        </Grid>
+                        <Grid item xs={11.5} sx={{paddingTop:"10px"}}>
+                            <Grid
+                                container
+                                direction={"row"}
+                                sx={{ width: "100%", height: "100%"}}
+                                justifyContent="left"
+                                alignItems={"left"}
+                            >
+                                <Grid item xs={1} sx={{}}>
+                                    Username
+                                </Grid>
+                                <Grid item xs={11} sx={{fontSize:"12px", paddingTop:"4px"}}>
+                                    2 days ago
+                                </Grid>
+
+                                <Grid item xs={12} sx={{paddingBottom:"5px", paddingTop:"5px"}}>
+                                    This map is very interesting! I learned a lot!
+                                </Grid>
+
+                                <Grid item xs={.25}>
+                                    <Box sx={{float:"right", paddingRight:"10px"}}>
+                                        25
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <ThumbUpIcon />
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <Box sx={{float:"right", paddingRight:"10px"}}>
+                                        2
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <ThumbDownIcon /> 
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <Grid item xs={0.5} sx={{paddingTop:"10px"}}>
+                            <IconButton href="/user-profile">
+                                <Avatar />  
+                            </IconButton>    
+                        </Grid>
+                        <Grid item xs={11.5} sx={{paddingTop:"10px"}}> 
+                            <Grid
+                                container
+                                direction={"row"}
+                                sx={{ width: "100%", height: "100%"}}
+                                justifyContent="left"
+                                alignItems={"left"}
+                            >
+                                <Grid item xs={1} sx={{}}>
+                                    Username
+                                </Grid>
+                                <Grid item xs={11} sx={{fontSize:"12px", paddingTop:"4px"}}>
+                                    2 days ago
+                                </Grid>
+
+                                <Grid item xs={12} sx={{paddingBottom:"5px", paddingTop:"5px"}}>
+                                    This map is very interesting! I learned a lot!
+                                </Grid>
+
+                                <Grid item xs={.25}>
+                                    <Box sx={{float:"right", paddingRight:"10px"}}>
+                                        25
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <ThumbUpIcon />
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <Box sx={{float:"right", paddingRight:"10px"}}>
+                                        2
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={.25}>
+                                    <ThumbDownIcon /> 
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
                     </Grid>
                 </Grid>
                 <Grid item xs={3}>
                     <Box sx={{paddingLeft:"20px", paddingBottom:"5px"}}>
                         Reccomended
                     </Box>
+                    <MapPreview />
                     <MapPreview />
                     <MapPreview />
                     <MapPreview />
