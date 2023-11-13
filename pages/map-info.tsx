@@ -2,10 +2,17 @@ import Header from "@/components/Header";
 import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
-import { Container, Grid, Typography, Box} from "@mui/material";
+import { Container, Grid, Typography, Box, IconButton, Button} from "@mui/material";
 import styles from '@/styles/about.module.css';
 import Link from "next/link";
 import dynamic from 'next/dynamic';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DownloadIcon from '@mui/icons-material/Download';
+import ForkRightIcon from '@mui/icons-material/ForkRight';
+import ShareIcon from '@mui/icons-material/Share';
+import Avatar from '@mui/material/Avatar';
 
 export default function MapInfo() {
     const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
@@ -41,45 +48,92 @@ export default function MapInfo() {
                             </Box>
                         </Grid>
 
-                        <Grid item xs={9}>
-                            Title
+                        <Grid item xs={9} sx={{fontSize: "25px", paddingBottom: "10px", paddingTop: "4px"}}>
+                            Map Title
                         </Grid>
-                        <Grid item xs={1}>
+                        <Grid item xs={1} sx={{paddingTop: "12px"}}>
                             200 Views
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} sx={{paddingTop: "12px"}}>
                             Uploaded 2 Weeks Ago
                         </Grid>
                         
                         <Grid item xs={0.5}>
-                            pfp
+                            <IconButton href="/user-profile">
+                                <Avatar />  
+                            </IconButton>    
                         </Grid>
                         <Grid item xs={8}>
-                            name,followers,follow button
+                            <Grid
+                                container
+                                direction={"row"}
+                                sx={{ width: "100%", height: "100%"}}
+                                justifyContent="left"
+                                alignItems={"left"}
+                            >
+                                <Grid item xs={1.25}>
+                                    Username
+                                </Grid>
+                                <Grid item xs={10.75}>
+                                    <Button sx={{ height:25, width: 80, fontSize:"10px"}} variant="contained">
+                                        Follow
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={3} sx={{fontSize: "10px"}}>
+                                    32 Followers
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={1.5}>
-                            likes,dislikes
+                        <Grid item xs={.25}>
+                            25
                         </Grid>
+                        <Grid item xs={.25}>
+                            <ThumbUpIcon />
+                        </Grid>
+                        <Grid item xs={.25}>
+                            2
+                        </Grid>
+                        <Grid item xs={.25}>
+                            <ThumbDownIcon /> 
+                        </Grid>
+                        <Grid item xs={0.5}></Grid>
                         <Grid item xs={2}>
-                            social buttons
+                            <Grid
+                                container
+                                direction={"row"}
+                                sx={{ width: "100%", height: "100%"}}
+                                justifyContent="left"
+                                alignItems={"left"}
+                            >
+                                <Grid item xs={3}>
+                                    <BookmarkIcon></BookmarkIcon>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <DownloadIcon></DownloadIcon>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <ForkRightIcon></ForkRightIcon>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <ShareIcon></ShareIcon>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={2.5} />
 
-                        <Grid item xs={12}>
-                            description
+                        <Grid item xs={12} sx={{paddingTop: "30px"}}>
+                            Description of the current map.
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={3}>
-                        <Box sx={{
-                                    display: "flex",
-                                    position: "relative",
-                                    backgroundColor: "black",
-                                    width:"20vw"
-                                }}>
-                                    tr
-                        </Box>
-                    </Grid>   
+                    <Box sx={{paddingLeft:"20px", paddingBottom:"5px"}}>
+                        Reccomended
+                    </Box>
+                    <MapPreview />
+                    <MapPreview />
+                    <MapPreview />
+                    
+                </Grid>   
             </Grid> 
         </>
     );
