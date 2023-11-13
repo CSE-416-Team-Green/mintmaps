@@ -28,14 +28,14 @@ export default function Help() {
                             First, <></>
                             <Link
                                 className={styles.linkText}
-                                href="/home"
+                                href="/login"
                             >
                                 log in <></>
                             </Link> 
                             or <></>
                             <Link
                                 className={styles.linkText}
-                                href="/home"
+                                href="/login"
                             >
                                 sign up
                             </Link> 
