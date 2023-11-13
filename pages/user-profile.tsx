@@ -3,9 +3,12 @@ import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import Avatar from '@mui/material/Avatar';
 import * as React from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography, IconButton } from "@mui/material";
 import styles from '@/styles/about.module.css';
 import Link from "next/link";
+import { Button } from "@mui/material";
+import ShareIcon from '@mui/icons-material/Share';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 export default function UserProfile() {
     return (
@@ -45,23 +48,24 @@ export default function UserProfile() {
                                         Username
                                     </div>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <div className={styles.usernameText}>
+                                <Grid item xs={8}>
+                                    <Button sx={{ minWidth: 120, minHeight: 40 }} variant="contained">
                                         Follow 
-                                    </div>
+                                    </Button>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <div className={styles.usernameText}>
-                                        Share
-                                    </div>
+                                <Grid item xs={1}>
+                                    <IconButton href="/user-profile">
+                                        <ShareIcon />  
+                                    </IconButton>    
                                 </Grid>
                                 <Grid item xs={2}>3 Followers</Grid>
                                 <Grid item xs={2}>3 Following</Grid>
-                                <Grid item xs={2}>Reputation</Grid>
+                                <Grid item xs={0.5}><WorkspacePremiumIcon /></Grid>
+                                <Grid item xs={0.5}>300 </Grid>
                                 <Grid item xs={6}></Grid>
                                 <Grid item xs={12}>
                                     <Typography className={styles.descriptionText}>
-                                        ASDASDASDASDASDASDASDASDASDASDASDAKJHGVSDFJHSDFVHJBSDJVHBFBVJ SFDJHVLSDFJHVLKSDFVHJSFDVJHJVHFSDJHKVFSD
+                                        Description Description Description  Description Description Description Description Description Description Description Description Description Description Description 
                                     </Typography>
                                 </Grid>
                             </Grid>
