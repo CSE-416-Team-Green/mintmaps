@@ -6,7 +6,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import styles from '@/styles/about.module.css';
 import Link from "next/link";
 
-export default function Home() {
+export default function SearchResults() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
     return (
         <>
@@ -22,53 +22,9 @@ export default function Home() {
                 </Grid>
                 <Container>
                     <div className={styles.homeText}>
-                        Featured
+                        Results (31)
                     </div>
-                    <div className={styles.homeBox}>
-                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <div className={styles.homeText} >
-                        Following
-                    </div>
-                    <div className={styles.homeBox}>
-                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <div className={styles.homeText}>
-                        Recently Uploaded
-                    </div>
-                    <div className={styles.homeBox}>
+                    <div className={styles.resultsBox}>
                         <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
                             <Grid item xs={3}>
                                 <MapPreview />
@@ -97,8 +53,75 @@ export default function Home() {
                             <Grid item xs={3}>
                                 <MapPreview />
                             </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <MapPreview />
+                            </Grid>
                         </Grid>
                     </div>
+                    
                 </Container>
                 
             </Grid>
