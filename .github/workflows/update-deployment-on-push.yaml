@@ -37,7 +37,7 @@ jobs:
               run: npx jest
 
     ssh-setup:
-        needs: checkout-repository
+        needs: checkout-repo-and-test
         runs-on: ubuntu-latest
 
         steps:

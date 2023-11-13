@@ -1,8 +1,6 @@
 name: Run Tests Before Push Accepted
 
 on:
-    push:
-        branches: [dev]
     pull_request:
         branches: [dev]
         types: [opened]
@@ -22,11 +20,11 @@ jobs:
 
             - name: Install dependencies
               run: npm install
-            
+
             - name: Start Server
               run: npm run dev &
-              env: 
-                CI: true
+              env:
+                  CI: true
 
             - name: Wait for Server
               run: npx wait-on http://localhost:3000
@@ -35,4 +33,4 @@ jobs:
               run: npx cypress run
 
             - name: Run Back End Tests
-              run : npx jest
+              run: npx jest
