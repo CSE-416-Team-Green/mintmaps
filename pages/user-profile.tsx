@@ -49,9 +49,14 @@ export default function UserProfile() {
                                         Username
                                     </div>
                                 </Grid>
-                                <Grid item xs={8}>
+                                <Grid item xs={6}>
                                     <Button sx={{ minWidth: 120, minHeight: 40 }} variant="contained">
                                         Follow 
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Button sx={{ minWidth: 120, minHeight: 40 }} variant="contained" href="/edit-account">
+                                        Edit
                                     </Button>
                                 </Grid>
                                 <Grid item xs={1}>
