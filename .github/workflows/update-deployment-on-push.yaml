@@ -10,12 +10,34 @@ on:
         types: [closed]
 
 jobs:
-    checkout-repo:
+    checkout-repo-and-test:
         runs-on: ubuntu-latest
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
+
+            - name: Set Up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20.9.0
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Start Server
+              run: npm run dev &
+              env:
+                  CI: true
+
+            - name: Wait for Server
+              run: npx wait-on http://localhost:3000
+
+            - name: Run Front End Tests
+              run: npx cypress run
+
+            - name: Run Back End Tests
+              run: npx jest
 
     ssh-setup:
         needs: checkout-repo
