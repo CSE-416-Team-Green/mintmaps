@@ -66,7 +66,6 @@ export default function UserManagement() {
            <FormControl size="small">
              <Select
                value={attribute}
-               onChange={handleAttributeChange}
                displayEmpty
                inputProps={{ 'aria-label': 'Without label' }}
                sx={{ mr: 1 }}
