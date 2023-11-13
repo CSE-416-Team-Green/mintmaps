@@ -55,7 +55,9 @@ export default function MapInfo() {
                             200 Views
                         </Grid>
                         <Grid item xs={2} sx={{paddingTop: "12px"}}>
-                            Uploaded 2 Weeks Ago
+                            <Box sx={{float:"right", paddingRight:"30px"}}>
+                                Uploaded 2 Weeks Ago
+                            </Box>
                         </Grid>
                         
                         <Grid item xs={0.5}>
@@ -85,13 +87,17 @@ export default function MapInfo() {
                             </Grid>
                         </Grid>
                         <Grid item xs={.25}>
-                            25
+                            <Box sx={{float:"right", paddingRight:"10px"}}>
+                                25
+                            </Box>
                         </Grid>
                         <Grid item xs={.25}>
                             <ThumbUpIcon />
                         </Grid>
                         <Grid item xs={.25}>
-                            2
+                            <Box sx={{float:"right", paddingRight:"10px"}}>
+                                2
+                            </Box>
                         </Grid>
                         <Grid item xs={.25}>
                             <ThumbDownIcon /> 
