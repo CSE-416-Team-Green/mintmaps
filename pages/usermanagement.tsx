@@ -1,5 +1,6 @@
 import React from 'react';
-import { Checkbox, Box,Button, CssBaseline, Toolbar, Typography, InputBase, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead,Select, TableRow, TablePagination, Avatar, Chip,MenuItem,FormControl } from '@mui/material';
+import Header from '@/components/Header';
+import { Checkbox, Box,Button, CssBaseline, Toolbar, Typography, InputBase, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead,Select, TableRow, TablePagination, Avatar, Chip,MenuItem,FormControl,Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -41,9 +42,12 @@ export default function UserManagement() {
 
 
  return (
+  <div>
+   <Header />
    <Box sx={{ display: 'flex' }}>
+    
      <CssBaseline />
-     {/* Drawer component if needed */}
+     
    
      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
        <Toolbar />
@@ -66,7 +70,6 @@ export default function UserManagement() {
            <FormControl size="small">
              <Select
                value={attribute}
-               onChange={handleAttributeChange}
                displayEmpty
                inputProps={{ 'aria-label': 'Without label' }}
                sx={{ mr: 1 }}
@@ -153,5 +156,6 @@ export default function UserManagement() {
        </TableContainer>
      </Box>
    </Box>
+   </div>
  );
 }
