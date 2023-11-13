@@ -57,7 +57,7 @@ export default function UserProfile() {
                                 </Grid>
                                 <Grid item xs={2}>3 Followers</Grid>
                                 <Grid item xs={2}>3 Following</Grid>
-                                <Grid item xs={2}> Reputation</Grid>
+                                <Grid item xs={2}>Reputation</Grid>
                                 <Grid item xs={6}></Grid>
                                 <Grid item xs={12}>
                                     <Typography className={styles.descriptionText}>
