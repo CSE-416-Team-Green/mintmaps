@@ -5,9 +5,14 @@ import styles from "@/styles/login.module.css";
 import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import SignUpModal from "@/components/SignupModal";
+import ThemeContext from "@/components/themeContext";
 
 export default function Login() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
+    const themeContext = React.useContext(ThemeContext);
+
+    const isDark = themeContext.mode === "dark";
+
     return (
         <>
             <Grid
@@ -55,11 +60,23 @@ export default function Login() {
                             </Container>
                         </Grid>
                         <Grid item sx={{ flexGrow: 1, mt: 5 }}>
-                            <Container className={styles.grey} sx={{}}>
+                            <Container
+                                sx={{
+                                    minWidth: "100%",
+                                    height: "100vh",
+                                    backgroundColor: isDark
+                                        ? "#272626"
+                                        : "#f1f1f1",
+                                }}
+                            >
                                 {isSigningUp ? (
-                                    <SignUpModal setIsSigningUp={setIsSigningUp} />
+                                    <SignUpModal
+                                        setIsSigningUp={setIsSigningUp}
+                                    />
                                 ) : (
-                                    <LoginModal setIsSigningUp={setIsSigningUp} />
+                                    <LoginModal
+                                        setIsSigningUp={setIsSigningUp}
+                                    />
                                 )}
                             </Container>
                         </Grid>
