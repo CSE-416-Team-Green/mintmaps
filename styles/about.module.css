@@ -1,0 +1,66 @@
+.container {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.aboutText {
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.helpText {
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.homeText {
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding-top: 2.5%;
+    padding-bottom: 2%;
+}
+
+.homeBox {
+    max-height: 500px;
+    width: 1200px;
+    overflow-x: hidden;
+    overflow-y:scroll;
+    flex-direction: row;
+}
+
+.padding{
+    height:50px;
+}
+
+.footerText {
+    font-size: 25px;
+    top: 15vh;
+    position:relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.grey {
+    background-color: #f1f1f1;
+    height: 300vh;
+}
+
+.linkText {
+    color: #27ae60;
+}
+
+.usernameText {
+    font-size: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.descriptionText {
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+
+}

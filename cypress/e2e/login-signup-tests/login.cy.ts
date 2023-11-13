@@ -1,6 +1,6 @@
 describe("Test Login Page and Login Modal", () => {
     beforeEach(() => {
-        cy.visit("http://localhost:3000");
+        cy.visit("http://localhost:3000/login");
     });
 
     it("Useranme field is able to receive test", () => {

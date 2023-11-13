@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { TextField, IconButton, Icon } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -8,7 +8,10 @@ const Search = () => {
             size='small'
             InputProps={{
                 startAdornment: <InputAdornment position="start">
-                    <SearchIcon />
+                    <IconButton href='search-results'> 
+                        <SearchIcon />
+                    </IconButton>
+                    
                 </InputAdornment>,
             }}
         />
