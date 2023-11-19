@@ -8,23 +8,33 @@ import {
     Chip,
     Typography,
     Button,
-} from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-
-import styles from "@/styles/login.module.css";
-import LoginButton from "./LoginButton";
-import Link from "next/link";
-import GoogleSignInButton from "./GoogleSigninButton";
-
-interface componentProps {
+ } from "@mui/material";
+ import Visibility from "@mui/icons-material/Visibility";
+ 
+ 
+ import styles from "@/styles/login.module.css";
+ import LoginButton from "./LoginButton";
+ import Link from "next/link";
+ import GoogleSignInButton from "./GoogleSigninButton";
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ interface componentProps {
     setIsSigningUp: (isSigningUp: Boolean) => void;
-}
-
-const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
+ }
+ 
+ 
+ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
     const handleSignUpClick = () => {
         setIsSigningUp(true);
     };
-
+ 
+ 
     return (
         <Grid
             container
@@ -60,7 +70,7 @@ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
             <Grid item>
                 <Link
                     className={styles.linkText}
-                    href="/"
+                    href="/resetpassword"
                     onClick={handleSignUpClick}
                 >
                     Forgot Your Password?
@@ -94,6 +104,7 @@ const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
             </Grid>
         </Grid>
     );
-};
-
-export default LoginModal;
+ };
+ 
+ 
+ export default LoginModal;
