@@ -17,6 +17,8 @@
     "@react-oauth/google": "^0.11.1",
     "jest-environment-jsdom": "^29.7.0",
     "leaflet": "^1.9.4",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.1",
     "mui-color-input": "^2.0.1",
     "next": "14.0.2",
     "nextjs-http-supertest": "^1.0.12",
