@@ -9,11 +9,7 @@ import AuthContext from "@/components/authContext";
 
 export default function Home() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
-    const authContext = React.useContext(AuthContext);
 
-    React.useEffect(() => {
-        console.log(authContext);
-    }, [authContext]);
     return (
         <>
             <Grid
