@@ -33,8 +33,6 @@ import {
     const handleSignUpClick = () => {
         setIsSigningUp(true);
     };
- 
- 
     return (
         <Grid
             container
@@ -68,11 +66,7 @@ import {
                 />
             </Grid>
             <Grid item>
-                <Link
-                    className={styles.linkText}
-                    href="/resetpassword"
-                    onClick={handleSignUpClick}
-                >
+                <Link className={styles.linkText} href="/">
                     Forgot Your Password?
                 </Link>
             </Grid>
