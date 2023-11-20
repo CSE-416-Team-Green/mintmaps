@@ -7,7 +7,7 @@ interface IUser extends Document {
     accountType: "google" | "email";
     email: string;
     password?: string;
-    salt?: number;
+    salt?: string;
     followers: Types.ObjectId[];
     likedMaps: Types.ObjectId[];
     createdMaps: Types.ObjectId[];
