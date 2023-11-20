@@ -16,7 +16,14 @@ import LoginButton from "./LoginButton";
 import Link from "next/link";
 import GoogleSignInButton from "./GoogleSigninButton";
 
-const LoginModal: React.FC = () => {
+interface componentProps {
+    setIsSigningUp: (isSigningUp: Boolean) => void;
+}
+
+const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
+    const handleSignUpClick = () => {
+        setIsSigningUp(true);
+    };
     return (
         <Grid
             container
@@ -50,11 +57,7 @@ const LoginModal: React.FC = () => {
                 />
             </Grid>
             <Grid item>
-                <Link
-                    className={styles.linkText}
-                    href="/"
-                 
-                >
+                <Link className={styles.linkText} href="/">
                     Forgot Your Password?
                 </Link>
             </Grid>
@@ -80,7 +83,7 @@ const LoginModal: React.FC = () => {
                         <Typography variant="caption"> No Account?</Typography>
                     </Grid>
                     <Grid item>
-                        <Button> Sign Up</Button>
+                        <Button onClick={handleSignUpClick}> Sign Up</Button>
                     </Grid>
                 </Grid>
             </Grid>
