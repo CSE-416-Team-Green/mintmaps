@@ -8,11 +8,39 @@ import Link from "next/link";
 import Search from "@/components/Search";
 import Avatar from "@mui/material/Avatar";
 import { IconButton } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ThemeContext from "./themeContext";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useRouter } from "next/navigation";
+import AuthContext from "./authContext";
 
 const Header = () => {
     const { theme, toggleTheme, mode } = useContext(ThemeContext);
+    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+    const authContext = useContext(AuthContext);
+
+    const router = useRouter();
+    const open = Boolean(anchor);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchor(event.currentTarget);
+    };
+
+    const handleCloseLogout = () => {
+        setAnchor(null);
+        authContext.onLoggingOut();
+        router.push("/login");
+    };
+
+    const handleClose = () => {
+        setAnchor(null);
+    };
+
+    const handleProfileClose = () => {
+        setAnchor(null);
+        router.push("/user-profile");
+    };
 
     return (
         <div className={styles.header}>
@@ -32,9 +60,24 @@ const Header = () => {
                 <IconButton>
                     <NotificationsIcon />
                 </IconButton>
-                <IconButton href="/login" data-cy="login-button">
+                <IconButton onClick={handleClick}>
                     <Avatar alt="Richard McKenna" src="" />
                 </IconButton>
+
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchor}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                    }}
+                >
+                    <MenuItem onClick={handleProfileClose}>Edit Profile</MenuItem>
+                    <MenuItem href={"/logout"} onClick={handleCloseLogout}>
+                        Logout
+                    </MenuItem>
+                </Menu>
             </div>
         </div>
     );
