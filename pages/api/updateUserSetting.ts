@@ -1,42 +1,61 @@
-// pages/api/update-user-settings.ts
+ // pages/api/updateUserData.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDb from '@/db';
-import Settings from '@/models/Settings';
+import connectDb from '../../db';
+import Users from '../../models/Users';
+import Settings from '../../models/Settings';
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method !== 'POST') {
-        res.setHeader('Allow', ['POST']);
-        return res.status(405).end(`Method ${req.method} Not Allowed`);
+    if (req.method !== 'PUT') {
+        res.setHeader('Allow', ['PUT']);
+        return res.status(405).end('Method Not Allowed');
     }
 
     await connectDb();
+    //const email = req.query.email as string;
+
+    //const user = await Users.findOne({ email: email }).populate('settings')
+   // console.log(user)
 
     try {
-        
-        const userId = 'userId'; // Fetch this from authenticated user session or token
-        const { darkMode, notificationsFollowers, notificationsLikes, notificationsComments } = req.body;
-
-        const updatedSettings = await Settings.findOneAndUpdate(
-            { userId },
-            {
-                darkMode,
-                notificationsFollowers,
-                notificationsLikes,
-                notificationsComments,
-            },
-            { new: true }
-        );
-
-        if (!updatedSettings) {
-            return res.status(404).json({ message: 'Settings not found' });
+        const { uname, bio, newFollowersNotification, mapLikedNotification, commentsNotification } = req.body;
+        const email = req.query.email as string;
+        const user = await Users.findOne({ email: email }).populate('settings')
+        //console.log(user)
+        console.log(req.body)
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json(updatedSettings);
+        // Update user data
+        if(uname){
+            user.userName = uname;
+        }
+        if(bio){
+            user.bio = bio;
+        }
+        
+        await user.save();
+
+        // Update settings
+        
+        user.settings[0].notificationsFollowers=newFollowersNotification;
+        user.settings[0].notificationsLikes=mapLikedNotification;
+        user.settings[0].notificationsComments=commentsNotification;
+        
+        /*if (user.settings) {
+            await Settings.findByIdAndUpdate(user.settings, {
+                notificationsFollowers: newFollowersNotification,
+                notificationsLikes: mapLikedNotification,
+                notificationsComments: commentsNotification,
+            });
+        }*/
+        console.log(user)
+        res.status(200).json({ message: 'User updated successfully' });
     } catch (error) {
-        console.error('Updating settings error:', error);
+        console.error('Error updating user:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }

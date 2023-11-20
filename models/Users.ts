@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Model, model, Types } from "mongoose";
+import { Document, Schema, Model, model, Types, models } from "mongoose";
 
 interface IUser extends Document {
     userName: string;
@@ -7,7 +7,7 @@ interface IUser extends Document {
     accountType: "google" | "email";
     email: string;
     password?: string;
-    salt?: number;
+    salt?: string;
     followers: Types.ObjectId[];
     likedMaps: Types.ObjectId[];
     createdMaps: Types.ObjectId[];
@@ -56,6 +56,6 @@ const userSchema = new Schema<IUser>({
     admin: { type: Boolean, required: true },
 });
 
-const Users = mongoose.models.Users || mongoose.model<IUser>('Users', userSchema);;
+const User = models.User || model<IUser>("User", userSchema);
 
-export default Users;
+export default User;

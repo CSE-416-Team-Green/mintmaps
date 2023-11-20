@@ -1,5 +1,5 @@
 import connectDb from '@/db';
-import User from '@/models/User';
+import User from '@/models/UserS';
 import mongoose from 'mongoose';
 
 import type { NextApiRequest, NextApiResponse } from 'next';

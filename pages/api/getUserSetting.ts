@@ -9,6 +9,10 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    if (req.method !== 'GET') {
+        res.setHeader('Allow', ['GET']);
+        return res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
     await connectDb();
 
     try {
@@ -17,6 +21,7 @@ export default async function handler(
         await connectDb();
 
         const user = await Users.findOne({ email: email }).populate('settings')
+        //console.log(user)
     
         res.status(200).json(user.settings);
     } catch (error) {
