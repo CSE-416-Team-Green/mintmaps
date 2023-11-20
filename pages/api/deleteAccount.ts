@@ -14,10 +14,16 @@ export default async function handler(
     }
 
     try {
-        const auth = JSON.parse(req.body);
-        const email = auth.email;
+        const email = req.body;
 
-        await connectDb();
+        try {
+            await connectDb();
+        } catch (err) {
+            console.error("Error connecting to the database:", err);
+            return res
+                .status(500)
+                .json({ message: "error connecting to database" });
+        }
         
         await User.deleteOne({ email: email });
 
