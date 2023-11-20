@@ -35,7 +35,7 @@ const userSchema = new Schema<IUser>({
         },
     },
     salt: {
-        type: Number,
+        type: String,
         required: function (this: UserContext) {
             return this.accountType === "email";
         },
