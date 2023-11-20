@@ -26,6 +26,27 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [accountType, setAccountType] = React.useState("");
     const [admin, setIsAdmin] = React.useState(false);
 
+    React.useEffect(() => {
+        const updateLogIn = async () => {
+            if (typeof window !== "undefined") {
+                setEmail(localStorage.getItem("email") || "");
+                setAccountType(localStorage.getItem("accountType") || "");
+                setIsAdmin(
+                    localStorage.getItem("admin") === "true"
+                        ? true
+                        : false || false
+                );
+                setIsLoggedIn(
+                    localStorage.getItem("isLoggedIn") === "true"
+                        ? true
+                        : false || false
+                );
+            }
+        };
+
+        updateLogIn();
+    }, [AuthContext]);
+
     const onLoggingIn = (userDetails: UserDetails) => {
         if (userDetails) {
             setEmail(userDetails.email);
@@ -33,6 +54,11 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             setIsAdmin(userDetails.admin);
             setIsLoggedIn(true);
         }
+
+        localStorage.setItem("email", userDetails.email);
+        localStorage.setItem("accountType", userDetails.accountType);
+        localStorage.setItem("admin", userDetails.admin ? "true" : "false");
+        localStorage.setItem("isLoggedIn", "true");
     };
 
     const onLoggingOut = () => {
@@ -40,6 +66,7 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setAccountType("");
         setIsAdmin(false);
         setIsLoggedIn(false);
+        localStorage.clear();
     };
 
     const contextValue: AuthContextType = {
