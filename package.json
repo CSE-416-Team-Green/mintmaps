@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.17",
     "@react-oauth/google": "^0.11.1",
     "axios": "^1.6.2",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "google-auth-library": "^9.2.0",
     "jest-environment-jsdom": "^29.7.0",

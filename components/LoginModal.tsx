@@ -60,7 +60,7 @@ import * as React from "react";
                         const userDetails = {
                             email: email,
                             accountType: email,
-                            admin: false,
+                            admin: false, //CHANGE THIS LATER
                         };
                         authContext.onLoggingIn(userDetails);
                         router.push("/home");
