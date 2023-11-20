@@ -15,7 +15,7 @@ export default async function handler(
     await connectDb();
 
     try {
-        // Replace 'userId' with the actual user's ID
+        
         const userId = 'userId'; // Fetch this from authenticated user session or token
         const { darkMode, notificationsFollowers, notificationsLikes, notificationsComments } = req.body;
 

@@ -35,11 +35,12 @@ export default function EditAccount() {
         }
     };
 
-    const handleProfilePicChange = (event) => {
+    const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             setProfilePic(event.target.files[0]);
         }
     };
+    
     useEffect(() => {
         const fetchUserData = async () => {
             try {

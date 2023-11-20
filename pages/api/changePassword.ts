@@ -1,8 +1,8 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
-import connectDb from '../../db'; // Your DB connection utility
-import User from '../../models/User'; // Your User model
+import connectDb from '../../db'; 
+import User from '../../models/User'; 
 
 export default async function handler(
     req: NextApiRequest,
@@ -23,13 +23,17 @@ export default async function handler(
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
+        
+        // Check if password is set for the user
+        if (typeof user.password === 'undefined') {
+            return res.status(400).json({ message: 'Password not set for this user' });
+        }
+        
         // Verify old password
         const validPassword = await bcrypt.compare(oldPassword, user.password);
         if (!validPassword) {
             return res.status(401).json({ message: 'Invalid old password' });
         }
-
         // Hash the new password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);

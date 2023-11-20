@@ -1,9 +1,8 @@
-// pages/api/send-reset-link.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import connectDb from '../../db'; 
-import User from '../../models/User'; // Your User model
-import sendResetEmail  from '../../mailer'; // Utility to send emails
+import User from '../../models/User'; 
+import sendResetEmail  from '../../mailer'; 
 
 export default async function handler(
     req: NextApiRequest,
@@ -27,7 +26,7 @@ export default async function handler(
 
         // Generate a secure token
         const resetToken = bcrypt.genSaltSync(10);
-        const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+        const resetTokenExpiry = new Date(Date.now() + 3600000);; // 1 hour from now
 
         // Save the token and expiry in the user's record
         user.resetToken = resetToken;

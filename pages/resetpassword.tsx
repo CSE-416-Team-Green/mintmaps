@@ -13,7 +13,7 @@ const ResetPasswordPage = () => {
         event.preventDefault();
         setMessage('Processing...');
         try {
-            const response = await fetch('/api/send-reset-link', { // Updated API endpoint name for clarity
+            const response = await fetch('/api/sendResetLink', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ interface IUser extends Document {
     accountType: "google" | "email";
     email: string;
     password?: string;
-    salt?: number;
+    salt?: string;
     followers: Types.ObjectId[];
     likedMaps: Types.ObjectId[];
     createdMaps: Types.ObjectId[];
@@ -18,6 +18,7 @@ interface IUser extends Document {
     admin: boolean;
     resetToken?: string;
     resetTokenExpiry?: Date;
+    
 }
 
 type UserContext = {
@@ -37,7 +38,7 @@ const userSchema = new Schema<IUser>({
         },
     },
     salt: {
-        type: Number,
+        type: String,
         required: function (this: UserContext) {
             return this.accountType === "email";
         },
