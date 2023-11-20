@@ -8,9 +8,13 @@ import { Button } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import { useState,useEffect } from 'react';
 
-
+import AuthContext from "@/components/authContext";
+import { useRouter } from 'next/navigation';
 
 export default function EditAccount() {
+    const authContext = React.useContext(AuthContext);
+    const router = useRouter();
+
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [profilePic, setProfilePic] = useState<File | null>(null);
@@ -22,6 +26,9 @@ export default function EditAccount() {
             try {
                 const response = await fetch('/api/deleteAccount', {
                     method: 'DELETE',
+                    body: JSON.stringify({
+                        authContext
+                    }),
                 });
     
                 if (response.ok) {
@@ -32,6 +39,8 @@ export default function EditAccount() {
             } catch (error) {
                 console.error('Error deleting account:', error);
             }
+
+            router.push("/login");
         }
     };
 
@@ -44,7 +53,9 @@ export default function EditAccount() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch('/api/getUserSetting'); 
+                const response = await fetch(`/api/getUserSetting?email=${authContext.email}`, {
+                    method: 'GET',
+                }); 
                 if (!response.ok) {
                     throw new Error('Failed to fetch user data');
                 }

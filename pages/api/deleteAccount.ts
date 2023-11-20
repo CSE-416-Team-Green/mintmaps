@@ -1,3 +1,6 @@
+import connectDb from '@/db';
+import User from '@/models/User';
+import mongoose from 'mongoose';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 // Import mongodb
@@ -11,7 +14,12 @@ export default async function handler(
     }
 
     try {
+        const auth = JSON.parse(req.body);
+        const email = auth.email;
+
+        await connectDb();
         
+        await User.deleteOne({ email: email });
 
         return res.status(200).json({ message: 'Account deleted successfully' });
     } catch (error) {
