@@ -42,6 +42,10 @@ const Header = () => {
         router.push("/user-profile");
     };
 
+    const navToLogin = () => {
+        setAnchor(null);
+        router.push("/login");
+    };
     return (
         <div className={styles.header}>
             <div className={styles.left}>
@@ -64,20 +68,37 @@ const Header = () => {
                     <Avatar alt="Richard McKenna" src="" />
                 </IconButton>
 
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchor}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                    }}
-                >
-                    <MenuItem onClick={handleProfileClose}>Edit Profile</MenuItem>
-                    <MenuItem href={"/logout"} onClick={handleCloseLogout}>
-                        Logout
-                    </MenuItem>
-                </Menu>
+                {authContext.isLoggedIn ? (
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchor}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        <MenuItem onClick={handleProfileClose}>
+                            Edit Profile
+                        </MenuItem>
+                        <MenuItem href={"/logout"} onClick={handleCloseLogout}>
+                            Logout
+                        </MenuItem>
+                    </Menu>
+                ) : (
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchor}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        {" "}
+                        <MenuItem onClick={navToLogin}>Login</MenuItem>
+                    </Menu>
+                )}
             </div>
         </div>
     );
