@@ -1,7 +1,7 @@
 // pages/api/update-user-settings.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDb from '../../db';
-import Settings from '../../models/Settings';
+import connectDb from '@/db';
+import Settings from '@/models/Settings';
 
 export default async function handler(
     req: NextApiRequest,

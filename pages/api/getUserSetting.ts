@@ -1,7 +1,7 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDb from '../../db'; // Your DB connection utility
-import Settings from '../../models/Settings'; // Your Settings model
+import connectDb from '@/db'; // Your DB connection utility
+import Settings from '@/models/Settings'; // Your Settings model
 
 export default async function handler(
     req: NextApiRequest,
