@@ -32,44 +32,55 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
 
     const handleSignUpClick = async () => {
         console.log("sign up email");
-        
-        // check if both password fields are the same
-
-        // check lengths of all fields
-
 
         console.log(userName);
         console.log(email);
         console.log(password);
         console.log(confirmPassword);
 
-        const payload = {
-            userName: userName,
-            email: email,
-            password: password
-        }
-
-        try {
-            const response = await fetch('/api/createAccount', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-    
-            if (response.ok) {
-                // Set user logged in through auth context
-
-                // bring user to home page
-    
-                alert('Account created successfully');
-            } else {
-                // Handle server errors (e.g., validation errors)
-                const errorData = await response.json();
-                alert(`Failed to create account: ${errorData.message}`);
+        if(userName && email && password && confirmPassword){
+        
+            // check if both password fields are the same
+            if(password != confirmPassword){
+                alert('Passwords do not match.');
+                return;
             }
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('An error occurred while updating the profile.');
+    
+            // check lengths of all fields (min and max)
+
+            
+            // check if passwords contain different characters
+
+
+            const payload = {
+                userName: userName,
+                email: email,
+                password: password
+            }
+            try {
+                const response = await fetch('/api/createAccount', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+        
+                if (response.ok) {
+                    // Set user logged in through auth context
+
+                    // bring user to home page
+        
+                    alert('Account created successfully');
+                } else {
+                    // Handle server errors (e.g., validation errors)
+                    const errorData = await response.json();
+                    alert(`Failed to create account: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('An error occurred while updating the profile.');
+            }
+        } else {
+            alert('Please complete every field.');
         }
     }
 
