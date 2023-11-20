@@ -6,12 +6,26 @@ import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import SignUpModal from "@/components/SignupModal";
 import ThemeContext from "@/components/themeContext";
+import AuthContext from "@/components/authContext";
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
     const themeContext = React.useContext(ThemeContext);
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
+    const authContext = React.useContext(AuthContext);
+    const router = useRouter(); 
 
     const isDark = themeContext.mode === "dark";
+
+    React.useEffect(() => {
+        const checkLoggedIn = () => {
+            if (authContext.isLoggedIn) {
+                router.push("/home");
+            }
+        };
+
+        checkLoggedIn();
+    }, []);
 
     return (
         <>

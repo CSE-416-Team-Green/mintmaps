@@ -2,11 +2,12 @@ import * as React from "react";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 import AuthContext from "./authContext";
-
+import { useRouter } from "next/navigation";
 const GoogleSignInButton = () => {
     React.useEffect(() => {}, []);
 
     const authContext = React.useContext(AuthContext);
+    const router = useRouter();
 
     const onSuccess = async (res: any) => {
         const token = res.credential;
@@ -18,15 +19,17 @@ const GoogleSignInButton = () => {
                 token: token,
             });
 
-            const data = response.data.data;
+            if (response.status === 200) {
+                const data = response.data.data;
 
-            const userDetails = {
-                email: data.email,
-                accountType: data.accountType,
-                admin: data.admin,
-            };
-            authContext.onLoggingIn(userDetails);
-            console.log(response);
+                const userDetails = {
+                    email: data.email,
+                    accountType: data.accountType,
+                    admin: data.admin,
+                };
+                authContext.onLoggingIn(userDetails);
+                router.push("/home");
+            }
         } catch (err) {
             console.error(err);
         }
