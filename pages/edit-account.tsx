@@ -6,17 +6,17 @@ import styles from '@/styles/about.module.css';
 import Link from "next/link";
 import { Button } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 
 
 export default function EditAccount() {
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
-    const [profilePic, setProfilePic] = useState(null);
-    const [newFollowersNotification, setNewFollowersNotification] = useState(true);
-    const [mapLikedNotification, setMapLikedNotification] = useState(true);
-    const [commentsNotification, setCommentsNotification] = useState(true);
+    const [profilePic, setProfilePic] = useState<File | null>(null);
+    const [newFollowersNotification, setNewFollowersNotification] = useState(false);
+    const [mapLikedNotification, setMapLikedNotification] = useState(false);
+    const [commentsNotification, setCommentsNotification] = useState(false);
     const deleteAccount = async () => {
         if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
             try {
@@ -40,23 +40,67 @@ export default function EditAccount() {
             setProfilePic(event.target.files[0]);
         }
     };
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('/api/getUserSetting'); 
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = await response.json();
+                setUsername(data.username);
+                setBio(data.bio);
+                setNewFollowersNotification(data.newFollowersNotification);
+                setMapLikedNotification(data.mapLikedNotification);
+                setCommentsNotification(data.commentsNotification);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+    
+        fetchUserData();
+    }, []);
+    
     const handleSaveChanges = async () => {
-        // Prepare data for sending
         const formData = new FormData();
         formData.append('username', username);
         formData.append('bio', bio);
+        formData.append('newFollowersNotification', String(newFollowersNotification));
+        formData.append('mapLikedNotification', String(mapLikedNotification));
+        formData.append('commentsNotification', String(commentsNotification));
+    
         if (profilePic) {
             formData.append('profilePic', profilePic);
         }
     
-        const response = await fetch('/api/updateProfile', {
-            method: 'POST',
-            body: formData,
-        });
+        try {
+            const response = await fetch('/api/updateUserSetting', {
+                method: 'POST',
+                body: formData,
+            });
     
-        // Handle the response
-        // ...
+            if (response.ok) {
+                // Assuming the server sends back the updated user data
+                const updatedData = await response.json();
+                // Update the state with the updated data
+                setUsername(updatedData.username);
+                setBio(updatedData.bio);
+                setNewFollowersNotification(updatedData.newFollowersNotification);
+                setMapLikedNotification(updatedData.mapLikedNotification);
+                setCommentsNotification(updatedData.commentsNotification);
+    
+                alert('Profile updated successfully');
+            } else {
+                // Handle server errors (e.g., validation errors)
+                const errorData = await response.json();
+                alert(`Failed to update profile: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('An error occurred while updating the profile.');
+        }
     };
+    
     return (
         <>
             <Grid
