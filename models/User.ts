@@ -23,7 +23,7 @@ type UserContext = {
 };
 
 const userSchema = new Schema<IUser>({
-    userName: { type: String, required: true, unique: true },
+    userName: { type: String, required: true},
     bio: { type: String },
     profilePic: { type: String },
     accountType: { type: String, required: true, enum: ["google", "email"] },
@@ -35,7 +35,7 @@ const userSchema = new Schema<IUser>({
         },
     },
     salt: {
-        type: Number,
+        type: String,
         required: function (this: UserContext) {
             return this.accountType === "email";
         },
@@ -59,3 +59,4 @@ const userSchema = new Schema<IUser>({
 const User = models.User || model<IUser>("User", userSchema);
 
 export default User;
+
