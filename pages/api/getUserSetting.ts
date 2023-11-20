@@ -3,7 +3,7 @@ import connectDb from '@/db'; // Your DB connection utility
 import Settings from '@/models/Settings'; // Your Settings model
 import mongoose from 'mongoose';
 
-import Users from '@/models/Users';
+import User from '@/models/User';
 
 export default async function handler(
     req: NextApiRequest,
@@ -20,7 +20,7 @@ export default async function handler(
 
         await connectDb();
 
-        const user = await Users.findOne({ email: email }).populate('settings')
+        const user = await User.findOne({ email: email }).populate('settings')
         //console.log(user)
     
         res.status(200).json(user.settings);
