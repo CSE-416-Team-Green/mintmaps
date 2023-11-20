@@ -28,20 +28,20 @@ export default async function handler(
         const userName = "123";
         const password = "123"; 
 
-        //check if there is an existing account with this email
 
 
         //check if both password fields are the same and if all fields have info (do this earlier?)
 
 
-
-        // Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
+        //check if there is an existing account with this email
         const hasAccount = await User.findOne({ email: email });
 
         if (!hasAccount) {
+            
+            // Hash the password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
             try {
                 const newSettings = new Settings();
 
