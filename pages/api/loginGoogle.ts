@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { jwtDecode } from "jwt-decode";
 import connectDb from "@/db";
-import User from "@/models/Users";
+import User from "@/models/User";
 import Settings from "@/models/Settings";
 import { rest } from "cypress/types/lodash";
 
