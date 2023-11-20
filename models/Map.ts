@@ -1,4 +1,4 @@
-import { Document, Schema, model, Types } from "mongoose";
+import { Document, Schema, model, Types, models } from "mongoose";
 
 interface IMap extends Document {
     name: string;
@@ -67,6 +67,6 @@ const mapSchema = new Schema<IMap>({
     views: Number,
 });
 
-const MapModel = model<IMap>("Map", mapSchema);
+const MapModel = models.MapModel ||model<IMap>("Map", mapSchema);
 
 export default MapModel;

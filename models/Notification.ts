@@ -1,4 +1,4 @@
-import { Document, Schema, model, Types } from "mongoose";
+import { Document, Schema, model, Types, models } from "mongoose";
 
 interface INotification extends Document {
     notificationType: "follow" | "like" | "comment";
@@ -33,6 +33,6 @@ const notificationSchema = new Schema<INotification>({
     },
 });
 
-const Notification = model<INotification>("Notification", notificationSchema);
+const Notification = models.Notification|| model<INotification>("Notification", notificationSchema);
 
 export default Notification;

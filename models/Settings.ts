@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, model, models } from "mongoose";
 
 interface ISettings extends Document {
     darkMode: boolean;
@@ -26,6 +26,6 @@ const settingsSchema = new Schema<ISettings>({
     },
 });
 
-const Settings = model<ISettings>("Settings", settingsSchema);
+const Settings = models.Settings ||model<ISettings>("Settings", settingsSchema);
 
 export default Settings;
