@@ -22,9 +22,9 @@ export default async function handler(
     try {
         const { uname, bio, newFollowersNotification, mapLikedNotification, commentsNotification } = req.body;
         const email = req.query.email as string;
+        console.log(email);
         const user = await User.findOne({ email: email }).populate('settings')
         //console.log(user)
-        console.log(req.body)
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -38,20 +38,21 @@ export default async function handler(
         }
         
         await user.save();
-
+        
         // Update settings
         
         user.settings[0].notificationsFollowers=newFollowersNotification;
         user.settings[0].notificationsLikes=mapLikedNotification;
         user.settings[0].notificationsComments=commentsNotification;
         
-        /*if (user.settings) {
+        
+        if (user.settings) {
             await Settings.findByIdAndUpdate(user.settings, {
                 notificationsFollowers: newFollowersNotification,
                 notificationsLikes: mapLikedNotification,
                 notificationsComments: commentsNotification,
             });
-        }*/
+        }
         console.log(user)
         res.status(200).json({ message: 'User updated successfully' });
     } catch (error) {
