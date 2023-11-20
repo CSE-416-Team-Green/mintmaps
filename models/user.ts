@@ -7,7 +7,7 @@ interface IUser extends Document {
     accountType: "google" | "email";
     email: string;
     password?: string;
-    salt?: string;
+    salt?: number;
     followers: Types.ObjectId[];
     likedMaps: Types.ObjectId[];
     createdMaps: Types.ObjectId[];
@@ -16,9 +16,6 @@ interface IUser extends Document {
     accountStatus: "suspended" | "active" | "deleted";
     reputation: number;
     admin: boolean;
-    resetToken?: string;
-    resetTokenExpiry?: Date;
-    
 }
 
 type UserContext = {
@@ -38,7 +35,7 @@ const userSchema = new Schema<IUser>({
         },
     },
     salt: {
-        type: String,
+        type: Number,
         required: function (this: UserContext) {
             return this.accountType === "email";
         },
@@ -57,12 +54,6 @@ const userSchema = new Schema<IUser>({
     },
     reputation: { type: Number, required: true, default: 0 },
     admin: { type: Boolean, required: true },
-    resetToken: {
-      type: String,
-    },
-    resetTokenExpiry: {
-        type: Date,
-    },
 });
 
 const User = model<IUser>("User", userSchema);
