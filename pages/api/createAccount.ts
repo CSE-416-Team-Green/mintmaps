@@ -53,7 +53,7 @@ export default async function handler(
 
                 await newUser.save();
                 await newSettings.save();
-                return res.status(200).json({ data: newUser });
+                return res.status(200).json({headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newUser) });
             } catch (err) {
                 console.error("Error creating user");
                 return res

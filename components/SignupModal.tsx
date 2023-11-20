@@ -11,10 +11,13 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import styles from "@/styles/login.module.css";
-import Link from "next/link";
 import GoogleSignInButton from "./GoogleSigninButton";
 import SignupButton from "./SignupButton";
 import { useState,useEffect } from 'react';
+import AuthContext from "./authContext";
+import { useRouter } from "next/navigation";
+import * as React from "react";
+
 
 interface componentProps {
     setIsSigningUp: (isSigningUp: Boolean) => void;
@@ -25,6 +28,9 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const authContext = React.useContext(AuthContext);
+    const router = useRouter();
 
     const handleLoginClick = () => {
         setIsSigningUp(false);
@@ -65,9 +71,16 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
                 });
         
                 if (response.ok) {
-                    // Set user logged in through auth context
-
-                    // bring user to home page
+                    if (response.status === 200) {
+        
+                        const userDetails = {
+                            email: email,
+                            accountType: email,
+                            admin: false,
+                        };
+                        authContext.onLoggingIn(userDetails);
+                        router.push("/home");
+                    }
         
                     alert('Account created successfully');
                 } else {
@@ -76,8 +89,8 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
                     alert(`Failed to create account: ${errorData.message}`);
                 }
             } catch (error) {
-                console.error('Error updating profile:', error);
-                alert('An error occurred while updating the profile.');
+                console.error('Error creating profile:', error);
+                alert('An error occurred while creating the profile.');
             }
         } else {
             alert('Please complete every field.');
