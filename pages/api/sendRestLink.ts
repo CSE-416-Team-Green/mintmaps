@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import connectDb from '../../db'; 
-import User from '../../models/User'; 
+import User from '../../models/Users'; 
 import sendResetEmail  from '../../mailer'; 
 
 export default async function handler(

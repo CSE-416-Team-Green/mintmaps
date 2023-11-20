@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import connectDb from '../../db'; 
-import User from '../../models/User'; 
+import User from '../../models/Users'; 
 
 export default async function handler(
     req: NextApiRequest,

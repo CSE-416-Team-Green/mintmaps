@@ -8,7 +8,6 @@ import SignUpModal from "@/components/SignupModal";
 import ThemeContext from "@/components/themeContext";
 
 export default function Login() {
-    const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
     const themeContext = React.useContext(ThemeContext);
 
     const isDark = themeContext.mode === "dark";
@@ -69,15 +68,7 @@ export default function Login() {
                                         : "#f1f1f1",
                                 }}
                             >
-                                {isSigningUp ? (
-                                    <SignUpModal
-                                        setIsSigningUp={setIsSigningUp}
-                                    />
-                                ) : (
-                                    <LoginModal
-                                        setIsSigningUp={setIsSigningUp}
-                                    />
-                                )}
+                                <LoginModal />
                             </Container>
                         </Grid>
                     </Grid>
