@@ -8,9 +8,12 @@ import { Button } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import { useState,useEffect } from 'react';
 
-
+import AuthContext from "@/components/authContext";
+import { useRouter } from 'next/navigation';
 
 export default function EditAccount() {
+    const authContext = React.useContext(AuthContext);
+    const router = useRouter();
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [profilePic, setProfilePic] = useState<File | null>(null);
@@ -22,6 +25,9 @@ export default function EditAccount() {
             try {
                 const response = await fetch('/api/deleteAccount', {
                     method: 'DELETE',
+                    body: JSON.stringify({
+                        authContext
+                    }),
                 });
     
                 if (response.ok) {
@@ -32,6 +38,8 @@ export default function EditAccount() {
             } catch (error) {
                 console.error('Error deleting account:', error);
             }
+
+            router.push("/login");
         }
     };
 
@@ -44,12 +52,18 @@ export default function EditAccount() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch('/api/getUserSetting'); 
+                
+                const response = await fetch(`/api/getUserSetting?email=${'jia.lin@stonybrook.edu'}`, {
+                    method: 'GET',
+                }); 
+                console.log(response)
                 if (!response.ok) {
                     throw new Error('Failed to fetch user data');
                 }
                 const data = await response.json();
+                console.log(data)
                 setUsername(data.username);
+                console.log(data.username)
                 setBio(data.bio);
                 setNewFollowersNotification(data.newFollowersNotification);
                 setMapLikedNotification(data.mapLikedNotification);
@@ -62,37 +76,29 @@ export default function EditAccount() {
         fetchUserData();
     }, []);
     
-    const handleSaveChanges = async () => {
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('bio', bio);
-        formData.append('newFollowersNotification', String(newFollowersNotification));
-        formData.append('mapLikedNotification', String(mapLikedNotification));
-        formData.append('commentsNotification', String(commentsNotification));
     
-        if (profilePic) {
-            formData.append('profilePic', profilePic);
-        }
+    const handleSaveChanges = async () => {
+        // Construct a payload object
+        const checkemail = authContext.email;
+        const payload = {
+            uName: username,
+            bio: bio,
+            newFollowersNotification: newFollowersNotification,
+            mapLikedNotification: mapLikedNotification,
+            commentsNotification: commentsNotification,
+        };
+        console.log(payload)
     
         try {
-            const response = await fetch('/api/updateUserSetting', {
-                method: 'POST',
-                body: formData,
+            const response = await fetch(`/api/updateUserSetting?email=${'jia.lin@stonybrook.edu'}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
     
             if (response.ok) {
-                // Assuming the server sends back the updated user data
-                const updatedData = await response.json();
-                // Update the state with the updated data
-                setUsername(updatedData.username);
-                setBio(updatedData.bio);
-                setNewFollowersNotification(updatedData.newFollowersNotification);
-                setMapLikedNotification(updatedData.mapLikedNotification);
-                setCommentsNotification(updatedData.commentsNotification);
-    
                 alert('Profile updated successfully');
             } else {
-                // Handle server errors (e.g., validation errors)
                 const errorData = await response.json();
                 alert(`Failed to update profile: ${errorData.message}`);
             }
@@ -101,6 +107,8 @@ export default function EditAccount() {
             alert('An error occurred while updating the profile.');
         }
     };
+    
+          
     
     return (
         <>
