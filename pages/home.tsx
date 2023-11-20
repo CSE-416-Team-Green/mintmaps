@@ -3,11 +3,17 @@ import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
-import styles from '@/styles/about.module.css';
+import styles from "@/styles/about.module.css";
 import Link from "next/link";
+import AuthContext from "@/components/authContext";
 
 export default function Home() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
+    const authContext = React.useContext(AuthContext);
+
+    React.useEffect(() => {
+        console.log(authContext);
+    }, [authContext]);
     return (
         <>
             <Grid
@@ -21,11 +27,14 @@ export default function Home() {
                     <Header />
                 </Grid>
                 <Container>
-                    <div className={styles.homeText}>
-                        Featured
-                    </div>
+                    <div className={styles.homeText}>Featured</div>
                     <div className={styles.homeBox}>
-                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
+                        <Grid
+                            container
+                            direction={"row"}
+                            alignItems={"left"}
+                            justifyContent={"left"}
+                        >
                             <Grid item xs={3}>
                                 <MapPreview />
                             </Grid>
@@ -49,11 +58,14 @@ export default function Home() {
                             </Grid>
                         </Grid>
                     </div>
-                    <div className={styles.homeText} >
-                        Following
-                    </div>
+                    <div className={styles.homeText}>Following</div>
                     <div className={styles.homeBox}>
-                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
+                        <Grid
+                            container
+                            direction={"row"}
+                            alignItems={"left"}
+                            justifyContent={"left"}
+                        >
                             <Grid item xs={3}>
                                 <MapPreview />
                             </Grid>
@@ -65,11 +77,14 @@ export default function Home() {
                             </Grid>
                         </Grid>
                     </div>
-                    <div className={styles.homeText}>
-                        Recently Uploaded
-                    </div>
+                    <div className={styles.homeText}>Recently Uploaded</div>
                     <div className={styles.homeBox}>
-                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
+                        <Grid
+                            container
+                            direction={"row"}
+                            alignItems={"left"}
+                            justifyContent={"left"}
+                        >
                             <Grid item xs={3}>
                                 <MapPreview />
                             </Grid>
@@ -100,7 +115,6 @@ export default function Home() {
                         </Grid>
                     </div>
                 </Container>
-                
             </Grid>
             <br />
             <br />

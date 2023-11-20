@@ -18,6 +18,6 @@ const commentSchema = new Schema<IComment>({
     dislikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
-const Comment = model<IComment>("Comment", commentSchema);
+const Comments = model<IComment>("Comments", commentSchema);
 
-export default Comment;
+export default Comments;

@@ -33,6 +33,6 @@ const notificationSchema = new Schema<INotification>({
     },
 });
 
-const Notification = model<INotification>("Notification", notificationSchema);
+const Notifications = model<INotification>("Notifications", notificationSchema);
 
-export default Notification;
+export default Notifications;
