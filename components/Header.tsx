@@ -26,13 +26,13 @@ const Header = () => {
                 <IconButton onClick={toggleTheme}>
                     {mode === "dark" ? <Brightness5Icon /> : <DarkModeIcon />}
                 </IconButton>
-                <IconButton href="/map-creation">
+                <IconButton href="/map-creation" data-cy="map-button">
                     <MapIcon />
                 </IconButton>
                 <IconButton>
                     <NotificationsIcon />
                 </IconButton>
-                <IconButton href="/login">
+                <IconButton href="/login" data-cy="login-button">
                     <Avatar alt="Richard McKenna" src="" />
                 </IconButton>
             </div>
