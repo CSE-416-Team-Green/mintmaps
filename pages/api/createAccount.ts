@@ -48,8 +48,6 @@ export default async function handler(
                     accountStatus: "active",
                     admin: false,
                 });
-                console.log(newUser);
-                console.log(salt);
 
                 await newUser.save();
                 await newSettings.save();
@@ -64,7 +62,6 @@ export default async function handler(
             return res.status(500).json({ message: "User already exists" });
         }
     } catch (err) {
-        console.log("ASHGD" + err);
         console.error(err);
         res.status(500).json({ message: "Internal Server Error" });
     }

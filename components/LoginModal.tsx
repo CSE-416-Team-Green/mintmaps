@@ -36,10 +36,6 @@ import * as React from "react";
     const router = useRouter();
 
     const handleLoginClick = async () => {
-        console.log("login email");
-
-        console.log(email);
-        console.log(password);
 
         if(email && password){
 

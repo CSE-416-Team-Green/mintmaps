@@ -29,7 +29,6 @@ export default async function handler(
 
         // check if there is an existing account with this email
         const hasAccount = await User.findOne({ email: email });
-        console.log(hasAccount);
 
         if (hasAccount) {
             // check if account type is email
@@ -59,7 +58,6 @@ export default async function handler(
             return res.status(500).json({ message: "Username or password is incorrect" });
         }
     } catch (err) {
-        console.log("ASHGD" + err);
         console.error(err);
         res.status(500).json({ message: "Internal Server Error" });
     }

@@ -37,12 +37,6 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
     };
 
     const handleSignUpClick = async () => {
-        console.log("sign up email");
-
-        console.log(userName);
-        console.log(email);
-        console.log(password);
-        console.log(confirmPassword);
 
         if(userName && email && password && confirmPassword){
         
