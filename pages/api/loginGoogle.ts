@@ -3,7 +3,6 @@ import { jwtDecode } from "jwt-decode";
 import connectDb from "@/db";
 import User from "@/models/Users";
 import Settings from "@/models/Settings";
-import { rest } from "cypress/types/lodash";
 
 type decodedUserInfo = {
     aud: string;
@@ -76,8 +75,10 @@ export default async function handler(
                     .status(500)
                     .json({ message: "Error creating new user" });
             }
+        } else if (hasAccount) {
+            return res.status(200).json({ data: hasAccount });
         } else {
-            return res.status(500).json({ message: "User already exists" });
+            return res.status(500).json({ message: "Error loggin in - retry" });
         }
     } catch (err) {
         console.error(err);
