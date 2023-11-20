@@ -67,6 +67,6 @@ const mapSchema = new Schema<IMap>({
     views: Number,
 });
 
-const MapModel = model<IMap>("Map", mapSchema);
+const Maps = model<IMap>("Maps", mapSchema);
 
-export default MapModel;
+export default Maps;
