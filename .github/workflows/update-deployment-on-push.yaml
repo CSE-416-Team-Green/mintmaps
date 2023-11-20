@@ -1,0 +1,200 @@
+name: Deploy after push to main branch
+
+on:
+    pull_request:
+        branches:
+            - main
+        types: [closed]
+
+jobs:
+    checkout-repo-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set Up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20.9.0
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Start Server
+              run: npm run dev &
+              env:
+                  CI: true
+
+            - name: Wait for Server
+              run: npx wait-on http://localhost:3000
+
+            - name: Run Front End Tests
+              run: npx cypress run
+
+            - name: Run Back End Tests
+              run: npx jest
+
+    ssh-setup:
+        needs: checkout-repo-and-test
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: SSH into EC2 and restart server
+              run: |
+                  mkdir -p ~/.ssh/
+                  echo "$SSH_KEY" > ~/.ssh/staging.key
+                  chmod 600 ~/.ssh/staging.key
+                  cat >>~/.ssh/config <<END
+                  Host staging
+                    HostName $SSH_HOST
+                    User $SSH_USER
+                    IdentityFile ~/.ssh/staging.key
+                    StrictHostKeyChecking no
+                  END
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}
+
+    pull-updates:
+        needs: ssh-setup
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Pull new updates
+              run: |
+                  mkdir -p ~/.ssh/
+                    echo "$SSH_KEY" > ~/.ssh/staging.key
+                    chmod 600 ~/.ssh/staging.key
+                    cat >>~/.ssh/config <<END
+                    Host staging
+                      HostName $SSH_HOST
+                      User $SSH_USER
+                      IdentityFile ~/.ssh/staging.key
+                      StrictHostKeyChecking no
+                    END
+                    ssh staging 'cd mint-maps/build-2 && git pull origin main'
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}
+
+    install-dependencies:
+        needs: pull-updates
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Install new dependencies
+              run: |
+                  mkdir -p ~/.ssh/
+                    echo "$SSH_KEY" > ~/.ssh/staging.key
+                    chmod 600 ~/.ssh/staging.key
+                    cat >>~/.ssh/config <<END
+                    Host staging
+                      HostName $SSH_HOST
+                      User $SSH_USER
+                      IdentityFile ~/.ssh/staging.key
+                      StrictHostKeyChecking no
+                    END
+                    ssh staging 'cd mint-maps/build-2 && npm install'
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}
+
+    test-frontend:
+        needs: install-dependencies
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Test frontend
+              run: |
+                  mkdir -p ~/.ssh/
+                    echo "$SSH_KEY" > ~/.ssh/staging.key
+                    chmod 600 ~/.ssh/staging.key
+                    cat >>~/.ssh/config <<END
+                    Host staging
+                      HostName $SSH_HOST
+                      User $SSH_USER
+                      IdentityFile ~/.ssh/staging.key
+                      StrictHostKeyChecking no
+                    END
+                    ssh staging 'cd mint-maps/build-2 && npx cypress run'
+
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}
+    test-backend:
+        needs: test-frontend
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: run jest tests
+              run: |
+                  mkdir -p ~/.ssh/
+                    echo "$SSH_KEY" > ~/.ssh/staging.key
+                    chmod 600 ~/.ssh/staging.key
+                    cat >>~/.ssh/config <<END
+                    Host staging
+                      HostName $SSH_HOST
+                      User $SSH_USER
+                      IdentityFile ~/.ssh/staging.key
+                      StrictHostKeyChecking no
+                    END
+                  ssh staging 'cd mint-maps/build-2 && npx jest'
+
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}
+
+    rebuild:
+        needs: test-backend
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Rebuild
+              run: |
+                  mkdir -p ~/.ssh/
+                    echo "$SSH_KEY" > ~/.ssh/staging.key
+                    chmod 600 ~/.ssh/staging.key
+                    cat >>~/.ssh/config <<END
+                    Host staging
+                      HostName $SSH_HOST
+                      User $SSH_USER
+                      IdentityFile ~/.ssh/staging.key
+                      StrictHostKeyChecking no
+                    END
+                  ssh staging 'cd mint-maps/build-2 && npm run build'
+
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}
+
+    redeploy:
+        needs: rebuild
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Redeploy
+              run: |
+                  mkdir -p ~/.ssh/
+                    echo "$SSH_KEY" > ~/.ssh/staging.key
+                    chmod 600 ~/.ssh/staging.key
+                    cat >>~/.ssh/config <<END
+                    Host staging
+                      HostName $SSH_HOST
+                      User $SSH_USER
+                      IdentityFile ~/.ssh/staging.key
+                      StrictHostKeyChecking no
+                    END
+                  ssh staging 'pm2 restart mint-maps-app'
+
+              env:
+                  SSH_USER: ${{ secrets.USERNAME }}
+                  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  SSH_HOST: ${{ secrets.EC2_HOST_DNS }}

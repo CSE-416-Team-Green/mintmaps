@@ -1,0 +1,13 @@
+.white {
+    min-height: 100vh;
+    width: 100%;
+}
+
+.linkText {
+    color: #27ae60;
+    font-size: 15px;
+}
+
+.green {
+    background-color: #27ae60;
+}

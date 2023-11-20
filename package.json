@@ -14,18 +14,35 @@
     "@mui/icons-material": "^5.14.16",
     "@mui/lab": "^5.0.0-alpha.152",
     "@mui/material": "^5.14.17",
+    "@react-oauth/google": "^0.11.1",
+    "jest-environment-jsdom": "^29.7.0",
     "leaflet": "^1.9.4",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.1",
     "mui-color-input": "^2.0.1",
     "next": "14.0.2",
+    "nextjs-http-supertest": "^1.0.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.8",
     "@types/leaflet": "^1.9.8",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "typescript": "^5"
+    "@types/supertest": "^2.0.16",
+    "babel-jest": "^29.7.0",
+    "cypress": "^13.5.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5",
+    "webpack": "^5.89.0"
   }
 }
