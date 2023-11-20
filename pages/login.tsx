@@ -25,7 +25,7 @@ export default function Login() {
         };
 
         checkLoggedIn();
-    }, []);
+    }, [authContext]);
 
     return (
         <>

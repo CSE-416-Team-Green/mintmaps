@@ -50,24 +50,23 @@ export default function EditAccount() {
     };
     
     useEffect(() => {
+        const email = localStorage.getItem('email');
+        
         const fetchUserData = async () => {
             try {
-                
-                const response = await fetch(`/api/getUserSetting?email=${'jia.lin@stonybrook.edu'}`, {
+                const response = await fetch(`/api/getUserSetting?email=${email}`, {
                     method: 'GET',
-                }); 
-                console.log(response)
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch user data');
                 }
-                const data = await response.json();
+                const data = (await response.json());
                 console.log(data)
-                setUsername(data.username);
-                console.log(data.username)
+                setUsername(data.userName);
                 setBio(data.bio);
-                setNewFollowersNotification(data.newFollowersNotification);
-                setMapLikedNotification(data.mapLikedNotification);
-                setCommentsNotification(data.commentsNotification);
+                setNewFollowersNotification(data.settings[0].notificationsFollowers);
+                setMapLikedNotification(data.settings[0].notificationsLikes);
+                setCommentsNotification(data.settings[0].notificationsComments);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -81,16 +80,18 @@ export default function EditAccount() {
         // Construct a payload object
         const checkemail = authContext.email;
         const payload = {
-            uName: username,
+            uname: username,
             bio: bio,
             newFollowersNotification: newFollowersNotification,
             mapLikedNotification: mapLikedNotification,
             commentsNotification: commentsNotification,
         };
         console.log(payload)
+
+        const email = localStorage.getItem('email');
     
         try {
-            const response = await fetch(`/api/updateUserSetting?email=${'jia.lin@stonybrook.edu'}`, {
+            const response = await fetch(`/api/updateUserSetting?email=${email}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
