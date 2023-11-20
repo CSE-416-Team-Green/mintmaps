@@ -17,11 +17,11 @@ export default function UserProfile() {
             <Grid
                 container
                 direction={"row"}
-                sx={{ width: "100%", height: "100%" }}
+                sx={{ width: "100vw", height: "100vh" }}
                 justifyContent="center"
                 alignItems={"center"}
             >
-                <Grid item sx={{ flexGrow: 1 }}>
+                <Grid item sx={{ flexGrow: 1 ,}}>
                     <Header />
                 </Grid>
                 <Container>
@@ -100,25 +100,25 @@ export default function UserProfile() {
                             </Grid>
                             <div className={styles.homeBox}>
                                 <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <MapPreview />
                                     </Grid>
                                 </Grid>
