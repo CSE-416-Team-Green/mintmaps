@@ -7,8 +7,8 @@ describe("Test Login Page and Login Modal", () => {
         cy.contains("Username")
             .parent()
             .find("input")
-            .type("user")
-            .should("have.value", "user");
+            .type("users")
+            .should("have.value", "users");
     });
 
     it("Password field is able to receive test", () => {
