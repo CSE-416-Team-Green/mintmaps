@@ -10,19 +10,14 @@ import {
     Button,
  } from "@mui/material";
  import Visibility from "@mui/icons-material/Visibility";
- 
- 
  import styles from "@/styles/login.module.css";
  import LoginButton from "./LoginButton";
  import Link from "next/link";
  import GoogleSignInButton from "./GoogleSigninButton";
- 
- 
- 
- 
- 
- 
- 
+ import { useState,useEffect } from 'react';
+import AuthContext from "./authContext";
+import { useRouter } from "next/navigation";
+import * as React from "react";
  
  interface componentProps {
     setIsSigningUp: (isSigningUp: Boolean) => void;
@@ -33,6 +28,59 @@ import {
     const handleSignUpClick = () => {
         setIsSigningUp(true);
     };
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const authContext = React.useContext(AuthContext);
+    const router = useRouter();
+
+    const handleLoginClick = async () => {
+        console.log("login email");
+
+        console.log(email);
+        console.log(password);
+
+        if(email && password){
+
+            const payload = {
+                email: email,
+                password: password
+            }
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+        
+                if (response.ok) {
+                    if (response.status === 200) {
+        
+                        const userDetails = {
+                            email: email,
+                            accountType: email,
+                            admin: false,
+                        };
+                        authContext.onLoggingIn(userDetails);
+                        router.push("/home");
+                    }
+        
+                    alert('Logged in successfully');
+                } else {
+                    // Handle server errors (e.g., validation errors)
+                    const errorData = await response.json();
+                    alert(`Failed to login: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Error logging in:', error);
+                alert('An error occurred while logging in.');
+            }
+        } else {
+            alert('Please complete every field.');
+        }
+    }
+
     return (
         <Grid
             container
@@ -44,7 +92,9 @@ import {
             <Grid item xs="auto">
                 <TextField
                     sx={{ width: 300, mt: 15 }}
-                    label="Username"
+                    label="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     variant="standard"
                 />
             </Grid>
@@ -52,6 +102,8 @@ import {
                 <TextField
                     label="Password"
                     type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     variant="standard"
                     sx={{ width: 300 }}
                     InputProps={{
@@ -71,7 +123,9 @@ import {
                 </Link>
             </Grid>
             <Grid item>
-                <LoginButton />
+                <Button sx={{ minWidth: 150 }} variant="contained" onClick={handleLoginClick}>
+                    Log in
+                </Button>
             </Grid>
             <Grid item>
                 <Divider sx={{ width: 300 }}>
