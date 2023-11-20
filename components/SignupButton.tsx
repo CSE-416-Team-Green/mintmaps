@@ -5,9 +5,13 @@ const SignupButton = () => {
     const handleSignUpClick = async () => {
         console.log("sign up email");
         
+        // check if both password fields are the same
+
+        // check lengths of all fields
+
+
+
         const formData = new FormData();
-        //formData.append('username', username);
-        //formData.append('bio', bio);
 
         try {
             const response = await fetch('/api/createAccount', {
@@ -16,11 +20,9 @@ const SignupButton = () => {
             });
     
             if (response.ok) {
-                // Assuming the server sends back the updated user data
-                const updatedData = await response.json();
-                // Update the state with the updated data
-                //setUsername(updatedData.username);
-                //setBio(updatedData.bio);
+                // Set user logged in through auth context
+
+                // bring user to home page
     
                 alert('Account created successfully');
             } else {

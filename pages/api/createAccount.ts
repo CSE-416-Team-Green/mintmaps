@@ -24,24 +24,17 @@ export default async function handler(
         }
 
         // get user info from text boxes
-        const email = "123";
-        const userName = "123";
-        const password = "123"; 
-
-        //check if there is an existing account with this email
-
-
-        //check if both password fields are the same and if all fields have info (do this earlier?)
-
-
+        const { email, userName, password } = req.body;
 
         // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        //check if there is an existing account with this email
         const hasAccount = await User.findOne({ email: email });
 
         if (!hasAccount) {
+
             try {
                 const newSettings = new Settings();
 
