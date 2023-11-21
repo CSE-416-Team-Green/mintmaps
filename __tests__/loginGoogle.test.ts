@@ -6,6 +6,9 @@ import request from "supertest";
 import { expect, jest, test } from "@jest/globals";
 
 describe("login with Google API Endpoint", () => {
+    afterAll(() => {
+        server.close();
+    });
     it("should return 405 Method Not Allowed when using any non-POST method", async () => {
         const result = await request(server).get("/api/loginGoogle");
         expect(result.status).toBe(401);
