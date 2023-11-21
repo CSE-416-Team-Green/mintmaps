@@ -63,7 +63,7 @@ export default function Login() {
                                             textAlign={"justify"}
                                         >
                                             {" "}
-                                            Loginn to MintMaps to create, share,
+                                            Login to MintMaps to create, share,
                                             and view other users’ map graphics!
                                             Interact with our community of
                                             dedicated map fans and discover new
