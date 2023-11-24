@@ -21,16 +21,16 @@ export default function EditAccount() {
     const [mapLikedNotification, setMapLikedNotification] = useState(false);
     const [commentsNotification, setCommentsNotification] = useState(false);
     const deleteAccount = async () => {
+        const email = localStorage.getItem('email');
         if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
             try {
                 const response = await fetch('/api/deleteAccount', {
                     method: 'DELETE',
-                    body: JSON.stringify({
-                        authContext
-                    }),
+                    body: email,
                 });
     
                 if (response.ok) {
+                    authContext.onLoggingOut();
                     alert('Account deleted successfully');
                 } else {
                     alert('Failed to delete account');
@@ -61,7 +61,6 @@ export default function EditAccount() {
                     throw new Error('Failed to fetch user data');
                 }
                 const data = (await response.json());
-                console.log(data)
                 setUsername(data.userName);
                 setBio(data.bio);
                 setNewFollowersNotification(data.settings[0].notificationsFollowers);
@@ -86,7 +85,6 @@ export default function EditAccount() {
             mapLikedNotification: mapLikedNotification,
             commentsNotification: commentsNotification,
         };
-        console.log(payload)
 
         const email = localStorage.getItem('email');
     
