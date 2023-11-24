@@ -18,6 +18,21 @@ export default function MapCreation() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const router = useRouter();
+    const [uploadedFile, setUploadedFile] = React.useState<File | null>(null);
+    const [selectedMapType, setSelectedMapType] = React.useState('');
+    const [title, setTitle] = React.useState('');
+    const [tags, setTags] = React.useState('');
+    const handleFileSelect = (file: File | null) => {
+        setUploadedFile(file);
+    };
+
+    const handleSelectedMapType = (mapType: string) => {
+        setSelectedMapType(mapType);
+    };
+    const handleTitleTagsChange = (title: string, tags: string) => {
+        setTitle(title);
+        setTags(tags);
+    }
 
     const isStepOptional = (step: number) => {
         return false;
@@ -87,18 +102,30 @@ export default function MapCreation() {
                     })}
                 </Stepper>
                 {activeStep === steps.length ? (
-                    <MapCreateLoading />
+                    <MapCreateLoading
+                    uploadedFile={uploadedFile}
+                    mapType={selectedMapType}
+                    ontitle={title}
+                    ontags={tags}
+                />
                 ) : (
                     <React.Fragment>
                         <div>
                             {(() => {
                                 switch(activeStep) {
                                     case 0:
-                                        return <InputMap />;
+                                        return  <InputMap onFileSelect={handleFileSelect} />  ;
                                     case 1:
-                                        return <InputMapType />;
+                                        
+                                        //if(uploadedFile){
+                                            //console.log("yes")
+                                        //}
+                                        
+                                       
+                                        return <InputMapType onMapTypeSelect={handleSelectedMapType} /> ;
                                     case 2:
-                                        return <InputTitleTags />;
+                                        console.log(typeof selectedMapType)
+                                        return <InputTitleTags onTitleTagsChange={handleTitleTagsChange} />;
                                 }
                             })()}
                         </div>

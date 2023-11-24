@@ -1,7 +1,8 @@
-import { Document, Schema, model, Types, models } from "mongoose";
+import mongoose,{ Document, Schema, model, Types, models } from "mongoose";
 
 interface IMap extends Document {
     name: string;
+    maptype:string;
     description?: string;
     tags?: string[];
     visibility: "public" | "unlisted" | "private";
@@ -21,7 +22,11 @@ interface IMap extends Document {
 const mapSchema = new Schema<IMap>({
     name: {
         type: String,
-        required: true,
+        // required: true,
+    },
+    maptype: {
+        type: String,
+        // required: true,
     },
     description: String,
     tags: [String],
@@ -32,11 +37,11 @@ const mapSchema = new Schema<IMap>({
     },
     geoJSON: {
         type: Object,
-        required: true,
+        //required: true,
     },
     mintMapsJSON: {
         type: Object,
-        required: true,
+        //required: true,
     },
     uploadDate: {
         type: Date,
@@ -67,6 +72,6 @@ const mapSchema = new Schema<IMap>({
     views: Number,
 });
 
-const MapModel = models.MapModel ||model<IMap>("Map", mapSchema);
+const MapModel = mongoose.models.Map || model<IMap>('Map', mapSchema);
 
 export default MapModel;
