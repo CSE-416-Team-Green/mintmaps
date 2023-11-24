@@ -54,7 +54,7 @@ const GridLegend: React.FC<ComponentProps> = (props) => {
             ctx.fillStyle = interpolateColor(yColorMin, yColorMax, i / canvas.width);
             ctx.fillRect(x, i + y, Math.floor(canvas.width / size - 1) * size, size);
             ctx.globalCompositeOperation = 'source-over';
-            sketch.text(x - 4, i + y, `${interpolateNumber(xValueMin, xValueMax, i / canvas.width)}`, {
+            sketch.text(x - 4, i + y, `${interpolateNumber(yValueMin, yValueMax, i / canvas.width)}`, {
                 strokeStyle: '#000000',
                 stroke: true,
                 textAlign: 'right',
