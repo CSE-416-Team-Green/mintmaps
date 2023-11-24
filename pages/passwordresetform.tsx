@@ -17,8 +17,8 @@ export default function PasswordResetForm() {
         setMessage('Resetting password...');
 
         try {
-            const response = await fetch('/api/reset-password', {
-                method: 'POST',
+            const response = await fetch('/api/resetpassword', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -27,7 +27,7 @@ export default function PasswordResetForm() {
 
             if (response.ok) {
                 setMessage('Your password has been reset. Redirecting to login...');
-                setTimeout(() => router.push('/login'), 3000); // Redirect to login page after 3 seconds
+                setTimeout(() => router.push('/login'), 3000); 
             } else {
                 setMessage('Failed to reset password. Please try again.');
             }
