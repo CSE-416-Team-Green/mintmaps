@@ -22,7 +22,7 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({ uploadedFile, mapTy
     useEffect(() => {
         const uploadData = async () => {
     
-        
+            console.log(uploadedFile)
             var buffer = geobuf.encode(uploadedFile, new Pbf());
            
             //console.log('abb'+buffer)

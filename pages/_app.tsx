@@ -3,6 +3,8 @@ import "@/styles/globals.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import AuthContextProvider from "@/components/authContextProvider";
+require('dotenv').config();
+
 
 const { GOOGLE_CLIENT_ID } = process.env;
 
