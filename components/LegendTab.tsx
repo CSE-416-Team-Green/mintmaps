@@ -1,7 +1,9 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
-import Image from 'next/image';
+import CircleLegend from './CircleLegend';
+import LinearLegend from './LinearLegend';
+import GridLegend from './GridLegend';
 
 const LegendTab = () => {
     return (
@@ -14,7 +16,12 @@ const LegendTab = () => {
                 justifyContent: 'center',
                 padding: '16px',
             }}>
-                <Image src="/choropleth-legend-temp.png" alt="Legend" width={256} height={256} />
+                {/* <CircleLegend valueMin={0} valueMax={256} colorMin='#FFFFFF' colorMax='#FF0000' /> */}
+                <LinearLegend valueMin={0} valueMax={256} colorMin='#FFFFFF' colorMax='#FF0000' />
+                {/* <GridLegend
+                    xValueMin={0} xValueMax={256} xColorMin='#FFFFFF' xColorMax='#FF0000'
+                    yValueMin={0} yValueMax={256} yColorMin='#FFFFFF' yColorMax='#0000FF'
+                /> */}
             </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
