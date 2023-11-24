@@ -1,44 +1,62 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { IncomingForm } from 'formidable';
+import fs from 'fs';
+import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import connectDb from "@/db";
 import MapModel from "@/models/Map";
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<any>
-) {
-    if(req.method !== "POST") {
-        res.status(401).json({message: "Method not allowed"})
-        return
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
+
+const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method !== "POST") {
+        return res.status(405).json({ message: "Method Not Allowed" });
     }
-    //try {
 
-        try {
-            await connectDb();
-        } catch (err) {
-            console.error("Error connecting to the database:", err);
-            return res
-                .status(500)
-                .json({ message: "error connecting to database" });
-        }
-        console.log("yes")
-        const body = req.body
-        const {name, tag,geoJSON,maptype} = body
-        console.log(typeof body)
-        console.log(body)
-        console.log(name)
-        console.log(maptype)
-        const newMap = new MapModel({
-            name:name,
-            tags:tag,
-            geoJSON: geoJSON,
-            
-            maptype:maptype
+    try {
+        await connectDb();
+        const form = new IncomingForm();
 
+        form.parse(req, async (err, fields, files) => {
+            if (err) {
+                console.error("Error parsing form:", err);
+                return res.status(500).json({ message: "Error parsing form data" });
+            }
+
+            const { name, tag, maptype } = fields;
+            let geojsonBuffer = null;
+
+            if (files.geojson) {
+                try {
+                    geojsonBuffer = fs.readFileSync(files.geojson.filepath);
+                    fs.unlinkSync(files.geojson.filepath); // Cleanup the temporary file
+                } catch (fileErr) {
+                    console.error("File handling error:", fileErr);
+                    return res.status(500).json({ message: "Error handling the file" });
+                }
+            }
+
+            const newMap = new MapModel({
+                name,
+                tags: tag ? tag.split(',') : [],
+                geoJSON: geojsonBuffer,
+                maptype,
+            });
+
+            try {
+                await newMap.save();
+                res.status(200).json({ message: 'Map created successfully', map: newMap });
+            } catch (dbErr) {
+                console.error("Database save error:", dbErr);
+                res.status(500).json({ message: "Error saving to database" });
+            }
         });
-        await newMap.save();
-        res.status(200).json({ message: 'Map created successfully', map: newMap });
-    //}//catch (err) {
-        //console.error(err);
-        //res.status(500).json({ message: "Internal Server Error" });
-    
-    //}
-}
+    } catch (err) {
+        console.error("API handler error:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+export default handler;

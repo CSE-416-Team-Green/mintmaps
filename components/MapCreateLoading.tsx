@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import Image from 'next/image';
+import { readFileSync } from 'fs';
+import { buffer } from 'node:stream/consumers';
+import Pbf from 'pbf';
+import geobuf from 'geobuf';
+
 
 
 interface MapCreateLoadingProps {
@@ -16,19 +21,33 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({ uploadedFile, mapTy
 
     useEffect(() => {
         const uploadData = async () => {
-            const payload = {
-                name: ontitle,
-                maptype:mapType,
-                geojson:uploadedFile,
-                tag:ontags
-            }
-            console.log(payload)
+    
+        
+            var buffer = geobuf.encode(uploadedFile, new Pbf());
+           
+            //console.log('abb'+buffer)
+            //const payload = {
+                //name: ontitle,
+                //maptype:mapType,
+                //geojson:buffer,
+                //tag:ontags
+            //}
+            //console.log(payload)
+            var formData = new FormData();
+
+            // Append your text fields
+            formData.append('name', ontitle);
+            formData.append('maptype', mapType);
+            formData.append('tag', ontags);
+
+            // Append your binary data (buffer)
+            formData.append('geojson', new Blob([buffer], { type: 'application/octet-stream' }));
 
             try {
                 const response = await fetch('/api/createMap', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
+                    body: formData,
+                    
                 });
 
                 if (response.ok) {

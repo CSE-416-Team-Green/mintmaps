@@ -6,7 +6,7 @@ interface IMap extends Document {
     description?: string;
     tags?: string[];
     visibility: "public" | "unlisted" | "private";
-    geoJSON: object;
+    geoJSON: Buffer;
     mintMapsJSON: object;
     uploadDate?: Date;
     likes: Types.ObjectId[];
@@ -36,7 +36,7 @@ const mapSchema = new Schema<IMap>({
         default: "private",
     },
     geoJSON: {
-        type: Object,
+        type: Buffer,
         //required: true,
     },
     mintMapsJSON: {

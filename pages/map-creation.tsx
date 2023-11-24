@@ -115,13 +115,7 @@ export default function MapCreation() {
                                 switch(activeStep) {
                                     case 0:
                                         return  <InputMap onFileSelect={handleFileSelect} />  ;
-                                    case 1:
-                                        
-                                        //if(uploadedFile){
-                                            //console.log("yes")
-                                        //}
-                                        
-                                       
+                                    case 1:                                     
                                         return <InputMapType onMapTypeSelect={handleSelectedMapType} /> ;
                                     case 2:
                                         console.log(typeof selectedMapType)
