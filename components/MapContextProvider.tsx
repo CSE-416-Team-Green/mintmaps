@@ -2,11 +2,10 @@ import * as React from "react";
 import MapContext from "./MapContext";
 import connectDb from "@/db";
 import geobuf from "geobuf";
-import mongoose from "mongoose";
 import MapModel from "@/models/Map";
 import Pbf from "pbf";
-import { GeoJsonObject } from 'geojson';
-
+import { GeoJsonObject } from "geojson";
+import axios from "axios";
 
 interface CustomProviderProps {
     children: React.ReactNode;
@@ -20,9 +19,8 @@ interface MapContextType {
     loadMap: (id: string) => void;
     legend: any;
     mapType: string;
-    geoJSON: GeoJsonObject; 
+    geoJSON: GeoJsonObject;
 }
-
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [mapId, setMapId] = React.useState<string>("");
@@ -33,48 +31,21 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const onChange = () => {};
 
     const saveMap = async () => {
-        try {
-            connectDb();
-        } catch (err) {
-            console.error("Error connecting to DB - check db connection", err);
-        }
-
-        try {
-            const compressedMap = geobuf.encode(geoJSON, new Pbf());
-            await MapModel.findByIdAndUpdate(mapId, {
-                geoJSON: compressedMap,
-            });
-        } catch (err) {
-            console.error("Error saving map to DB", err);
-        }
+       
     };
 
     const setMap = () => {};
 
     const loadMap = async (id: string) => {
         try {
-            connectDb();
-        } catch (err) {
-            console.error("Error connecting to DB - check db connection", err);
-        }
-
-        try {
-            const compressedMap = await MapModel.findById(id).populate(
-                "geoJSON"
-            );
-            const unCompressedMap = geobuf.decode(
-                new Pbf(compressedMap.geoJSON)
-            );
-            setgeoJSON(unCompressedMap);
+            const res = await axios.get(`/api/getMapById/${id}`);
+            setgeoJSON(res.data.map.features[0]);
         } catch (err) {
             console.error("Error loading map from DB", err);
         }
     };
 
-    const updateFeature = () =>{
-
-
-    }
+    const updateFeature = () => {};
 
     const contextValue: MapContextType = {
         mapId,
@@ -93,3 +64,5 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         </MapContext.Provider>
     );
 };
+
+export default MapContextProvider;

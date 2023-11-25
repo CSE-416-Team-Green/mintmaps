@@ -20,7 +20,7 @@ const MapContext = React.createContext<MapContextType>({
     loadMap: () => {},
     legend: null,
     mapType: "",
-    geoJSON: JSON.parse(""),
+    geoJSON: JSON.parse(JSON.stringify({mapdata:""})),
 });
 
 export default MapContext;
