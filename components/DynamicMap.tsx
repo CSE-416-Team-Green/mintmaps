@@ -16,6 +16,8 @@ interface MapContextType {
     legend: any;
     mapType: string;
     geoJSON: GeoJsonObject;
+    hasMap: boolean;
+    mapKey: string;
 }
 
 const DynamicMap = () => {
@@ -25,15 +27,16 @@ const DynamicMap = () => {
     useEffect(() => {
         const loadMapData = async () => {
             try {
-                await mapContext.loadMap("65626f5a7ea6ef5d69cd27cf");
+                mapContext.loadMap("656272b8739b9f79d93d27ab");
                 setMapData(mapContext.geoJSON);
+                console.log(mapData);
             } catch (error) {
                 console.error("Error connecting to db", error);
             }
         };
 
         loadMapData();
-    }, [mapData]);
+    }, [mapContext.hasMap]);
 
     return (
         <MapContainer
@@ -46,7 +49,9 @@ const DynamicMap = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <GeoJSON key={mapContext.mapId} data={mapData} />
+            {mapContext.hasMap && (
+                <GeoJSON key={mapContext.mapKey} data={mapData} />
+            )}
         </MapContainer>
     );
 };

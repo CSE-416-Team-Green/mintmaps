@@ -32,7 +32,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
@@ -48,6 +49,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/supertest": "^2.0.16",
+    "@types/uuid": "^9.0.7",
     "babel-jest": "^29.7.0",
     "cypress": "^13.5.0",
     "supertest": "^6.3.3",

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GeoJsonObject } from 'geojson';
+import { GeoJsonObject } from "geojson";
 
 interface MapContextType {
     mapId: string;
@@ -9,7 +9,9 @@ interface MapContextType {
     loadMap: (id: string) => void;
     legend: any;
     mapType: string;
-    geoJSON: GeoJsonObject; 
+    geoJSON: GeoJsonObject;
+    hasMap: boolean;
+    mapKey: string;
 }
 
 const MapContext = React.createContext<MapContextType>({
@@ -20,7 +22,9 @@ const MapContext = React.createContext<MapContextType>({
     loadMap: () => {},
     legend: null,
     mapType: "",
-    geoJSON: JSON.parse(JSON.stringify({mapdata:""})),
+    geoJSON: JSON.parse(JSON.stringify({ mapdata: "" })),
+    hasMap: false,
+    mapKey: "",
 });
 
 export default MapContext;
