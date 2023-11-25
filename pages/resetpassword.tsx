@@ -14,7 +14,7 @@ const ResetPasswordPage = () => {
         setMessage('Processing...');
         try {
             const response = await fetch('/api/sendResetLink', { 
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
