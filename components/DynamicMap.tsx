@@ -4,8 +4,6 @@ import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
-import connectDb from "@/db";
-import MapModel from "@/models/Map";
 
 interface MapContextType {
     mapId: string;
