@@ -7,7 +7,7 @@ import { useContext } from 'react';
 
 const LegendTab = () => {
     const mapContext = useContext(MapContext);
-    const mapType = mapContext.mapType;
+    let mapType = mapContext.mapType;
 
     return (
         <Box>

@@ -8,13 +8,13 @@ import MapContext from './MapContext';
 
 const LinearLegend = () => {
     const mapContext = useContext(MapContext);
-    const legend = mapContext.legend;
+    const legend = mapContext.legend ?? {};
 
     const [title, setTitle] = useState(legend.title ?? '');
     const [valueMin, setValueMin] = useState(legend.valueMin ?? 0);
     const [valueMax, setValueMax] = useState(legend.valueMax ?? 0);
-    const [colorMin, setColorMin] = useState(legend.colorMin ?? '');
-    const [colorMax, setColorMax] = useState(legend.colorMax ?? '');
+    const [colorMin, setColorMin] = useState(legend.colorMin ?? '#FFFFFF');
+    const [colorMax, setColorMax] = useState(legend.colorMax ?? '#2ECC71');
 
     const size = 50;
     const canvasRef = useRef<HTMLCanvasElement>(null);
