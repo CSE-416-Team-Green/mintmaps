@@ -14,7 +14,7 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 
 export default function MapEditing() {
     const [tab, setTab] = React.useState('1');
-
+    
     const handleTabChange = (event: React.SyntheticEvent, newTab: string) => {
         setTab(newTab);
     };
