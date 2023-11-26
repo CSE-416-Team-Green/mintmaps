@@ -1,24 +1,21 @@
 import { interpolateColor, interpolateNumber } from '@/libs/interpolate';
 import Sketch from '@/libs/sketch';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
-
-interface ComponentProps {
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    size?: number;
-}
+import MapContext from './MapContext';
 
 const LinearLegend = () => {
-    const [title, setTitle] = useState('');
-    const [valueMin, setValueMin] = useState(0);
-    const [valueMax, setValueMax] = useState(256);
-    const [colorMin, setColorMin] = useState('#FFFFFF');
-    const [colorMax, setColorMax] = useState('#FF0000');
+    const mapContext = useContext(MapContext);
+    const legend = mapContext.legend;
+
+    const [title, setTitle] = useState(legend.title ?? '');
+    const [valueMin, setValueMin] = useState(legend.valueMin ?? 0);
+    const [valueMax, setValueMax] = useState(legend.valueMax ?? 0);
+    const [colorMin, setColorMin] = useState(legend.colorMin ?? '');
+    const [colorMax, setColorMax] = useState(legend.colorMax ?? '');
+
     const size = 50;
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -39,6 +36,13 @@ const LinearLegend = () => {
                 textBaseline: 'top',
             });
         }
+
+        legend.title = title;
+        legend.valueMin = valueMin;
+        legend.valueMax = valueMax;
+        legend.colorMin = colorMin;
+        legend.colorMax = colorMax;
+        mapContext.onChange();
     }, [
         valueMin,
         valueMax,
