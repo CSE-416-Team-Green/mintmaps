@@ -8,18 +8,18 @@ import MapContext from './MapContext';
 
 const GridLegend = () => {
     const mapContext = useContext(MapContext);
-    const legend = mapContext.legend;
+    const legend = mapContext.legend ?? {};
 
     const [xTitle, setXTitle] = useState(legend.xTitle ?? '');
     const [yTitle, setYTitle] = useState(legend.yTitle ?? '');
     const [xValueMin, setXValueMin] = useState(legend.xValueMin ?? 0);
     const [xValueMax, setXValueMax] = useState(legend.xValueMax ?? 0);
-    const [xColorMin, setXColorMin] = useState(legend.xColorMin ?? '');
-    const [xColorMax, setXColorMax] = useState(legend.xColorMax ?? '');
+    const [xColorMin, setXColorMin] = useState(legend.xColorMin ?? '#FFFFFF');
+    const [xColorMax, setXColorMax] = useState(legend.xColorMax ?? '#2ECC71');
     const [yValueMin, setYValueMin] = useState(legend.yValueMin ?? 0);
     const [yValueMax, setYValueMax] = useState(legend.yValueMax ?? 0);
-    const [yColorMin, setYColorMin] = useState(legend.yColorMin ?? '');
-    const [yColorMax, setYColorMax] = useState(legend.yColorMax ?? '');
+    const [yColorMin, setYColorMin] = useState(legend.yColorMin ?? '#FFFFFF');
+    const [yColorMax, setYColorMax] = useState(legend.yColorMax ?? '#2ECC71');
     
     const size = 50;
     const canvasRef = useRef<HTMLCanvasElement>(null);
