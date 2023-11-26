@@ -12,10 +12,11 @@ const LegendTab = () => {
     return (
         <Box>
             {
-                mapType === 'Proportional Symbol' ? <CircleLegend /> :
-                mapType === 'Choropleth' ? <LinearLegend /> :
-                mapType === 'Heat Map' ? <LinearLegend /> :
-                mapType === 'Bivariate Choropleth' ? <GridLegend /> : <Box />
+                mapType === 'proportional-symbol' ? <CircleLegend /> :
+                mapType === 'choropleth' ? <LinearLegend /> :
+                mapType === 'heat' ? <LinearLegend /> :
+                mapType === 'bivariate-choropleth' ? <GridLegend /> :
+                <Box />
             }
         </Box>
     );
