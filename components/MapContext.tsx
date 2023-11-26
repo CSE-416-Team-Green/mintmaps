@@ -1,5 +1,5 @@
-import * as React from "react";
-import { GeoJsonObject } from "geojson";
+import * as React from 'react';
+import { GeoJsonObject } from 'geojson';
 
 interface Legend {
     title: string;
@@ -21,6 +21,13 @@ interface Legend {
     yColorMax: string;
 }
 
+type MapType =
+    'point' |
+    'heat' |
+    'choropleth' |
+    'bivariate-choropleth' |
+    'proportional-symbol';
+
 interface MapContextType {
     mapId: string;
     onChange: () => void;
@@ -28,23 +35,23 @@ interface MapContextType {
     setMap: (map: any) => void;
     loadMap: (id: string) => void;
     legend: Partial<Legend>;
-    mapType: string;
+    mapType: MapType | null;
     geoJSON: GeoJsonObject;
     hasMap: boolean;
     mapKey: string;
 }
 
 const MapContext = React.createContext<MapContextType>({
-    mapId: "",
+    mapId: '',
     onChange: () => {},
     saveMap: () => {},
     setMap: () => {},
     loadMap: () => {},
     legend: {},
-    mapType: "",
-    geoJSON: JSON.parse(JSON.stringify({ mapdata: "" })),
+    mapType: null,
+    geoJSON: JSON.parse(JSON.stringify({ mapdata: '' })),
     hasMap: false,
-    mapKey: "",
+    mapKey: '',
 });
 
 export default MapContext;
