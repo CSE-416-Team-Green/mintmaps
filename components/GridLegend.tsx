@@ -3,19 +3,23 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
 import { interpolateColor, interpolateNumber } from '@/libs/interpolate';
 import Sketch from '@/libs/sketch';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import MapContext from './MapContext';
 
 const GridLegend = () => {
-    const [xTitle, setXTitle] = useState('');
-    const [yTitle, setYTitle] = useState('');
-    const [xValueMin, setXValueMin] = useState(0);
-    const [xValueMax, setXValueMax] = useState(256);
-    const [xColorMin, setXColorMin] = useState('#FFFFFF');
-    const [xColorMax, setXColorMax] = useState('#FF0000');
-    const [yValueMin, setYValueMin] = useState(0);
-    const [yValueMax, setYValueMax] = useState(256);
-    const [yColorMin, setYColorMin] = useState('#FFFFFF');
-    const [yColorMax, setYColorMax] = useState('#0000FF');
+    const mapContext = useContext(MapContext);
+    const legend = mapContext.legend;
+
+    const [xTitle, setXTitle] = useState(legend.xTitle ?? '');
+    const [yTitle, setYTitle] = useState(legend.yTitle ?? '');
+    const [xValueMin, setXValueMin] = useState(legend.xValueMin ?? 0);
+    const [xValueMax, setXValueMax] = useState(legend.xValueMax ?? 0);
+    const [xColorMin, setXColorMin] = useState(legend.xColorMin ?? '');
+    const [xColorMax, setXColorMax] = useState(legend.xColorMax ?? '');
+    const [yValueMin, setYValueMin] = useState(legend.yValueMin ?? 0);
+    const [yValueMax, setYValueMax] = useState(legend.yValueMax ?? 0);
+    const [yColorMin, setYColorMin] = useState(legend.yColorMin ?? '');
+    const [yColorMax, setYColorMax] = useState(legend.yColorMax ?? '');
     
     const size = 50;
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -53,6 +57,18 @@ const GridLegend = () => {
                 textBaseline: 'top',
             });
         }
+
+        legend.xTitle = xTitle;
+        legend.yTitle = yTitle;
+        legend.xValueMin = xValueMin;
+        legend.xValueMax = xValueMax;
+        legend.xColorMin = xColorMin;
+        legend.xColorMax = xColorMax;
+        legend.yValueMin = yValueMin;
+        legend.yValueMax = yValueMax;
+        legend.yColorMin = yColorMin;
+        legend.yColorMax = yColorMax;
+        mapContext.onChange();
     }, [
         xValueMin,
         xValueMax,

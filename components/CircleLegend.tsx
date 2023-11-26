@@ -1,29 +1,24 @@
 import { interpolateColor } from '@/libs/interpolate';
 import { interpolateNumber } from '@/libs/interpolate';
 import Sketch from '@/libs/sketch';
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
-
-interface ComponentProps {
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    sizeMin?: number;
-    sizeMax?: number;
-    interval?: number;
-}
+import MapContext from './MapContext';
 
 const CircleLegend = () => {
-    const [title, setTitle] = useState('');
-    const [valueMin, setValueMin] = useState(0);
-    const [valueMax, setValueMax] = useState(256);
-    const [colorMin, setColorMin] = useState('#FFFFFF');
-    const [colorMax, setColorMax] = useState('#FF0000');
-    const [sizeMin, setSizeMin] = useState(0);
-    const [sizeMax, setSizeMax] = useState(128);
+    const mapContext = useContext(MapContext);
+    const legend = mapContext.legend;
+
+    const [title, setTitle] = useState(legend.title ?? '');
+    const [valueMin, setValueMin] = useState(legend.valueMin ?? 0);
+    const [valueMax, setValueMax] = useState(legend.valueMax ?? 0);
+    const [colorMin, setColorMin] = useState(legend.colorMin ?? '');
+    const [colorMax, setColorMax] = useState(legend.colorMax ?? '');
+    const [sizeMin, setSizeMin] = useState(legend.sizeMin ?? 0);
+    const [sizeMax, setSizeMax] = useState(legend.sizeMax ?? 0);
+
     const interval = 4;
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -50,6 +45,15 @@ const CircleLegend = () => {
                 textBaseline: 'top',
             });
         }
+
+        legend.title = title;
+        legend.valueMin = valueMin;
+        legend.valueMax = valueMax;
+        legend.colorMin = colorMin;
+        legend.colorMax = colorMax;
+        legend.sizeMin = sizeMin;
+        legend.sizeMax = sizeMax;
+        mapContext.onChange();
     }, [
         valueMin,
         valueMax,

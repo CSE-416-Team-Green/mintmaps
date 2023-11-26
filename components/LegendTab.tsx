@@ -2,17 +2,20 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@
 import CircleLegend from './CircleLegend';
 import LinearLegend from './LinearLegend';
 import GridLegend from './GridLegend';
+import MapContext from './MapContext';
+import { useContext } from 'react';
 
 const LegendTab = () => {
-    const maptype: string = 'Bivariate Choropleth';
+    const mapContext = useContext(MapContext);
+    const mapType = mapContext.mapType;
 
     return (
         <Box>
             {
-                maptype === 'Proportional Symbol' ? <CircleLegend /> :
-                maptype === 'Choropleth' ? <LinearLegend /> :
-                maptype === 'Heat Map' ? <LinearLegend /> :
-                maptype === 'Bivariate Choropleth' ? <GridLegend /> : <Box />
+                mapType === 'Proportional Symbol' ? <CircleLegend /> :
+                mapType === 'Choropleth' ? <LinearLegend /> :
+                mapType === 'Heat Map' ? <LinearLegend /> :
+                mapType === 'Bivariate Choropleth' ? <GridLegend /> : <Box />
             }
         </Box>
     );
