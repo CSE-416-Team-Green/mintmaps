@@ -4,6 +4,36 @@ import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
+import { SelectChangeEvent } from "@mui/material";
+import FitBounds from "./FitBounds";
+import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
+
+interface Legend {
+    title: string;
+    valueMin: number;
+    valueMax: number;
+    colorMin: string;
+    colorMax: string;
+    sizeMin: number;
+    sizeMax: number;
+    xTitle: string;
+    yTitle: string;
+    xValueMin: number;
+    xValueMax: number;
+    xColorMin: string;
+    xColorMax: string;
+    yValueMin: number;
+    yValueMax: number;
+    yColorMin: string;
+    yColorMax: string;
+}
+
+type MapType =
+    | "point"
+    | "heat"
+    | "choropleth"
+    | "bivariate-choropleth"
+    | "proportional-symbol";
 
 interface MapContextType {
     mapId: string;
@@ -11,11 +41,15 @@ interface MapContextType {
     saveMap: () => void;
     setMap: (map: any) => void;
     loadMap: (id: string) => void;
-    legend: any;
-    mapType: string;
+    legend: Partial<Legend>;
+    mapType: MapType | null;
     geoJSON: GeoJsonObject;
     hasMap: boolean;
     mapKey: string;
+    selectedProperty: string;
+    selectedPropertyIndex: number;
+    selectProperty: (event: SelectChangeEvent) => void;
+    updateLegend: (legend: any) => void;
 }
 
 const DynamicMap = () => {
@@ -36,6 +70,50 @@ const DynamicMap = () => {
         loadMapData();
     }, [mapContext.hasMap]);
 
+    const colorRegion = (feature: any) => {
+        const value = feature.properties[mapContext.selectedProperty];
+        const color = getColorForProperty(mapContext.legend, value);
+
+        return {
+            fillColor: color,
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            fillOpacity: 0.7,
+        };
+    };
+
+    const getColorForProperty = (legend: any, value: number) => {
+        const normalizedValue =
+            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+        return interpolateColor(
+            legend.colorMin,
+            legend.colorMax,
+            normalizedValue
+        );
+    };
+
+    const onEachFeature = (feature: any, layer: any) => {
+        layer.on({
+            mouseover: (event: any) => {
+                const layer = event.target;
+                const value = feature.properties[mapContext.selectedProperty];
+
+                if (value) {
+                    layer
+                        .bindTooltip(value.toString(), {
+                            permanent: false,
+                            sticky: true,
+                        })
+                        .openTooltip();
+                }
+            },
+            mouseout: (event: any) => {
+                const layer = event.target;
+                layer.closeTooltip();
+            },
+        });
+    };
     return (
         <MapContainer
             style={{ height: "100%", width: "100%" }}
@@ -48,8 +126,14 @@ const DynamicMap = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {mapContext.hasMap && (
-                <GeoJSON key={mapContext.mapKey} data={mapData} />
+                <GeoJSON
+                    key={mapContext.mapKey}
+                    data={mapData}
+                    style={colorRegion}
+                    onEachFeature={onEachFeature}
+                />
             )}
+            {mapData && <FitBounds mapData={mapData} />}
         </MapContainer>
     );
 };

@@ -5,19 +5,52 @@ import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
 import * as React from "react";
+import { SelectChangeEvent } from "@mui/material";
 
-interface MapContextType {
-    mapId: string;
-    onChange: () => void;
-    saveMap: () => void;
-    setMap: (map: any) => void;
-    loadMap: (id: string) => void;
-    legend: any;
-    mapType: string;
-    geoJSON: GeoJsonObject;
-    hasMap: boolean;
-    mapKey: string;
+
+interface Legend {
+    title: string;
+    valueMin: number;
+    valueMax: number;
+    colorMin: string;
+    colorMax: string;
+    sizeMin: number;
+    sizeMax: number;
+    xTitle: string;
+    yTitle: string;
+    xValueMin: number;
+    xValueMax: number;
+    xColorMin: string;
+    xColorMax: string;
+    yValueMin: number;
+    yValueMax: number;
+    yColorMin: string;
+    yColorMax: string;
 }
+
+type MapType =
+    'point' |
+    'heat' |
+    'choropleth' |
+    'bivariate-choropleth' |
+    'proportional-symbol';
+
+    interface MapContextType {
+        mapId: string;
+        onChange: () => void;
+        saveMap: () => void;
+        setMap: (map: any) => void;
+        loadMap: (id: string) => void;
+        legend: Partial<Legend>;
+        mapType: MapType | null;
+        geoJSON: GeoJsonObject;
+        hasMap: boolean;
+        mapKey: string;
+        selectedProperty: string;
+        selectedPropertyIndex: number;
+        selectProperty: (event: SelectChangeEvent) => void;
+    }
+
 
 interface MapProps {
     mapId: string;
