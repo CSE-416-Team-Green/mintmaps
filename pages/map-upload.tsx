@@ -56,7 +56,7 @@ export default function MapUpload() {
                         <Typography variant="h3" gutterBottom>
                             {mapContext.title}
                         </Typography>
-                        <Typography component="h5">
+                        <Typography variant="h3">
                             {mapContext.description}
                         </Typography>
                         <Box
