@@ -58,6 +58,12 @@ interface MapContextType {
     updateLegendColor: (colorMin: string, colorMax: string) => void;
     updateFeatureProperty: (name: string, newValue: any) => void;
     updateFeatureName: (oldName: string, newName: string) => void;
+    tags: string[];
+    title: string;
+    description: string;
+    updateTags: (tags: string[]) => void;
+    updateDescription: (desc: string) => void;
+    updateTitle: (title: string) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -74,6 +80,9 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [mapKey, setMapKey] = React.useState("");
     const [selectedProperty, setSelectedProperty] = React.useState("");
     const [selectedPropertyIndex, setSelectedPropertyIndex] = React.useState(0);
+    const [tags, setTags] = React.useState<string[]>([]);
+    const [title, setTitle] = React.useState("");
+    const [description, setDescription] = React.useState("");
 
     React.useEffect(() => {
         if (
@@ -136,6 +145,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             setgeoJSON(res.data.map);
             setHasMap(true);
             setMapId(id);
+            setTags(res.data.mapProps.tags);
             const key = uuidv4();
             setMapKey(key);
         } catch (err) {
@@ -187,6 +197,17 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapKey(key);
     };
 
+    const updateTags = (tags: string[]) => {
+        setTags(tags);
+    };
+
+    const updateDescription = (desc: string) => {
+        setDescription(desc);
+    };
+
+    const updateTitle = (title: string) => {
+        setTitle(title);
+    };
     const contextValue: MapContextType = {
         mapId,
         onChange,
@@ -204,6 +225,12 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         updateLegendColor,
         updateFeatureName,
         updateFeatureProperty,
+        tags,
+        title,
+        description,
+        updateTags,
+        updateDescription,
+        updateTitle,
     };
 
     return (

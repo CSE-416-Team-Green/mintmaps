@@ -46,7 +46,14 @@ interface MapContextType {
     updateLegendColor: (colorMin: string, colorMax: string) => void;
     updateFeatureProperty: (name: string, newValue: any) => void;
     updateFeatureName: (oldName: string, newName: string) => void;
+    tags: string[];
+    title: string;
+    description: string;
+    updateTags: (tags: string[]) => void;
+    updateDescription: (desc: string) => void;
+    updateTitle: (title: string) => void;
 }
+
 const MapContext = React.createContext<MapContextType>({
     mapId: "",
     onChange: () => {},
@@ -64,6 +71,12 @@ const MapContext = React.createContext<MapContextType>({
     updateLegendColor: () => {},
     updateFeatureProperty: () => {},
     updateFeatureName: () => {},
+    tags: [],
+    title: "",
+    description: "",
+    updateTags: () => {},
+    updateDescription: () => {},
+    updateTitle: () => {},
 });
 
 export default MapContext;

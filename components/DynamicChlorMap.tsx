@@ -51,6 +51,12 @@ interface MapContextType {
     updateLegendColor: (colorMin: string, colorMax: string) => void;
     updateFeatureProperty: (name: string, newValue: any) => void;
     updateFeatureName: (oldName: string, newName: string) => void;
+    tags: string[];
+    title: string;
+    description: string;
+    updateTags: (tags: string[]) => void;
+    updateDescription: (desc: string) => void;
+    updateTitle: (title: string) => void;
 }
 
 interface MapProps {

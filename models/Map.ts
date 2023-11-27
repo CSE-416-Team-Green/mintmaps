@@ -1,8 +1,8 @@
-import mongoose,{ Document, Schema, model, Types, models } from "mongoose";
+import mongoose, { Document, Schema, model, Types, models } from "mongoose";
 
 interface IMap extends Document {
     name: string;
-    maptype:string;
+    maptype: string;
     description?: string;
     tags?: string[];
     visibility: "public" | "unlisted" | "private";
@@ -17,6 +17,27 @@ interface IMap extends Document {
     shares?: number;
     exports?: number;
     views?: number;
+    legend?: Partial<Legend>;
+}
+
+interface Legend {
+    title: string;
+    valueMin: number;
+    valueMax: number;
+    colorMin: string;
+    colorMax: string;
+    sizeMin: number;
+    sizeMax: number;
+    xTitle: string;
+    yTitle: string;
+    xValueMin: number;
+    xValueMax: number;
+    xColorMin: string;
+    xColorMax: string;
+    yValueMin: number;
+    yValueMax: number;
+    yColorMin: string;
+    yColorMax: string;
 }
 
 const mapSchema = new Schema<IMap>({
@@ -70,8 +91,9 @@ const mapSchema = new Schema<IMap>({
     shares: Number,
     exports: Number,
     views: Number,
+    legend: Object,
 });
 
-const MapModel = mongoose.models.Map || model<IMap>('Map', mapSchema);
+const MapModel = mongoose.models.Map || model<IMap>("Map", mapSchema);
 
 export default MapModel;
