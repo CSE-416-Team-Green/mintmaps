@@ -50,13 +50,13 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
 
             
             // check if passwords contain different characters
-
-
+           
             const payload = {
                 userName: userName,
                 email: email,
                 password: password
             }
+            console.log("dasdas"+typeof JSON.stringify(payload))
             try {
                 const response = await fetch('/api/createAccount', {
                     method: 'POST',

@@ -18,14 +18,23 @@ const presetMaps = [
     "Spain",
     "Italy",
 ]
-
-const InputMap = () => {
+interface InputMapProps {
+    onFileSelect: (file: File | null) => void;
+}
+const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
     const [preset, setPreset] = React.useState<string>("Select a preset map");
-
+    const [uploadedFile, setUploadedFile] = React.useState<File | null>(null);
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+            onFileSelect(file);
+            setPreset("Select a preset map");
+        }
+    };
     function handlePresetChange(event: SelectChangeEvent<string>) {
         setPreset(event.target.value as string);
     }
-
+    
     return (
         <Box sx={{
             display: 'flex',
@@ -56,11 +65,24 @@ const InputMap = () => {
                         flexDirection: 'column',
                         rowGap: '12px',
                     }}>
-                        <Button variant="contained" style={{
-                            height: '48px',
-                        }}>
+                         <input
+                            accept=".kml,.geojson,.shp,.zip, .json"
+                            type="file"
+                            id="file-upload"
+                            style={{ display: "none" }}
+                            onChange={handleFileChange}
+                        />
+                     <label htmlFor="file-upload">
+                        <Button 
+                            style={{
+                                height: '48px'}}
+                            variant="contained" 
+                            color="primary"
+                            component="span"
+                        >
                             UPLOAD GEOJSON/FILE
                         </Button>
+                        </label>
                         .KML .SHP .GEOJSON or .MINTMAP file
                     </Box>
                     <Divider>or</Divider>

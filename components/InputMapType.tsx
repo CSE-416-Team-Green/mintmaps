@@ -1,5 +1,7 @@
 import { Box, Chip } from '@mui/material';
 import Image from 'next/image';
+import React from 'react';
+
 
 const maps = [
     {
@@ -23,13 +25,19 @@ const maps = [
         image: "/bi-choropleth-preview.png",
     },
 ]
+interface InputMapTypeProps {
+    onMapTypeSelect: (selectedMapType: string) => void;
+}
+const InputMapType : React.FC<InputMapTypeProps> = ({ onMapTypeSelect }) => {
 
-const InputMapType = () => {
+   // const [selectedMapType, setSelectedMapType] = React.useState<string | null>(null);
 
-    function handleClick() {
-        console.log("click");
-    }
-
+    const handleClick = (mapName: string) => {
+        onMapTypeSelect(mapName);
+    };
+    //React.useEffect(() => {
+        //onMapTypeSelect(mapName);
+    //}, [mapName, onMapTypeSelect]);
     return (
         <Box sx={{
             display: 'flex',
@@ -60,7 +68,11 @@ const InputMapType = () => {
                                 }}
                             >
                                 <Image src={map.image} alt={map.name} width={280} height={200} />
-                                <Chip onClick={handleClick} label={map.name} />
+                                <Chip
+                                    onClick={() => handleClick(map.name)}
+                                    label={map.name}
+                                    color={map.name ? "primary" : "default"}
+                                />
                             </Box>
                         )
                     })

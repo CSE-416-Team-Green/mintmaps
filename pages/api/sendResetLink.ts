@@ -8,8 +8,8 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method !== 'POST') {
-        res.setHeader('Allow', ['POST']);
+    if (req.method !== 'PUT') {
+        res.setHeader('Allow', ['PUT']);
         return res.status(405).end('Method Not Allowed');
     }
 
@@ -29,12 +29,14 @@ export default async function handler(
         const resetTokenExpiry = new Date(Date.now() + 3600000);; // 1 hour from now
 
         // Save the token and expiry in the user's record
+        console.log(resetToken)
         user.resetToken = resetToken;
         user.resetTokenExpiry = resetTokenExpiry;
         await user.save();
 
         // Send the email with the reset link
-        const resetLink = `https://yourfrontenddomain.com/reset-password?token=${resetToken}`;
+        //https://mintmaps.site//reset-password?token=${resetToken}
+        const resetLink = `http://localhost:3000/passwordresetform?token=${resetToken}`;
         await sendResetEmail(email, resetLink);
 
         res.status(200).json({ message: 'Reset link sent to email' });

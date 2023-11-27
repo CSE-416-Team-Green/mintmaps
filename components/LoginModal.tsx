@@ -114,7 +114,7 @@ import * as React from "react";
                 />
             </Grid>
             <Grid item>
-                <Link className={styles.linkText} href="/">
+                <Link className={styles.linkText} href="/resetpassword">
                     Forgot Your Password?
                 </Link>
             </Grid>

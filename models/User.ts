@@ -16,6 +16,8 @@ interface IUser extends Document {
     accountStatus: "suspended" | "active" | "deleted";
     reputation: number;
     admin: boolean;
+    resetToken?: string;
+    resetTokenExpiry?: Date;
 }
 
 type UserContext = {
@@ -54,6 +56,8 @@ const userSchema = new Schema<IUser>({
     },
     reputation: { type: Number, required: true, default: 0 },
     admin: { type: Boolean, required: true },
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date },
 });
 
 const User = models.User || model<IUser>("User", userSchema);
