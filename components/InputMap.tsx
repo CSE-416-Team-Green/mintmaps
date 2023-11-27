@@ -93,6 +93,7 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
         setPreset(event.target.value as string);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     const handlePresetMapSelection = async (presetMap: string) => {
         if (presetMap in presetMapGeoJsonUrls) {
@@ -117,6 +118,8 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
             handlePresetMapSelection(preset); 
         }
     }, [preset]);
+=======
+>>>>>>> parent of 5f18acc (mapcreationimprove)
 =======
 >>>>>>> parent of 5f18acc (mapcreationimprove)
     
