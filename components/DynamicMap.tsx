@@ -49,7 +49,7 @@ interface MapContextType {
     selectedProperty: string;
     selectedPropertyIndex: number;
     selectProperty: (event: SelectChangeEvent) => void;
-    updateLegend: (legend: any) => void;
+    updateLegendColor: (colorMin: string, colorMax: string) => void;
 }
 
 const DynamicMap = () => {

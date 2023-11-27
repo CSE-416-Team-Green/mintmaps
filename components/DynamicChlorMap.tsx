@@ -7,7 +7,6 @@ import { GeoJsonObject } from "geojson";
 import * as React from "react";
 import { SelectChangeEvent } from "@mui/material";
 
-
 interface Legend {
     title: string;
     valueMin: number;
@@ -29,28 +28,28 @@ interface Legend {
 }
 
 type MapType =
-    'point' |
-    'heat' |
-    'choropleth' |
-    'bivariate-choropleth' |
-    'proportional-symbol';
+    | "point"
+    | "heat"
+    | "choropleth"
+    | "bivariate-choropleth"
+    | "proportional-symbol";
 
-    interface MapContextType {
-        mapId: string;
-        onChange: () => void;
-        saveMap: () => void;
-        setMap: (map: any) => void;
-        loadMap: (id: string) => void;
-        legend: Partial<Legend>;
-        mapType: MapType | null;
-        geoJSON: GeoJsonObject;
-        hasMap: boolean;
-        mapKey: string;
-        selectedProperty: string;
-        selectedPropertyIndex: number;
-        selectProperty: (event: SelectChangeEvent) => void;
-    }
-
+interface MapContextType {
+    mapId: string;
+    onChange: () => void;
+    saveMap: () => void;
+    setMap: (map: any) => void;
+    loadMap: (id: string) => void;
+    legend: Partial<Legend>;
+    mapType: MapType | null;
+    geoJSON: GeoJsonObject;
+    hasMap: boolean;
+    mapKey: string;
+    selectedProperty: string;
+    selectedPropertyIndex: number;
+    selectProperty: (event: SelectChangeEvent) => void;
+    updateLegendColor: (colorMin: string, colorMax: string) => void;
+}
 
 interface MapProps {
     mapId: string;
