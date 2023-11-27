@@ -20,14 +20,31 @@ export default async function handler(
     }
 
     try {
-        const { id, geoJSON, title, tags, description, legend } = req.body;
+        const {
+            id,
+            geoJSON,
+            title,
+            tags,
+            description,
+            legend,
+            selectedProperty,
+            selectedPropertyIndex,
+        } = req.body;
         const uint8 = geobuf.encode(geoJSON, new Pbf());
         const buffer = Buffer.from(uint8);
         console.log(id);
         console.log(legend);
         const updatedMap = await MapModel.findByIdAndUpdate(
             id,
-            { geoJSON: buffer, name: title, tags, description, legend: legend },
+            {
+                geoJSON: buffer,
+                name: title,
+                tags,
+                description,
+                legend: legend,
+                selectedProperty,
+                selectedPropertyIndex,
+            },
             { new: true }
         );
 
