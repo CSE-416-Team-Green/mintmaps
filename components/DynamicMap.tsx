@@ -58,6 +58,7 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
+    
 }
 
 const DynamicMap = () => {
