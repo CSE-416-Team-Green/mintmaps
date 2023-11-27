@@ -67,7 +67,8 @@ const DynamicMap = () => {
     useEffect(() => {
         const loadMapData = async () => {
             try {
-                mapContext.loadMap("656272b8739b9f79d93d27ab");
+                const id = localStorage.getItem("mapId") as string;
+                mapContext.loadMap(id);
                 setMapData(mapContext.geoJSON);
                 console.log(mapData);
             } catch (error) {

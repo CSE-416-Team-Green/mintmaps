@@ -9,6 +9,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { SelectChangeEvent } from "@mui/material";
 import { FeatureCollection } from "geojson";
+import { useRouter } from "next/navigation";
 
 interface CustomProviderProps {
     children: React.ReactNode;
@@ -83,6 +84,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [tags, setTags] = React.useState<string[]>([]);
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
+    const router = useRouter();
 
     React.useEffect(() => {
         if (
@@ -103,7 +105,24 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
     const onChange = () => {};
 
-    const saveMap = async () => {};
+    const saveMap = async () => {
+        const updatedMap = {
+            id: localStorage.getItem("mapId"),
+            geoJSON: geoJSON,
+            title: title,
+            tags: tags,
+            description: description,
+            legend: legend,
+        };
+        try {
+            const response = await axios.post("/api/saveMap", updatedMap);
+
+            if (response.status == 200) {
+            }
+        } catch (err) {
+            console.error("Error saving map - try again", err);
+        }
+    };
 
     const setMap = () => {};
 
@@ -146,6 +165,14 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             setHasMap(true);
             setMapId(id);
             setTags(res.data.mapProps.tags);
+
+            if (res.data.mapProps.name) {
+                setTitle(res.data.mapProps.name);
+            }
+
+            if (res.data.mapProps.description) {
+                setDescription(res.data.description);
+            }
             const key = uuidv4();
             setMapKey(key);
         } catch (err) {

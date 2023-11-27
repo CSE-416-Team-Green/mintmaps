@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         await connectDb();
         const form = new IncomingForm();
 
-        form.parse(req, async (err, fields, files) => {
+        form.parse(req, async (err:any, fields:any, files:any) => {
             if (err) {
                 console.error("Error parsing form:", err);
                 return res.status(500).json({ message: "Error parsing form data" });
