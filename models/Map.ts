@@ -17,6 +17,7 @@ interface IMap extends Document {
     shares?: number;
     exports?: number;
     views?: number;
+    legend?: Object
 }
 
 const mapSchema = new Schema<IMap>({
@@ -70,6 +71,7 @@ const mapSchema = new Schema<IMap>({
     shares: Number,
     exports: Number,
     views: Number,
+    legend: Object
 });
 
 const MapModel = mongoose.models.Map || model<IMap>('Map', mapSchema);
