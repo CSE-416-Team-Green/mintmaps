@@ -56,6 +56,8 @@ interface MapContextType {
     selectedPropertyIndex: number;
     selectProperty: (event: SelectChangeEvent) => void;
     updateLegendColor: (colorMin: string, colorMax: string) => void;
+    updateFeatureProperty: (name: string, newValue: any) => void;
+    updateFeatureName: (oldName: string, newName: string) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -78,13 +80,15 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             geoJSON &&
             geoJSON.features &&
             geoJSON.features.length > 0 &&
-            geoJSON.features[0].properties
+            geoJSON.features[0].properties &&
+            selectedProperty == ""
         ) {
             const propertyKeys = Object.keys(selectedProperty);
             if (propertyKeys.length > 0) {
                 setSelectedProperty(propertyKeys[0]);
                 setSelectedPropertyIndex(0);
             }
+        } else {
         }
     }, [geoJSON]);
 
@@ -139,7 +143,49 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         }
     };
 
-    const updateFeature = () => {};
+    const updateFeatureProperty = (name: string, newValue: any) => {
+        const newGeoJSON = JSON.parse(JSON.stringify(geoJSON));
+        newGeoJSON.features.forEach((feature: any) => {
+            if (feature.properties.name === name) {
+                const properFormatedValue =
+                    typeof feature.properties[selectedProperty] === "number"
+                        ? parseFloat(newValue)
+                        : newValue;
+                feature.properties[selectedProperty] = properFormatedValue;
+            }
+        });
+        setgeoJSON(newGeoJSON);
+
+        const values = newGeoJSON.features
+            .map((feature: any) => feature.properties[selectedProperty])
+            .filter((value: any) => typeof value === "number");
+
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+
+        const newLegend = {
+            ...legend,
+            valueMin: minValue,
+            valueMax: maxValue,
+        };
+
+        setLegend(newLegend);
+
+        const key = uuidv4();
+        setMapKey(key);
+    };
+
+    const updateFeatureName = (oldName: string, newName: string) => {
+        const newGeoJSON = JSON.parse(JSON.stringify(geoJSON));
+        newGeoJSON.features.forEach((feature: any) => {
+            if (feature.properties.name === oldName) {
+                feature.properties.name = newName;
+            }
+        });
+        setgeoJSON(newGeoJSON);
+        const key = uuidv4();
+        setMapKey(key);
+    };
 
     const contextValue: MapContextType = {
         mapId,
@@ -156,6 +202,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         selectedPropertyIndex,
         selectProperty,
         updateLegendColor,
+        updateFeatureName,
+        updateFeatureProperty,
     };
 
     return (

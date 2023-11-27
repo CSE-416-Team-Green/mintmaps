@@ -50,6 +50,8 @@ interface MapContextType {
     selectedPropertyIndex: number;
     selectProperty: (event: SelectChangeEvent) => void;
     updateLegendColor: (colorMin: string, colorMax: string) => void;
+    updateFeatureProperty: (name: string, newValue: any) => void;
+    updateFeatureName: (oldName: string, newName: string) => void;
 }
 
 const DynamicMap = () => {
@@ -69,6 +71,15 @@ const DynamicMap = () => {
 
         loadMapData();
     }, [mapContext.hasMap]);
+
+    useEffect(() => {
+        setMapData(mapContext.geoJSON);
+    }, [
+        mapContext.geoJSON,
+        mapContext.legend.valueMax,
+        mapContext.legend.valueMin,
+        mapContext.selectedProperty,
+    ]);
 
     const colorRegion = (feature: any) => {
         const value = feature.properties[mapContext.selectedProperty];
@@ -128,7 +139,7 @@ const DynamicMap = () => {
             {mapContext.hasMap && (
                 <GeoJSON
                     key={mapContext.mapKey}
-                    data={mapData}
+                    data={mapContext.geoJSON}
                     style={colorRegion}
                     onEachFeature={onEachFeature}
                 />

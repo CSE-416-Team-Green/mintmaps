@@ -49,6 +49,8 @@ interface MapContextType {
     selectedPropertyIndex: number;
     selectProperty: (event: SelectChangeEvent) => void;
     updateLegendColor: (colorMin: string, colorMax: string) => void;
+    updateFeatureProperty: (name: string, newValue: any) => void;
+    updateFeatureName: (oldName: string, newName: string) => void;
 }
 
 interface MapProps {

@@ -26,27 +26,47 @@ interface AccordionProps {
 
 const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
     const mapContext = useContext(MapContext);
-    // const [selectedProperty, setSelectedProperty] = useState(
-    //     mapContext.selectedProperty
-    // );
-    // const [selectedPropertyIndex, setSelectedPropertyIndex] = useState(
-    //     mapContext.selectedPropertyIndex
-    // );
 
-    // useEffect(() => {
-    //     if (
-    //         geoJSON &&
-    //         geoJSON.features &&
-    //         geoJSON.features.length > 0 &&
-    //         geoJSON.features[0].properties
-    //     ) {
-    //         const propertyKeys = Object.keys(mapContext.selectedProperty);
-    //         if (propertyKeys.length > 0) {
-    //             setSelectedProperty(propertyKeys[0]);
-    //             setSelectedPropertyIndex(0);
-    //         }
-    //     }
-    // }, [mapContext.selectedProperty]);
+    const [editValues, setEditValues] = useState<any>({});
+
+    const handleEditChange = (name: any, value: any) => {
+        setEditValues((prevValues: any) => ({
+            ...prevValues,
+            [name]: value,
+        }));
+    };
+    const updateFeatureName = (event: any, oldName: string) => {
+        if (event.key == "Enter") {
+            const newName = event.target.value;
+            mapContext.updateFeatureName(oldName, newName);
+        }
+    };
+
+    const updateFeaturePropValue = (event: any, name: any, index: any) => {
+        if (event.key === "Enter") {
+            // newValue is the edited value from the state
+            const newValue = editValues[index];
+            mapContext.updateFeatureProperty(name, newValue);
+
+            // Optionally, you can reset the edit state here
+            setEditValues((prevValues: any) => ({
+                ...prevValues,
+                [index]: newValue,
+            }));
+        }
+    };
+
+    useEffect(() => {
+        const initialValues = geoJSON.features.reduce(
+            (acc: any, feature, index) => {
+                acc[index] = feature?.properties?.[mapContext.selectedProperty];
+                return acc;
+            },
+            {}
+        );
+
+        setEditValues(initialValues);
+    }, [geoJSON, mapContext.selectedProperty]);
 
     return (
         <>
@@ -89,9 +109,14 @@ const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
                                                 ? feature.properties.name
                                                 : "Name Data Not Available"
                                         }
+                                        onKeyDown={(e) =>
+                                            updateFeatureName(
+                                                e,
+                                                feature.properties?.name
+                                            )
+                                        }
                                     />
-
-                                    <TextField
+                                    {/* <TextField
                                         label={mapContext.selectedProperty}
                                         variant="outlined"
                                         defaultValue={
@@ -117,6 +142,32 @@ const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
                                                       ]
                                                   ] || "Data Not Available"
                                                 : "Data Not Available"
+                                        }
+                                        onKeyDown={(e) =>
+                                            updateFeaturePropValue(
+                                                e,
+                                                feature.properties?.name
+                                            )
+                                        }
+
+                                        
+                                    /> */}
+                                    <TextField
+                                        label={mapContext.selectedProperty}
+                                        variant="outlined"
+                                        value={editValues[index] ?? ""}
+                                        onChange={(e) =>
+                                            handleEditChange(
+                                                index,
+                                                e.target.value
+                                            )
+                                        }
+                                        onKeyDown={(e) =>
+                                            updateFeaturePropValue(
+                                                e,
+                                                feature.properties?.name,
+                                                index
+                                            )
                                         }
                                     />
                                 </Box>

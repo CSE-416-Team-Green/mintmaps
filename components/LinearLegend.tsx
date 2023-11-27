@@ -59,7 +59,14 @@ const LinearLegend = () => {
         legend.colorMax = colorMax;
         mapContext.onChange();
         mapContext.updateLegendColor(colorMin, colorMax);
-    }, [valueMin, valueMax, colorMin, colorMax]);
+    }, [
+        valueMin,
+        valueMax,
+        colorMin,
+        colorMax,
+        mapContext.geoJSON,
+        mapContext.legend,
+    ]);
 
     return (
         <Box
