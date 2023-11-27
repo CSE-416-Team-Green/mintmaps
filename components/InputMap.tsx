@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
@@ -26,14 +26,6 @@ const presetMaps = [
     "Spain",
     "Italy",
 ]
-
-const presetMapGeoJsonUrls: PresetMapGeoJsonUrls = {
-    "United States": "/presetmap/usa.geo.json"
-    // ... other maps
-};
-interface PresetMapGeoJsonUrls {
-    [key: string]: string;
-}
 interface InputMapProps {
     onFileSelect: (file: File | null) => void;
 }
@@ -45,6 +37,7 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
     
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
+<<<<<<< HEAD
         setUploadedFile(file)
         onFileSelect(file);
         setPreset("Select a preset map");
@@ -87,12 +80,19 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                 alert("Invalid file type. Please upload a KML, GeoJSON, SHP, ZIP, JSON, or MINTMAP file.");
             }
         }*/
+=======
+        if (file) {
+            onFileSelect(file);
+            setPreset("Select a preset map");
+        }
+>>>>>>> parent of 5f18acc (mapcreationimprove)
     };
     
     
     function handlePresetChange(event: SelectChangeEvent<string>) {
         setPreset(event.target.value as string);
     }
+<<<<<<< HEAD
     
     const handlePresetMapSelection = async (presetMap: string) => {
         if (presetMap in presetMapGeoJsonUrls) {
@@ -117,6 +117,8 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
             handlePresetMapSelection(preset); 
         }
     }, [preset]);
+=======
+>>>>>>> parent of 5f18acc (mapcreationimprove)
     
     return (
         <Box sx={{
@@ -154,7 +156,6 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                             id="file-upload"
                             style={{ display: "none" }}
                             onChange={handleFileChange}
-                            disabled={preset !== "Select a preset map"}
                         />
                      <label htmlFor="file-upload">
                         <Button 
@@ -163,7 +164,6 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                             variant="contained" 
                             color="primary"
                             component="span"
-                            disabled={preset !== "Select a preset map"}
                         >
                             UPLOAD GEOJSON/FILE
                         </Button>
@@ -171,13 +171,12 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                         .KML .SHP .GEOJSON or .MINTMAP file
                     </Box>
                     <Divider>or</Divider>
-                    <FormControl fullWidth disabled={uploadedFile !== null}>
+                    <FormControl fullWidth>
                         <InputLabel>Preset Map</InputLabel>
                         <Select
                             value={preset}
                             label="Preset Map"
                             onChange={handlePresetChange}
-                            disabled={uploadedFile !== null}
                         >
                             {presetMaps.map((presetMap) => {
                                 return (
