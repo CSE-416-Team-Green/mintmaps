@@ -44,11 +44,9 @@ const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
 
     const updateFeaturePropValue = (event: any, name: any, index: any) => {
         if (event.key === "Enter") {
-            // newValue is the edited value from the state
             const newValue = editValues[index];
             mapContext.updateFeatureProperty(name, newValue);
 
-            // Optionally, you can reset the edit state here
             setEditValues((prevValues: any) => ({
                 ...prevValues,
                 [index]: newValue,
@@ -72,51 +70,49 @@ const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
         <>
             <MapDataSelector />
             <Box>
-                {geoJSON.features.map((feature, index) =>
-                    feature?.properties?.name !== "Israel" ? (
-                        <Accordion key={index}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        columnGap: "8px",
-                                    }}
-                                >
-                                    <CropIcon />
+                {geoJSON.features.map((feature, index) => (
+                    <Accordion key={index}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    columnGap: "8px",
+                                }}
+                            >
+                                <CropIcon />
 
-                                    {feature.properties &&
-                                    feature.properties.name
-                                        ? feature.properties.name
-                                        : "Name Data Not Available"}
-                                </Box>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "100%",
-                                        rowGap: "16px",
-                                    }}
-                                >
-                                    <TextField
-                                        label="Name"
-                                        variant="outlined"
-                                        defaultValue={
-                                            feature.properties &&
-                                            feature.properties.name
-                                                ? feature.properties.name
-                                                : "Name Data Not Available"
-                                        }
-                                        onKeyDown={(e) =>
-                                            updateFeatureName(
-                                                e,
-                                                feature.properties?.name
-                                            )
-                                        }
-                                    />
-                                    {/* <TextField
+                                {feature.properties && feature.properties.name
+                                    ? feature.properties.name
+                                    : "Name Data Not Available"}
+                            </Box>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    width: "100%",
+                                    rowGap: "16px",
+                                }}
+                            >
+                                <TextField
+                                    label="Name"
+                                    variant="outlined"
+                                    defaultValue={
+                                        feature.properties &&
+                                        feature.properties.name
+                                            ? feature.properties.name
+                                            : "Name Data Not Available"
+                                    }
+                                    onKeyDown={(e) =>
+                                        updateFeatureName(
+                                            e,
+                                            feature.properties?.name
+                                        )
+                                    }
+                                />
+                                {/* <TextField
                                         label={mapContext.selectedProperty}
                                         variant="outlined"
                                         defaultValue={
@@ -152,31 +148,25 @@ const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
 
                                         
                                     /> */}
-                                    <TextField
-                                        label={mapContext.selectedProperty}
-                                        variant="outlined"
-                                        value={editValues[index] ?? ""}
-                                        onChange={(e) =>
-                                            handleEditChange(
-                                                index,
-                                                e.target.value
-                                            )
-                                        }
-                                        onKeyDown={(e) =>
-                                            updateFeaturePropValue(
-                                                e,
-                                                feature.properties?.name,
-                                                index
-                                            )
-                                        }
-                                    />
-                                </Box>
-                            </AccordionDetails>
-                        </Accordion>
-                    ) : (
-                        ""
-                    )
-                )}
+                                <TextField
+                                    label={mapContext.selectedProperty}
+                                    variant="outlined"
+                                    value={editValues[index] ?? ""}
+                                    onChange={(e) =>
+                                        handleEditChange(index, e.target.value)
+                                    }
+                                    onKeyDown={(e) =>
+                                        updateFeaturePropValue(
+                                            e,
+                                            feature.properties?.name,
+                                            index
+                                        )
+                                    }
+                                />
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
             </Box>
         </>
     );
