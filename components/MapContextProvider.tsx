@@ -113,6 +113,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             tags: tags,
             description: description,
             legend: legend,
+            selectedProperty: selectedProperty,
+            selectedPropertyIndex: selectedPropertyIndex,
         };
         try {
             const response = await axios.post("/api/saveMap", updatedMap);
@@ -172,6 +174,17 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
             if (res.data.mapProps.description) {
                 setDescription(res.data.description);
+            }
+
+            if (res.data.mapProps.selectedProperty) {
+                setSelectedProperty(res.data.mapProps.selectedProperty);
+                setSelectedPropertyIndex(
+                    res.data.mapProps.selectedPropertyIndex
+                );
+            }
+
+            if (res.data.mapProps.legend) {
+                setLegend(res.data.mapProps.legend);
             }
             const key = uuidv4();
             setMapKey(key);
