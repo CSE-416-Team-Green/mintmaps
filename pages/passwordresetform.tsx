@@ -1,38 +1,40 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function PasswordResetForm() {
-    const [newPassword, setNewPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const [newPassword, setNewPassword] = useState("");
+    const [message, setMessage] = useState("");
     const router = useRouter();
     const { token } = router.query; // Get the token from the query parameters
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: any) => {
         event.preventDefault();
         if (!token) {
-            setMessage('Token is missing.');
+            setMessage("Token is missing.");
             return;
         }
 
-        setMessage('Resetting password...');
+        setMessage("Resetting password...");
 
         try {
-            const response = await fetch('/api/resetpassword', {
-                method: 'PUT',
+            const response = await fetch("/api/resetpassword", {
+                method: "PUT",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ token, newPassword }),
             });
 
             if (response.ok) {
-                setMessage('Your password has been reset. Redirecting to login...');
-                setTimeout(() => router.push('/login'), 3000); 
+                setMessage(
+                    "Your password has been reset. Redirecting to login..."
+                );
+                setTimeout(() => router.push("/login"), 3000);
             } else {
-                setMessage('Failed to reset password. Please try again.');
+                setMessage("Failed to reset password. Please try again.");
             }
         } catch (error) {
-            setMessage('An error occurred. Please try again.');
+            setMessage("An error occurred. Please try again.");
         }
     };
 
@@ -51,6 +53,4 @@ export default function PasswordResetForm() {
             {message && <p>{message}</p>}
         </div>
     );
-};
-
-
+}
