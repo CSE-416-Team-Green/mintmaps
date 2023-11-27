@@ -45,7 +45,10 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
     
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
-        if (file) {
+        setUploadedFile(file)
+        onFileSelect(file);
+        setPreset("Select a preset map");
+        /*if (file) {
             const fileType = file.name.split('.').pop();
             if (fileType && ['kml', 'geojson', 'shp', 'zip', 'json', 'mintmap'].includes(fileType.toLowerCase())) {
                 if (fileType.toLowerCase() === 'kml' || fileType.toLowerCase() === 'shp') {
@@ -83,7 +86,7 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
             } else {
                 alert("Invalid file type. Please upload a KML, GeoJSON, SHP, ZIP, JSON, or MINTMAP file.");
             }
-        }
+        }*/
     };
     
     

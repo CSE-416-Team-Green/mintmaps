@@ -37,15 +37,13 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     return res.status(500).json({ message: "Error handling the file" });
                 }
             }
-            console.log(10)
+
             const newMap = new MapModel({
                 name,
-                //tags: tag ,
+                tags: tag ? tag.split(',') : [],
                 geoJSON: geojsonBuffer,
                 maptype,
             });
-            console.log(11)
-            console.log(newMap)
 
             try {
                 await newMap.save();
