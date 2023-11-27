@@ -7,6 +7,14 @@ import React, { useState, useEffect } from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
+import fs from "fs";
+import { promises as fsPromises } from "fs";
+
+import { DOMParser } from "xmldom";
+import tj from "togeojson";
+import shpjs from "shpjs";
+
+
 const presetMaps = [
     "Select a preset map",
     "United States",
@@ -32,17 +40,57 @@ interface InputMapProps {
 const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
     const [preset, setPreset] = React.useState<string>("Select a preset map");
     const [uploadedFile, setUploadedFile] = React.useState<File | null>(null);
+
+
+    
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
         if (file) {
-            onFileSelect(file);
-            setUploadedFile(file);
-            setPreset("Select a preset map");
+            const fileType = file.name.split('.').pop();
+            if (fileType && ['kml', 'geojson', 'shp', 'zip', 'json', 'mintmap'].includes(fileType.toLowerCase())) {
+                if (fileType.toLowerCase() === 'kml' || fileType.toLowerCase() === 'shp') {
+                    // Call API to convert KML or SHP to GeoJSON
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    try {
+                        console.log(0)
+                        const response = await fetch('/api/convertToGeoJson', {
+                            method: 'POST',
+                            body: formData,
+                        });
+                        console.log(response)
+                        if (!response.ok) {
+                            throw new Error('Failed to convert file');
+                        }
+                        const convertedFile = await response.json();
+                        console.log(5)
+                        console.log(convertedFile)
+                        const newfile =new File([JSON.stringify(convertedFile)], `${file.name}.json`, { type: 'application/geo+json' })
+                        setUploadedFile(newfile);
+                        
+                    } catch (error) {
+                        console.error('Error converting file:', error);
+                        alert('Failed to convert file.');
+                    }
+                
+                } else {
+                    // Directly use the file for other types
+                    setUploadedFile(file);
+
+                }
+                onFileSelect(uploadedFile);
+                setPreset("Select a preset map");
+            } else {
+                alert("Invalid file type. Please upload a KML, GeoJSON, SHP, ZIP, JSON, or MINTMAP file.");
+            }
         }
     };
+    
+    
     function handlePresetChange(event: SelectChangeEvent<string>) {
         setPreset(event.target.value as string);
     }
+    
     const handlePresetMapSelection = async (presetMap: string) => {
         if (presetMap in presetMapGeoJsonUrls) {
             console.log(presetMap)
@@ -63,7 +111,7 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
 
     useEffect(() => {
         if (preset !== "Select a preset map") {
-            handlePresetMapSelection(preset);
+            handlePresetMapSelection(preset); 
         }
     }, [preset]);
     

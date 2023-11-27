@@ -20,6 +20,8 @@ async function convertFileToGeoJson(file: File): Promise<GeoJsonObject> {
 
         reader.onload = (event) => {
             try {
+                console.log(1)
+                console.log(event.target?.result)
                 const geoJson = JSON.parse(event.target.result as string);
                 resolve(geoJson);
             } catch (error) {
@@ -47,6 +49,8 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({ uploadedFile, mapTy
                 return;
             }try {
                 // Convert the file to a GeoJSON object
+                console.log(4)
+                console.log(uploadedFile)
                 const geoJson = await convertFileToGeoJson(uploadedFile);
         
                 // Encode the GeoJSON object
