@@ -9,10 +9,14 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { IconButton, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import ThemeContext from "@/components/themeContext";
+import * as React from "react";
 
 const MapPreview = () => {
 
     const router = useRouter();
+    const themeContext = React.useContext(ThemeContext);
+    const isDark = themeContext.mode === "dark";
 
     function handleImageClick() {
         console.log("image click");
@@ -44,13 +48,16 @@ const MapPreview = () => {
                                 <Link
                                     href="/map-info"
                                 >
-                                    <Typography sx={{fontSize:'20px', color:'black'}}>
+                                    <Typography sx={{fontSize:'20px', 
+                                        color: isDark
+                                        ? "white"
+                                        : "black",}}>
                                         Map Title
                                     </Typography>
                                 </Link>
                         </Grid>
                         <Grid item xs={1.5}>
-                            <IconButton sx={{color:'black'}} onClick={handleMoreClick}>
+                            <IconButton onClick={handleMoreClick}>
                                 <MoreVertIcon />
                             </IconButton>
                         </Grid>
@@ -58,7 +65,10 @@ const MapPreview = () => {
                             <Link
                                     href="/user-profile"
                                 >
-                                    <Typography sx={{fontSize:'12px', color: 'black'}}>
+                                    <Typography sx={{fontSize:'12px',
+                                        color: isDark
+                                        ? "white"
+                                        : "black",}}>
                                         Username
                                     </Typography>
                             </Link>

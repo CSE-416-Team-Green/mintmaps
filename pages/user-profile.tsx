@@ -10,8 +10,11 @@ import { Button } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SortIcon from '@mui/icons-material/Sort';
+import ThemeContext from "@/components/themeContext";
 
 export default function UserProfile() {
+    const themeContext = React.useContext(ThemeContext);
+    const isDark = themeContext.mode === "dark";
     return (
         <>
             <Grid
@@ -82,8 +85,11 @@ export default function UserProfile() {
                             <Grid 
                                 container
                                 direction={"column"}
-                                sx={{ width: "100%", height: "100%", backgroundColor:"#f1f1f1"}}
-                                justifyContent="center"
+                                sx={{ width: "100%", height: "100%", 
+                                    backgroundColor: isDark
+                                        ? "#272626"
+                                        : "#f1f1f1",}}
+                                    justifyContent="center"
                                 alignItems={"center"}
                             >
                                 <Grid item xs={0.5} sx={{paddingTop:"30px", fontSize:"25px"}}>User's Maps </Grid>
