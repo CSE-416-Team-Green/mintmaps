@@ -12,7 +12,7 @@ export const config = {
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") {
-        return res.status(405).json({ message: "Method Not Allowed" });
+        return res.status(405).json({ message: "123213123" });
     }
 
     try {
@@ -37,6 +37,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     return res.status(500).json({ message: "Error handling the file" });
                 }
             }
+           
 
             const newMap = new MapModel({
                 name,
@@ -55,7 +56,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         });
     } catch (err) {
         console.error("API handler error:", err);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "1111" });
     }
 };
 
