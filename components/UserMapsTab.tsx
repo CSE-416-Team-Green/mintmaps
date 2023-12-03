@@ -4,7 +4,9 @@ import { Grid } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import styles from '@/styles/about.module.css';
 
-const UserMapsTab: FC = () => {
+const UserMapsTab: FC<{
+    maps: any[]
+}> = (props) => {
     return (
         <Grid item xs={9} sx={{ paddingTop: "40px" }}>
             <Grid item xs={12} sx={{ fontSize: "25px", paddingBottom: "10px", paddingTop: "4px", paddingLeft: "10px" }}>
@@ -12,27 +14,13 @@ const UserMapsTab: FC = () => {
             </Grid>
             <div className={styles.homeBox}>
                 <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <MapPreview />
-                    </Grid>
+                    {
+                        props.maps.map((map, index) => (
+                            <Grid key={index} item xs={4}>
+                                <MapPreview />
+                            </Grid>
+                        ))
+                    }
                 </Grid>
             </div>
         </Grid>

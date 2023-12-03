@@ -5,7 +5,9 @@ import SortIcon from '@mui/icons-material/Sort';
 import styles from '@/styles/about.module.css';
 import ProfileUser from './ProfileUser';
 
-const FollowersTab: FC = () => {
+const FollowersTab: FC<{
+    followers: any[]
+}> = (props) => {
     return (
         <Grid item xs={9} sx={{ paddingTop: "40px" }}>
             <Grid item xs={12} sx={{ fontSize: "25px", paddingBottom: "10px", paddingTop: "4px", paddingLeft: "10px" }}>
@@ -19,11 +21,11 @@ const FollowersTab: FC = () => {
                     flexDirection: 'column',
                     rowGap: '16px'
                 }}>
-                    <ProfileUser />
-                    <ProfileUser />
-                    <ProfileUser />
-                    <ProfileUser />
-                    <ProfileUser />
+                    {
+                        props.followers.map((follower, index) => (
+                            <ProfileUser key={index} username={'user ' + follower}/>
+                        ))
+                    }
                 </Box>
             </Box>
         </Grid>

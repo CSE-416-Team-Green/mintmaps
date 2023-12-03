@@ -1,7 +1,9 @@
 import { FC } from 'react';
 import { Box, Avatar } from '@mui/material';
 
-const ProfileUser: FC = () => {
+const ProfileUser: FC<{
+    username: string;
+}> = (props) => {
     return (
         <Box sx={{
             display: 'flex',
@@ -13,7 +15,7 @@ const ProfileUser: FC = () => {
             <Box sx={{
                 fontSize: '20px',
             }}>
-                Username
+                {props.username}
             </Box>
         </Box>
     );

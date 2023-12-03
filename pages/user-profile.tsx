@@ -16,17 +16,55 @@ import LikedMapsTab from '@/components/LikedMapsTab';
 import SavedMapsTab from '@/components/SavedMapsTab';
 import FollowingTab from '@/components/FollowingTab';
 import FollowersTab from '@/components/FollowersTab';
+import AuthContext from '@/components/authContext';
 
 type Tabs = 'user' | 'liked' | 'saved' | 'following' | 'followers';
 
 export default function UserProfile() {
     const themeContext = React.useContext(ThemeContext);
     const isDark = themeContext.mode === "dark";
-    const [currentTab, setCurrentTab] = React.useState<Tabs>('user');
 
+    const [following, setFollowing] = React.useState<string[]>([]);
+    const [followers, setFollowers] = React.useState<string[]>([]);
+    const [createdMaps, setCreatedMaps] = React.useState<string[]>([]);
+    const [likedMaps, setLikedMaps] = React.useState<string[]>([]);
+    const [savedMaps, setSavedMaps] = React.useState<string[]>([]);
+    const [reputation, setReputation] = React.useState<number>(0);
+    const [username, setUsername] = React.useState<string>('');
+    const [bio, setBio] = React.useState<string>('');
+
+    const [currentTab, setCurrentTab] = React.useState<Tabs>('user');
     const handleTabChange = (tab: Tabs) => {
         setCurrentTab(tab);
     }
+
+    React.useEffect(() => {
+        const email = localStorage.getItem('email');
+        
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(`/api/getUserSetting?email=${email}`, {
+                    method: 'GET',
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = (await response.json());
+                setFollowing(data.following ?? []);
+                setFollowers(data.followers ?? []);
+                setCreatedMaps(data.createdMaps ?? []);
+                setLikedMaps(data.likedMaps ?? []);
+                setSavedMaps(data.savedMaps ?? []);
+                setReputation(data.reputation ?? 0);
+                setUsername(data.userName ?? '');
+                setBio(data.bio ?? '');
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, []);
 
     return (
         <>
@@ -60,7 +98,7 @@ export default function UserProfile() {
                             >
                                 <Grid item xs={3}>
                                     <div className={styles.usernameText}>
-                                        Username
+                                        {username}
                                     </div>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -78,14 +116,14 @@ export default function UserProfile() {
                                         <ShareIcon />
                                     </IconButton>
                                 </Grid>
-                                <Grid item xs={2}>3 Followers</Grid>
-                                <Grid item xs={2}>3 Following</Grid>
+                                <Grid item xs={2}>{followers.length} Followers</Grid>
+                                <Grid item xs={2}>{following.length} Following</Grid>
                                 <Grid item xs={0.5}><WorkspacePremiumIcon /></Grid>
-                                <Grid item xs={0.5}>300 </Grid>
+                                <Grid item xs={0.5}>{reputation}</Grid>
                                 <Grid item xs={6}></Grid>
                                 <Grid item xs={12}>
                                     <Typography className={styles.descriptionText}>
-                                        Description Description Description  Description Description Description Description Description Description Description Description Description Description Description
+                                        {bio}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -113,11 +151,11 @@ export default function UserProfile() {
                             </Grid>
                         </Grid>
                         {
-                            currentTab === 'user' ? <UserMapsTab /> : 
-                            currentTab === 'liked' ? <LikedMapsTab /> :
-                            currentTab === 'saved' ? <SavedMapsTab /> :
-                            currentTab === 'following' ? <FollowingTab /> :
-                            currentTab === 'followers' ? <FollowersTab /> :
+                            currentTab === 'user' ? <UserMapsTab maps={createdMaps} /> : 
+                            currentTab === 'liked' ? <LikedMapsTab maps={likedMaps} /> :
+                            currentTab === 'saved' ? <SavedMapsTab maps={savedMaps} /> :
+                            currentTab === 'following' ? <FollowingTab following={following} /> :
+                            currentTab === 'followers' ? <FollowersTab followers={followers} /> :
                             null
                         }
                     </Grid>
