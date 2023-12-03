@@ -5,7 +5,7 @@ interface IMap extends Document {
     maptype: string;
     description?: string;
     tags?: string[];
-    visibility: "public" | "unlisted" | "private";
+    visibility: "Public" | "Unlisted" | "private";
     geoJSON: Buffer;
     mintMapsJSON: object;
     uploadDate?: Date;
@@ -35,7 +35,7 @@ const mapSchema = new Schema<IMap>({
     tags: [String],
     visibility: {
         type: String,
-        enum: ["public", "unlisted", "private"],
+        enum: ["Public", "Unlisted", "private"],
         default: "private",
     },
     geoJSON: {

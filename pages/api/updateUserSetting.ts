@@ -22,7 +22,7 @@ export default async function handler(
     try {
         const { uname, bio, newFollowersNotification, mapLikedNotification, commentsNotification } = req.body;
         const email = req.query.email as string;
-        console.log(email);
+        //console.log(email);
         const user = await User.findOne({ email: email }).populate('settings')
         //console.log(user)
         if (!user) {
@@ -53,7 +53,7 @@ export default async function handler(
                 notificationsComments: commentsNotification,
             });
         }
-        console.log(user)
+        //console.log(user)
         res.status(200).json({ message: 'User updated successfully' });
     } catch (error) {
         console.error('Error updating user:', error);
