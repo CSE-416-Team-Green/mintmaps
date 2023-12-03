@@ -4,9 +4,10 @@ import { Grid, Box } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import styles from '@/styles/about.module.css';
 import ProfileUser from './ProfileUser';
+import { IUser } from '@/models/User';
 
 const FollowingTab: FC<{
-    following: any[]
+    following: IUser[]
 }> = (props) => {
     return (
         <Grid item xs={9} sx={{ paddingTop: "40px" }}>
@@ -23,7 +24,7 @@ const FollowingTab: FC<{
                 }}>
                     {
                         props.following.map((follower, index) => (
-                            <ProfileUser key={index} username={'user ' + follower}/>
+                            <ProfileUser key={index} username={follower.userName}/>
                         ))
                     }
                 </Box>
