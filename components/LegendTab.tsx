@@ -17,7 +17,7 @@ const LegendTab = () => {
                 mapType === 'heat' ? <LinearLegend /> :
                 mapType === 'bivariate-choropleth' ? <GridLegend /> :
                 mapType === 'point' ? <LinearLegend/>:
-                <Box />
+                null
             }
         </Box>
     );
