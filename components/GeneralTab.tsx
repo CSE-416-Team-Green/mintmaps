@@ -1,48 +1,117 @@
-import { Box, TextField, Chip, Button, TextareaAutosize } from '@mui/material';
+import { Box, TextField, Chip, Button, TextareaAutosize } from "@mui/material";
+import MapContext from "./MapContext";
+import { useContext, useState, useEffect } from "react";
 
 const GeneralTab = () => {
+    const mapContext = useContext(MapContext);
+
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [tags, setTags] = useState<string[]>([]);
+    const [tagInput, setTagInput] = useState("");
+
+    useEffect(() => {
+        setTitle(mapContext.title);
+        setDescription(mapContext.description);
+        setTags(mapContext.tags);
+    }, [mapContext.description, mapContext.title, mapContext.tags]);
+
+    const changeTitle = (event: any) => {
+        setTitle(event.target.value);
+        mapContext.updateTitle(event.target.value);
+    };
+
+    const changeDesc = (event: any) => {
+        setDescription(event.target.value);
+        mapContext.updateDescription(event.target.value);
+    };
+
+    const addTag = () => {
+        const newTags = tagInput.split(" ").filter((tag) => tag.trim() !== "");
+        const allTags = [...tags, ...newTags];
+        setTags(allTags);
+        mapContext.updateTags([...allTags]);
+        setTagInput("");
+    };
+
+    const onUpload = () => {
+        mapContext.saveMap();
+    };
+
     return (
-        <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            
-        }}>
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                rowGap: '16px',
-                paddingBottom: '2rem',
-                width: '100%',
-            }}>
-                <TextField label="Title" variant="outlined" />
-                <TextField label="Description" variant="outlined" multiline/>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    columnGap: '8px',
-                }}>
-                    <TextField sx={{
-                        width: '100%',
-                    }} label="Add Tag" variant="outlined" />
-                    <Button sx={{
-                        height: '56px',
-                    }} variant="contained">Add</Button>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+            }}
+        >
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "16px",
+                    paddingBottom: "2rem",
+                    width: "100%",
+                }}
+            >
+                <TextField
+                    label="Title"
+                    variant="outlined"
+                    value={title}
+                    onChange={changeTitle}
+                />
+                <TextField
+                    label="Description"
+                    variant="outlined"
+                    multiline
+                    value={description}
+                    onChange={changeDesc}
+                />
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "8px",
+                    }}
+                >
+                    <TextField
+                        sx={{
+                            width: "100%",
+                        }}
+                        label="Add Tag"
+                        variant="outlined"
+                        onChange={(e) => setTagInput(e.target.value)}
+                        value={tagInput}
+                    />
+                    <Button
+                        sx={{
+                            height: "56px",
+                        }}
+                        variant="contained"
+                        onClick={addTag}
+                    >
+                        Add
+                    </Button>
                 </Box>
-                <Box sx={{
-                    display: 'flex',
-                    columnGap: '8px',
-                    alignItems: 'center',
-                }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        columnGap: "8px",
+                        alignItems: "center",
+                    }}
+                >
                     Tags:
-                    <Chip label="tag 1" />
-                    <Chip label="tag 2" />
-                    <Chip label="tag 3" />
+                    {tags.map((tagName) => (
+                        <Chip label={tagName} />
+                    ))}
                 </Box>
             </Box>
-            <Button variant="contained" href='map-upload'>Upload</Button>
+            <Button variant="contained" href="map-upload" onClick={onUpload}>
+                Upload
+            </Button>
         </Box>
     );
-}
+};
 
 export default GeneralTab;

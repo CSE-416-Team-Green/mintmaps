@@ -20,14 +20,16 @@ export default async function handler(
         }
 
         try {
-            const compressedMap = await MapModel.findById(req.query.id).populate(
-                "geoJSON"
-            );
+            const compressedMap = await MapModel.findById(
+                req.query.id
+            ).populate("geoJSON");
             const unCompressedMap = await geobuf.decode(
                 new Pbf(compressedMap.geoJSON)
             );
 
-            return res.status(200).json({ map: unCompressedMap });
+            return res
+                .status(200)
+                .json({ map: unCompressedMap, mapProps: compressedMap });
         } catch (err) {
             console.error("Error parsing map", err);
         }
