@@ -9,6 +9,7 @@ interface IUser extends Document {
     password?: string;
     salt?: string;
     followers: Types.ObjectId[];
+    following: Types.ObjectId[];
     likedMaps: Types.ObjectId[];
     createdMaps: Types.ObjectId[];
     savedMaps: Types.ObjectId[];
@@ -43,9 +44,10 @@ const userSchema = new Schema<IUser>({
         },
     },
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    likedMaps: [{ type: Schema.Types.ObjectId, ref: "Maps" }],
-    createdMaps: [{ type: Schema.Types.ObjectId, ref: "Maps" }],
-    savedMaps: [{ type: Schema.Types.ObjectId, ref: "Maps" }],
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    likedMaps: [{ type: Schema.Types.ObjectId, ref: "Map" }],
+    createdMaps: [{ type: Schema.Types.ObjectId, ref: "Map" }],
+    savedMaps: [{ type: Schema.Types.ObjectId, ref: "Map" }],
     settings: [
         { type: Schema.Types.ObjectId, ref: "Settings", required: true },
     ],
