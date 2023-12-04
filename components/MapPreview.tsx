@@ -132,7 +132,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                {mapInfo.likes.length}
+                                0
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -140,7 +140,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                {mapInfo.comments.length}
+                                0
                             </Typography>
                         </Grid>
                     </Grid>
