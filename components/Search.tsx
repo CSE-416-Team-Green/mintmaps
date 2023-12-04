@@ -1,42 +1,25 @@
 import { TextField, IconButton, Icon } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import { useState } from 'react';
 
 const Search = () => {
     const router = useRouter();
+    const [text, setText] = useState('');
+
     const handleClick = async () => {
-
-        const payload = {
-            type: "",
-            filter: "",
-            sort: "",
-            searchTerm: ""
-        }
-
-
-        try {
-            const response = await fetch('/api/searchMaps', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-    
-            if (response.ok) {
-                console.log(response.body);
-                router.push("/search-results");
-                console.log(response);
-            } else {
-
-            }
-        }catch (error) {
-            console.error('Error performing search:', error);
-            alert('An error occurred while performing your search.');
+        localStorage.searchTerm = text;
+        if(router.pathname != "/search-results"){
+            router.push("/search-results");
+        } else {
+            router.reload();
         }
     }
     return (
         <TextField
             size='small'
+            onChange={(e) => setText(e.target.value)}
             InputProps={{
                 startAdornment: <InputAdornment position="start">
                     <IconButton onClick={handleClick}> 

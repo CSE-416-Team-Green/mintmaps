@@ -17,7 +17,7 @@ export default function SearchResultsPage() {
                 type: "",
                 filter: "",
                 sort: "",
-                searchTerm: ""
+                searchTerm: localStorage.searchTerm
             }
             try {
                 const response = await fetch('/api/searchMaps', {

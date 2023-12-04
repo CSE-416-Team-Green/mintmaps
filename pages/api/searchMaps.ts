@@ -23,7 +23,7 @@ export default async function handler(
     const { type, filter, sort, searchTerm } = req.body;
 
     //get all maps
-    const allMaps = await Map.find({}, {geoJSON:0, legend:0, })
+    const allMaps = await Map.find({name: searchTerm}, {geoJSON:0, legend:0, })
     console.log(allMaps);
 
     //filter by desired map type
