@@ -20,6 +20,7 @@ import MapContext from '@/components/MapContext';
 import AuthContext from '@/components/authContext';
 
 export default function MapInfo() {
+    // const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
     const email = authContext.email;
     const [liked, setLiked] = React.useState<boolean>(false);
@@ -224,9 +225,9 @@ export default function MapInfo() {
                                     }} onClick={handleDownload} />
                                 </Grid>
                                 <Grid item xs={3}>
-                                <IconButton onClick={handleForkMap}>
-                                    <ForkRightIcon />
-                                </IconButton>
+                                    <ForkRightIcon sx={{
+                                        cursor: "pointer"
+                                    }} onClick={handleForkMap}/>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <ShareIcon></ShareIcon>
