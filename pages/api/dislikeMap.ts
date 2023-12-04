@@ -18,18 +18,23 @@ export default async function handler(
         await connectDb();
         const user = await User.findOne({ email: email });
         const map = await MapModel.findById(mapId);
+        const owner = await User.findOne({ email: map.createdBy });
 
         const dislikedMapIndex = user.dislikedMaps.indexOf(mapId);
         if(dislikedMapIndex > -1) {
             user.dislikedMaps.splice(dislikedMapIndex, 1);
+            owner.reputation = owner.reputation + 1;
         } else {
             user.dislikedMaps.push(mapId);
+            owner.reputation = owner.reputation - 1;
         }
         const likedMapIndex = user.likedMaps.indexOf(mapId);
         if(likedMapIndex > -1) {
             user.likedMaps.splice(likedMapIndex, 1);
+            owner.reputation = owner.reputation - 1;
         }
         await user.save();
+        await owner.save();
 
         const userIndex = map.dislikes.indexOf(user._id);
         if(userIndex > -1) {
