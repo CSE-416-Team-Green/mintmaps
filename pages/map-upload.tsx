@@ -78,6 +78,8 @@ export default function MapUpload() {
                     sx={{
                         display: "flex",
                         columnGap: "32px",
+                        width: "100%",
+                        paddingLeft: "32px",
                     }}
                 >
                     <Box
@@ -91,19 +93,20 @@ export default function MapUpload() {
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            width: 400, 
+                            flex: 1,
                         }}
                     >
                         <Typography variant="h3" gutterBottom>
                             {mapContext.title}
                         </Typography>
-                        <Typography variant="h3">
+                        <Typography>
                             {mapContext.description}
                         </Typography>
                         <Box
                             sx={{
                                 display: "flex",
                                 columnGap: "8px",
+                                paddingTop: "16px",
                             }}
                         >
                             {mapContext.tags.map((tagName) => (
