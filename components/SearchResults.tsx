@@ -8,11 +8,11 @@ const SearchResults: FC<{
     maps: any[]
 }> = (props) => {
     return (
-        <Grid item xs={9} sx={{ paddingTop: "40px" }}>
+        <Grid item xs={12} sx={{ paddingTop: "40px" }}>
                 <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
                     {
                         props.maps.map((map, index) => (
-                            <Grid key={index} item xs={4}>
+                            <Grid key={index} item xs={3}>
                                 <MapPreview map={map} />
                             </Grid>
                         ))

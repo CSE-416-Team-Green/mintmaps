@@ -9,7 +9,37 @@ import SearchResults from "@/components/SearchResults"
 
 export default function SearchResultsPage() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
-    const [resultMaps, setCreatedMaps] = React.useState<string[]>([]);
+    const [resultMaps, setResultMaps] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+        const fetchUserData = async () => {
+            const payload = {
+                type: "",
+                filter: "",
+                sort: "",
+                searchTerm: ""
+            }
+            try {
+                const response = await fetch('/api/searchMaps', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+        
+                if (response.ok) {
+                    const data = (await response.json());
+                    setResultMaps(data.reverse() ?? []); //TODO GET RID OF REVERSE HERE< DO IT IN BACK END
+                    console.log(resultMaps);
+                } else {
+                    throw new Error('Failed to fetch data');
+                }
+            }catch (error) {
+                console.error('Error performing search:', error);
+                alert('An error occurred while performing your search.');
+            }
+        };
+        fetchUserData();
+    }, []);
 
     return (
         <>
