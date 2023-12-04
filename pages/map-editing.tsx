@@ -10,7 +10,6 @@ import LegendTab from "@/components/LegendTab";
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => (
         <Skeleton>
-            <DynamicMap />
         </Skeleton>
     ),
     ssr: false,
