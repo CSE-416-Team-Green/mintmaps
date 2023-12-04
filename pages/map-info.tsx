@@ -434,10 +434,6 @@ export default function MapInfo() {
                     <Box sx={{ paddingLeft: "20px", paddingBottom: "5px" }}>
                         Reccomended
                     </Box>
-                    <MapPreview />
-                    <MapPreview />
-                    <MapPreview />
-                    <MapPreview />
                 </Grid>
             </Grid>
         </>
