@@ -23,8 +23,10 @@ export default async function handler(
     const { type, filter, sort, searchTerm } = req.body;
 
     //get all maps
-    const allMaps = await Map.find({name: searchTerm}, {geoJSON:0, legend:0, })
+    const allMaps = await Map.find({}, {geoJSON:0, legend:0});
     console.log(allMaps);
+
+    const maps=await Map.find({name: "asdhbasdghaglhjsdgjahlsd"}, {geoJSON:0, legend:0, });
 
     //filter by desired map type
 
@@ -34,11 +36,18 @@ export default async function handler(
 
     //sort by parameter
 
+    //title
+    allMaps.forEach(function (map){
+        if(map.name){
+            if(map.name.includes(searchTerm)){
+                maps.push(map)
+            }
+        }
+    })
 
     //return array of maps to be used in search results
     //maybe only want to return certain info? maybe even just mapIds?
 
-    const maps = [Map];
 
-    return res.status(200).json(allMaps);
+    return res.status(200).json(maps);
 }
