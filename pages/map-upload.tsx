@@ -1,10 +1,11 @@
 import Header from "@/components/Header";
-import MapContext from "@/components/MapContext";
+
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
 import dynamic from 'next/dynamic';
 import AuthContext from "@/components/authContext";
+import MapContext from "@/components/MapContext";
 import React, { useState } from 'react';
 
 
@@ -18,7 +19,7 @@ export default function MapUpload() {
     const [visibility, setVisibility] = useState('Unlisted');
     const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
-    const chipStyle = (label) => ({
+    const chipStyle = (label: string) => ({
         backgroundColor: visibility === label ? "#E0E0E0" : undefined, // Grey if selected
         cursor: 'pointer',
     });
@@ -78,6 +79,8 @@ export default function MapUpload() {
                     sx={{
                         display: "flex",
                         columnGap: "32px",
+                        width: "100%",
+                        paddingLeft: "32px",
                     }}
                 >
                     <Box
@@ -91,19 +94,20 @@ export default function MapUpload() {
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            width: 400, 
+                            flex: 1,
                         }}
                     >
                         <Typography variant="h3" gutterBottom>
                             {mapContext.title}
                         </Typography>
-                        <Typography variant="h3">
+                        <Typography>
                             {mapContext.description}
                         </Typography>
                         <Box
                             sx={{
                                 display: "flex",
                                 columnGap: "8px",
+                                paddingTop: "16px",
                             }}
                         >
                             {mapContext.tags.map((tagName) => (

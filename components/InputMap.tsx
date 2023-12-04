@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -119,6 +119,7 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                                 UPLOAD GEOJSON/FILE
                             </Button>
                         </label>
+                        <Typography>{uploadedFile?.name}</Typography>
                         .KML .SHP .GEOJSON or .MINTMAP file
                     </Box>
                     <Divider>or</Divider>
