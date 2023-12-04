@@ -94,6 +94,29 @@ export default function MapInfo() {
         window.open('/api/exportMap?mapId=' + localStorage.getItem('mapId'));
     };
 
+    const handleForkMap = async () => {
+        const mapId = localStorage.getItem("mapId") as string; 
+        const userEmail = localStorage.getItem("email") as string
+
+        // Constructing the payload
+        const payload = {
+            mapId,
+            userEmail,
+        };
+    
+        const response = await fetch('/api/forkmap', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    };
+
     return (
         <>
             <Header />
@@ -201,7 +224,9 @@ export default function MapInfo() {
                                     }} onClick={handleDownload} />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <ForkRightIcon></ForkRightIcon>
+                                <IconButton onClick={handleForkMap}>
+                                    <ForkRightIcon />
+                                </IconButton>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <ShareIcon></ShareIcon>

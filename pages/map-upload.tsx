@@ -1,10 +1,11 @@
 import Header from "@/components/Header";
-import MapContext from "@/components/MapContext";
+
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
 import dynamic from 'next/dynamic';
 import AuthContext from "@/components/authContext";
+import MapContext from "@/components/MapContext";
 import React, { useState } from 'react';
 
 
