@@ -51,9 +51,11 @@ export default function EditAccount() {
     
     useEffect(() => {
         const email = localStorage.getItem('email');
+        //console.log("321321"+email)
         
         const fetchUserData = async () => {
             try {
+                //console.log("321321"+email)
                 const response = await fetch(`/api/getUserSetting?email=${email}`, {
                     method: 'GET',
                 });
@@ -87,6 +89,8 @@ export default function EditAccount() {
         };
 
         const email = localStorage.getItem('email');
+        console.log("213123")
+        console.log(email)
     
         try {
             const response = await fetch(`/api/updateUserSetting?email=${email}`, {
