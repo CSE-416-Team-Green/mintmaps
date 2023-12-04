@@ -59,6 +59,7 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                     geoJson as FeatureCollection,
                     new Pbf()
                 );
+                
 
                 // Check if buffer is not null before proceeding
                 if (buffer) {
@@ -74,6 +75,8 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                         "geojson",
                         new Blob([buffer], { type: "application/octet-stream" })
                     );
+                    console.log("3")
+                    console.log(formData)
 
                     try {
                         const response = await fetch("/api/createMap", {

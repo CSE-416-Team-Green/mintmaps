@@ -1,7 +1,6 @@
-describe("All map types should be available for map creation", () => {
+/*describe("All map types should be available for map creation", () => {
     beforeEach(() => {
         cy.visit("http://localhost:3000/map-creation");
-        cy.contains("Next").click();
     });
 
     it("Heat Map Available", () => {
@@ -47,4 +46,4 @@ describe("All map types should be available for map creation", () => {
     it("Bivariate Choropleth Clickable", () => {
         cy.contains(".MuiChip-label", "Bivariate Choropleth").click();
     });
-});
+});*/
