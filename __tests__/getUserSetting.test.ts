@@ -8,4 +8,8 @@ describe("getUserSetting API Endpoint", () => {
         const result = await request(server).post("/api/getUserSetting");
         expect(result.status).toBe(405);
     });
+    it("should return 404 when the user is not found", async () => {
+        const result = await request(server).get("/api/getUserSetting");
+        expect(result.status).toBe(404);
+    });
 });
