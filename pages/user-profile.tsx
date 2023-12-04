@@ -17,6 +17,7 @@ import SavedMapsTab from '@/components/SavedMapsTab';
 import FollowingTab from '@/components/FollowingTab';
 import FollowersTab from '@/components/FollowersTab';
 import AuthContext from '@/components/authContext';
+import { IUser } from '@/models/User';
 
 type Tabs = 'user' | 'liked' | 'saved' | 'following' | 'followers';
 
@@ -24,8 +25,8 @@ export default function UserProfile() {
     const themeContext = React.useContext(ThemeContext);
     const isDark = themeContext.mode === "dark";
 
-    const [following, setFollowing] = React.useState<string[]>([]);
-    const [followers, setFollowers] = React.useState<string[]>([]);
+    const [following, setFollowing] = React.useState<IUser[]>([]);
+    const [followers, setFollowers] = React.useState<IUser[]>([]);
     const [createdMaps, setCreatedMaps] = React.useState<string[]>([]);
     const [likedMaps, setLikedMaps] = React.useState<string[]>([]);
     const [savedMaps, setSavedMaps] = React.useState<string[]>([]);
