@@ -60,7 +60,21 @@ export default function MapCreation() {
     };
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        const newActiveStep = activeStep - 1;
+
+    
+        if (newActiveStep === 0) {
+            // If going back to Step 0, reset the uploaded file
+            setUploadedFile(null);
+        } else if (newActiveStep === 1) {
+            // If going back to Step 1, reset the selected map type
+            setSelectedMapType('');
+        } else if (newActiveStep === 2) {
+            // If going back to Step 2, reset title and tags
+            setTitle('');
+            setTags('');
+        }
+            setActiveStep(newActiveStep);
     };
 
     const handleSkip = () => {
@@ -75,6 +89,18 @@ export default function MapCreation() {
             return newSkipped;
         });
     };
+    const isStepOneCompleted = () => {
+        return uploadedFile !== null;
+    };
+    
+    const isStepTwoCompleted = () => {
+        return selectedMapType !== '';
+    };
+    
+    const isStepThreeCompleted = () => {
+        return title !== '' && tags !== '';
+    };
+    
 
     return (
         <div>
@@ -118,7 +144,7 @@ export default function MapCreation() {
                                     case 1:                                     
                                         return <InputMapType onMapTypeSelect={handleSelectedMapType} /> ;
                                     case 2:
-                                        console.log(typeof selectedMapType)
+                                        //console.log(typeof selectedMapType)
                                         return <InputTitleTags onTitleTagsChange={handleTitleTagsChange} />;
                                 }
                             })()}
@@ -138,7 +164,11 @@ export default function MapCreation() {
                                     Skip
                                 </Button>
                             )}
-                            <Button onClick={handleNext}>
+                            <Button onClick={handleNext}
+                                 disabled={(activeStep === 0 && !isStepOneCompleted()) ||
+                                 (activeStep === 1 && !isStepTwoCompleted()) || 
+                                 (activeStep === 2 && !isStepThreeCompleted()) }
+                                 >
                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                             </Button>
                         </Box>
