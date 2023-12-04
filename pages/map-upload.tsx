@@ -18,7 +18,7 @@ export default function MapUpload() {
     const [visibility, setVisibility] = useState('Unlisted');
     const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
-    const chipStyle = (label) => ({
+    const chipStyle = (label: string) => ({
         backgroundColor: visibility === label ? "#E0E0E0" : undefined, // Grey if selected
         cursor: 'pointer',
     });
