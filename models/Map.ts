@@ -20,6 +20,7 @@ interface IMap extends Document {
     legend?: Object;
     selectedProperty?: string;
     selectedPropertyIndex?: number;
+    createdBy: string;
 }
 
 const mapSchema = new Schema<IMap>({
@@ -76,6 +77,7 @@ const mapSchema = new Schema<IMap>({
     legend: Object,
     selectedProperty: String,
     selectedPropertyIndex: Number,
+    createdBy: String,
 });
 
 const MapModel = mongoose.models.Map || model<IMap>("Map", mapSchema);
