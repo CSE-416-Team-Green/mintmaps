@@ -2,21 +2,30 @@ import Header from "@/components/Header";
 import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
-import { Container, Grid, Typography, Box, IconButton, Button, TextField } from "@mui/material";
-import styles from '@/styles/about.module.css';
+import {
+    Container,
+    Grid,
+    Typography,
+    Box,
+    IconButton,
+    Button,
+    TextField,
+ } from "@mui/material";
+import styles from "@/styles/about.module.css";
 import Link from "next/link";
-import dynamic from 'next/dynamic';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import DownloadIcon from '@mui/icons-material/Download';
-import ForkRightIcon from '@mui/icons-material/ForkRight';
-import ShareIcon from '@mui/icons-material/Share';
-import Avatar from '@mui/material/Avatar';
-import InputAdornment from '@mui/material/InputAdornment';
-import SortIcon from '@mui/icons-material/Sort';
+import dynamic from "next/dynamic";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import DownloadIcon from "@mui/icons-material/Download";
+import ForkRightIcon from "@mui/icons-material/ForkRight";
+import ShareIcon from "@mui/icons-material/Share";
+import Avatar from "@mui/material/Avatar";
+import InputAdornment from "@mui/material/InputAdornment";
+import SortIcon from "@mui/icons-material/Sort";
+import { MapContainer } from "react-leaflet";
+import MapContext from "@/components/MapContext";
 import { useEffect, useContext } from 'react';
-import MapContext from '@/components/MapContext';
 import AuthContext from '@/components/authContext';
 
 export default function MapInfo() {
@@ -138,11 +147,13 @@ export default function MapInfo() {
                         alignItems={"left"}
                     >
                         <Grid item xs={12}>
-                            <Box sx={{
-                                height: "70vh",
-                                width: "70vw",
-                                display: "flex",
-                            }}>
+                            <Box
+                                sx={{
+                                    height: "70vh",
+                                    width: "70vw",
+                                    display: "flex",
+                                }}
+                            >
                                 <DynamicMap />
                             </Box>
                         </Grid>
@@ -150,11 +161,11 @@ export default function MapInfo() {
                         <Grid item xs={9} sx={{ fontSize: "25px", paddingBottom: "10px", paddingTop: "4px" }}>
                             Map Title
                         </Grid>
-                        <Grid item xs={1} sx={{ paddingTop: "12px" }}>
+                        <Grid item xs={1} sx={{  paddingTop: "12px"  }}>
                             200 Views
                         </Grid>
-                        <Grid item xs={2} sx={{ paddingTop: "12px" }}>
-                            <Box sx={{ float: "right", paddingRight: "30px" }}>
+                        <Grid item xs={2} sx={{  paddingTop: "12px"  }}>
+                            <Box sx={{  float:  "right", paddingRight:  "30px"  }}>
                                 Uploaded 2 Weeks Ago
                             </Box>
                         </Grid>
@@ -251,8 +262,7 @@ export default function MapInfo() {
                         <Grid item xs={.75} sx={{ paddingBottom: "20px" }}>
                             Tag 4
                         </Grid>
-                        <Grid item xs={9}>
-                        </Grid>
+                        <Grid item xs={9}></Grid>
 
                         <Grid item xs={0.5}>
                             <IconButton href="/user-profile">
@@ -262,10 +272,11 @@ export default function MapInfo() {
                         <Grid item xs={10}>
                             <TextField
                                 fullWidth
-                                size='small'
+                                size="small"
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start">
-                                    </InputAdornment>,
+                                    startAdornment: (
+                                        <InputAdornment position="start"></InputAdornment>
+                                    ),
                                 }}
                             />
                         </Grid>
@@ -314,7 +325,7 @@ export default function MapInfo() {
                                         25
                                     </Box>
                                 </Grid>
-                                <Grid item xs={.25}>
+                                <Grid item xs={0.25}>
                                     <ThumbUpIcon />
                                 </Grid>
                                 <Grid item xs={.25}>
@@ -357,7 +368,7 @@ export default function MapInfo() {
                                         25
                                     </Box>
                                 </Grid>
-                                <Grid item xs={.25}>
+                                <Grid item xs={0.25}>
                                     <ThumbUpIcon />
                                 </Grid>
                                 <Grid item xs={.25}>
@@ -400,7 +411,7 @@ export default function MapInfo() {
                                         25
                                     </Box>
                                 </Grid>
-                                <Grid item xs={.25}>
+                                <Grid item xs={0.25}>
                                     <ThumbUpIcon />
                                 </Grid>
                                 <Grid item xs={.25}>
@@ -413,7 +424,6 @@ export default function MapInfo() {
                                 </Grid>
                             </Grid>
                         </Grid>
-
                     </Grid>
                 </Grid>
                 <Grid item xs={3}>
