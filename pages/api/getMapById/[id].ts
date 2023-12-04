@@ -3,6 +3,7 @@ import connectDb from "@/db";
 import geobuf from "geobuf";
 import MapModel from "@/models/Map";
 import Pbf from "pbf";
+import Comment from "@/models/Comment";
 
 export default async function handler(
     req: NextApiRequest,
@@ -19,10 +20,25 @@ export default async function handler(
             console.error("Error connecting to DB - check db connection", err);
         }
 
+        const cm = await Comment.create({
+            user: "655c423229ab4c6953973e65",
+            message: "This is a cool map",
+        });
+
+        await cm.save();
         try {
-            const compressedMap = await MapModel.findById(
-                req.query.id
-            ).populate("geoJSON");
+            const compressedMap = await MapModel.findById(req.query.id)
+                .populate("geoJSON")
+                .populate("likes")
+                .populate("dislikes")
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "user",
+                        model: "User",
+                    },
+                })
+                .exec();
             const unCompressedMap = await geobuf.decode(
                 new Pbf(compressedMap.geoJSON)
             );
