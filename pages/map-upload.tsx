@@ -1,12 +1,9 @@
 import Header from "@/components/Header";
-
+import MapContext from "@/components/MapContext";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
 import dynamic from 'next/dynamic';
-import AuthContext from "@/components/authContext";
-import MapContext from "@/components/MapContext";
-import React, { useState } from 'react';
 
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
@@ -16,52 +13,13 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 
 
 export default function MapUpload() {
-    const [visibility, setVisibility] = useState('Unlisted');
     const mapContext = useContext(MapContext);
-    const authContext = useContext(AuthContext);
-    const chipStyle = (label: string) => ({
-        backgroundColor: visibility === label ? "#E0E0E0" : undefined, // Grey if selected
-        cursor: 'pointer',
-    });
+
     useEffect(() => {
         const mapId = localStorage.getItem("mapId") as string; 
         mapContext.loadMap(mapId); 
     }, [])
-    const changeVisibility = (newVisibility: React.SetStateAction<string>) => {
-        setVisibility(newVisibility);
-    };
-    const uploadMapToUser = async () => {
-        
-            const mapId = localStorage.getItem("mapId") as string; 
-            console.log('1'+mapId)
-            const userEmail = localStorage.getItem("email") as string
-            console.log(userEmail)
-    
-            // Constructing the payload
-            const payload = {
-                mapId,
-                userEmail,
-                visibility
-            };
-            console.log(payload)
-            console.log(JSON.stringify(payload))
-           
-    
-            const response = await fetch('/api/uploadmaptouser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
-    
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-    
-            // Handle the response here (e.g., show a success message)
-       
-    };
+
     return (
         <div>
             <Header />
@@ -79,8 +37,6 @@ export default function MapUpload() {
                     sx={{
                         display: "flex",
                         columnGap: "32px",
-                        width: "100%",
-                        paddingLeft: "32px",
                     }}
                 >
                     <Box
@@ -94,20 +50,19 @@ export default function MapUpload() {
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            flex: 1,
+                            width: 400, 
                         }}
                     >
                         <Typography variant="h3" gutterBottom>
                             {mapContext.title}
                         </Typography>
-                        <Typography>
+                        <Typography variant="h3">
                             {mapContext.description}
                         </Typography>
                         <Box
                             sx={{
                                 display: "flex",
                                 columnGap: "8px",
-                                paddingTop: "16px",
                             }}
                         >
                             {mapContext.tags.map((tagName) => (
@@ -124,22 +79,12 @@ export default function MapUpload() {
                     }}
                 >
                     <h2>Visibility:</h2>
-                    <Chip 
-                        label="Unlisted" 
-                        onClick={() => changeVisibility('Unlisted')} 
-                        color={visibility === 'Unlisted' ? 'primary' : 'default'} 
-                        sx={chipStyle('Unlisted')}
-                    />
-                    <Chip 
-                        label="Public" 
-                        onClick={() => changeVisibility('Public')} 
-                        color={visibility === 'Public' ? 'primary' : 'default'} 
-                        sx={chipStyle('Public')}
-                    />
+                    <Chip label="Unlisted" />
+                    <Chip label="Public" />
                 </Box>
                 <Box>
                     <Button href="/map-editing">Back</Button>
-                    <Button variant="contained" href="/home" onClick={uploadMapToUser}>
+                    <Button variant="contained" href="/home">
                         Upload
                     </Button>
                 </Box>

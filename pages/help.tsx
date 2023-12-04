@@ -3,14 +3,10 @@ import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import styles from '@/styles/about.module.css';
-import ThemeContext from "@/components/themeContext";
 import Link from "next/link";
 
 export default function Help() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
-    const themeContext = React.useContext(ThemeContext);
-    
-    const isDark = themeContext.mode === "dark";
     return (
         <>
             <Grid
@@ -23,11 +19,7 @@ export default function Help() {
                 <Grid item sx={{ flexGrow: 1 }}>
                     <Header />
                 </Grid>
-                <Container sx={{
-                                    backgroundColor: isDark
-                                        ? "#272626"
-                                        : "#f1f1f1",
-                                }}>
+                <Container className={styles.grey}>
                     <Grid container direction={"column"} alignItems={"center"} justifyContent={"center"} >
                         <Grid item xs={"auto"}>
                             <LogoLarge />

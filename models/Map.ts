@@ -5,7 +5,7 @@ interface IMap extends Document {
     maptype: string;
     description?: string;
     tags?: string[];
-    visibility: "Public" | "Unlisted" | "private";
+    visibility: "public" | "unlisted" | "private";
     geoJSON: Buffer;
     mintMapsJSON: object;
     uploadDate?: Date;
@@ -20,7 +20,6 @@ interface IMap extends Document {
     legend?: Object;
     selectedProperty?: string;
     selectedPropertyIndex?: number;
-    createdBy: string;
 }
 
 const mapSchema = new Schema<IMap>({
@@ -36,7 +35,7 @@ const mapSchema = new Schema<IMap>({
     tags: [String],
     visibility: {
         type: String,
-        enum: ["Public", "Unlisted", "private"],
+        enum: ["public", "unlisted", "private"],
         default: "private",
     },
     geoJSON: {
@@ -77,7 +76,6 @@ const mapSchema = new Schema<IMap>({
     legend: Object,
     selectedProperty: String,
     selectedPropertyIndex: Number,
-    createdBy: String,
 });
 
 const MapModel = mongoose.models.Map || model<IMap>("Map", mapSchema);

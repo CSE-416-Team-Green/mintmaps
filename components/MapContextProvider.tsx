@@ -173,7 +173,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             }
 
             if (res.data.mapProps.description) {
-                setDescription(res.data.mapProps.description);
+                setDescription(res.data.description);
             }
 
             if (res.data.mapProps.selectedProperty) {
