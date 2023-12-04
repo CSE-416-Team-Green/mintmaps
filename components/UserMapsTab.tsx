@@ -17,7 +17,7 @@ const UserMapsTab: FC<{
                     {
                         props.maps.map((map, index) => (
                             <Grid key={index} item xs={4}>
-                                <MapPreview />
+                                <MapPreview map={map}/>
                             </Grid>
                         ))
                     }

@@ -27,6 +27,8 @@ import { MapContainer } from "react-leaflet";
 import MapContext from "@/components/MapContext";
 import { useEffect, useContext } from 'react';
 import AuthContext from '@/components/authContext';
+import Search from "@mui/icons-material/Search";
+import SearchResults from "@/components/SearchResults"
 
 export default function MapInfo() {
     // const mapContext = useContext(MapContext);
@@ -430,10 +432,6 @@ export default function MapInfo() {
                     <Box sx={{ paddingLeft: "20px", paddingBottom: "5px" }}>
                         Reccomended
                     </Box>
-                    <MapPreview />
-                    <MapPreview />
-                    <MapPreview />
-                    <MapPreview />
 
                 </Grid>
             </Grid>

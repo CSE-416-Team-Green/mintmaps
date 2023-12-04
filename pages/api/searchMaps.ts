@@ -40,5 +40,5 @@ export default async function handler(
 
     const maps = [Map];
 
-    return res.status(200).json({headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(allMaps) });
+    return res.status(200).json(allMaps);
 }

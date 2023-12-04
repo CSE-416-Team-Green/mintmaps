@@ -18,8 +18,12 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import DownloadIcon from '@mui/icons-material/Download';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
+import { FC } from 'react';
+import MapModel from '@/models/Map';
 
-const MapPreview = () => {
+const MapPreview: FC<{
+    map: any
+}> = (props) => {
 
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const router = useRouter();
@@ -79,7 +83,7 @@ const MapPreview = () => {
                                         color: isDark
                                         ? "white"
                                         : "black",}}>
-                                        Map Title
+                                        {props.map.name}
                                     </Typography>
                                 </Link>
                         </Grid>
