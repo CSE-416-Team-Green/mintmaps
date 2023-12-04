@@ -1,8 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import connectDb from '@/db';
+import MapModel from '@/models/Map';
+import User from '@/models/User';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default function handler(
+export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<any>
+    res: NextApiResponse<any>,
 ) {
     if(req.method !== "POST") {
         res.status(401).json({message: "Method not allowed"});
