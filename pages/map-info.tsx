@@ -15,12 +15,36 @@ import ShareIcon from '@mui/icons-material/Share';
 import Avatar from '@mui/material/Avatar';
 import InputAdornment from '@mui/material/InputAdornment';
 import SortIcon from '@mui/icons-material/Sort';
+import AuthContext from "@/components/authContext";
+import MapContext from "@/components/MapContext";
 
 export default function MapInfo() {
     const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
         loading: () => <p>loading...</p>,
         ssr: false
     })
+    const handleForkMap = async () => {
+        const mapId = localStorage.getItem("mapId") as string; 
+        const userEmail = localStorage.getItem("email") as string
+
+        // Constructing the payload
+        const payload = {
+            mapId,
+            userEmail,
+        };
+    
+        const response = await fetch('/api/forkmap', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    };
     return (
         <>
             <Header />
@@ -120,7 +144,9 @@ export default function MapInfo() {
                                     <DownloadIcon></DownloadIcon>
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <ForkRightIcon></ForkRightIcon>
+                                <IconButton onClick={handleForkMap}>
+                                    <ForkRightIcon />
+                                </IconButton>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <ShareIcon></ShareIcon>
