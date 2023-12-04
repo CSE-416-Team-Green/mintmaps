@@ -30,6 +30,7 @@ const MapPreview: FC<{
     const themeContext = React.useContext(ThemeContext);
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
+    const mapInfo = props.map;
 
     function handleImageClick() {
         console.log("image click");
@@ -79,11 +80,11 @@ const MapPreview: FC<{
                                 <Link
                                     href="/map-info"
                                 >
-                                    <Typography sx={{fontSize:'20px', 
+                                    <Typography sx={{fontSize:'20px', overflow:'hidden', textOverflow: 'ellipsis', width: '150px', height: '25px',
                                         color: isDark
                                         ? "white"
                                         : "black",}}>
-                                        {props.map.name}
+                                        {mapInfo.name}
                                     </Typography>
                                 </Link>
                         </Grid>
@@ -96,17 +97,17 @@ const MapPreview: FC<{
                             <Link
                                     href="/user-profile"
                                 >
-                                    <Typography sx={{fontSize:'12px',
+                                    <Typography sx={{fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '100px', height: '20px',
                                         color: isDark
                                         ? "white"
                                         : "black",}}>
-                                        Username
+                                            {mapInfo.createdBy}
                                     </Typography>
                             </Link>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography sx={{float:'right', fontSize:'12px'}}>
-                                3 Weeks Ago
+                            <Typography sx={{float:'right', fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
+                                {mapInfo.uploadDate}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -122,7 +123,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                1.2k
+                                0 
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -130,7 +131,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                85%
+                                {mapInfo.likes.length}
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -138,7 +139,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                30
+                                {mapInfo.comments.length}
                             </Typography>
                         </Grid>
                     </Grid>
