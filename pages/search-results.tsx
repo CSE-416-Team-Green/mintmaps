@@ -5,9 +5,12 @@ import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import styles from '@/styles/about.module.css';
 import Link from "next/link";
+import SearchResults from "@/components/SearchResults"
 
-export default function SearchResults() {
+export default function SearchResultsPage() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
+    const [resultMaps, setCreatedMaps] = React.useState<string[]>([]);
+
     return (
         <>
             <Grid
@@ -22,104 +25,10 @@ export default function SearchResults() {
                 </Grid>
                 <Container>
                     <div className={styles.homeText}>
-                        Results (31)
+                        Results ({resultMaps.length})
                     </div>
                     <div className={styles.resultsBox}>
-                        <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <MapPreview />
-                            </Grid>
-                        </Grid>
+                        <SearchResults maps={resultMaps} />
                     </div>
                     
                 </Container>
