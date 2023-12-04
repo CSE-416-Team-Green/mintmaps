@@ -8,20 +8,51 @@ import ModeCommentIcon from '@mui/icons-material/ModeComment';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { IconButton, Typography } from '@mui/material';
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import ThemeContext from "@/components/themeContext";
+import * as React from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DownloadIcon from '@mui/icons-material/Download';
+import ForkRightIcon from '@mui/icons-material/ForkRight';
+import ShareIcon from '@mui/icons-material/Share';
 
 const MapPreview = () => {
 
+    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const router = useRouter();
+    const themeContext = React.useContext(ThemeContext);
+    const isDark = themeContext.mode === "dark";
+    const open = Boolean(anchor);
 
     function handleImageClick() {
         console.log("image click");
         router.push("/map-info");
     }
 
-    function handleMoreClick() {
-        console.log("more click");
-    }
+    
+    const handleMoreClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchor(event.currentTarget);
+    };
+    
+    const handleClose = () => {
+        setAnchor(null);
+    };
+
+    const handleExportClose = () => {
+        setAnchor(null);
+    };
+    const handleShareClose = () => {
+        setAnchor(null);
+    };
+    const handleForkClose = () => {
+        setAnchor(null);
+    };
+    const handleSaveClose = () => {
+        setAnchor(null);
+    };
 
     return (
         <div >
@@ -44,13 +75,16 @@ const MapPreview = () => {
                                 <Link
                                     href="/map-info"
                                 >
-                                    <Typography sx={{fontSize:'20px', color:'black'}}>
+                                    <Typography sx={{fontSize:'20px', 
+                                        color: isDark
+                                        ? "white"
+                                        : "black",}}>
                                         Map Title
                                     </Typography>
                                 </Link>
                         </Grid>
                         <Grid item xs={1.5}>
-                            <IconButton sx={{color:'black'}} onClick={handleMoreClick}>
+                            <IconButton onClick={handleMoreClick}>
                                 <MoreVertIcon />
                             </IconButton>
                         </Grid>
@@ -58,7 +92,10 @@ const MapPreview = () => {
                             <Link
                                     href="/user-profile"
                                 >
-                                    <Typography sx={{fontSize:'12px', color: 'black'}}>
+                                    <Typography sx={{fontSize:'12px',
+                                        color: isDark
+                                        ? "white"
+                                        : "black",}}>
                                         Username
                                     </Typography>
                             </Link>
@@ -104,6 +141,33 @@ const MapPreview = () => {
                 </Grid>
                 
             </Grid>
+
+            <Menu
+                id="basic-menu"
+                anchorEl={anchor}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                }}
+            >
+                <MenuItem onClick={handleShareClose}>
+                    <ShareIcon sx={{marginRight: '10px'}}/>
+                    <Typography sx={{fontSize: '20px'}}>Share</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleForkClose}>
+                    <ForkRightIcon sx={{marginRight: '10px'}}/>
+                    <Typography sx={{fontSize: '20px'}}>Fork</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleExportClose}>
+                    <DownloadIcon sx={{marginRight: '10px'}}/>
+                    <Typography sx={{fontSize: '20px'}}>Export</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleSaveClose}>
+                    <BookmarkIcon sx={{marginRight: '10px'}}/>
+                    <Typography sx={{fontSize: '20px'}}>Save</Typography>
+                </MenuItem>
+            </Menu>
         </div>
     )
 }

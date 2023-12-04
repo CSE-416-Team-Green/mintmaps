@@ -63,17 +63,20 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                 // Check if buffer is not null before proceeding
                 if (buffer) {
                     var formData = new FormData();
-
+                    const email = localStorage.getItem("email") as string;
                     // Append your text fields
                     formData.append("name", ontitle);
                     formData.append("maptype", mapType);
                     formData.append("tag", ontags);
+                    formData.append("email", email);
 
                     // Append your binary data (buffer)
                     formData.append(
                         "geojson",
                         new Blob([buffer], { type: "application/octet-stream" })
                     );
+                    console.log("3");
+                    console.log(formData);
 
                     try {
                         const response = await fetch("/api/createMap", {

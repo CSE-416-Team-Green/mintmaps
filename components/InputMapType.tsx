@@ -28,16 +28,14 @@ const maps = [
 interface InputMapTypeProps {
     onMapTypeSelect: (selectedMapType: string) => void;
 }
-const InputMapType : React.FC<InputMapTypeProps> = ({ onMapTypeSelect }) => {
-
-   // const [selectedMapType, setSelectedMapType] = React.useState<string | null>(null);
+const InputMapType: React.FC<InputMapTypeProps> = ({ onMapTypeSelect }) => {
+    const [selectedMapType, setSelectedMapType] = React.useState<string | null>(null);
 
     const handleClick = (mapName: string) => {
+        setSelectedMapType(mapName);
         onMapTypeSelect(mapName);
     };
-    //React.useEffect(() => {
-        //onMapTypeSelect(mapName);
-    //}, [mapName, onMapTypeSelect]);
+
     return (
         <Box sx={{
             display: 'flex',
@@ -55,31 +53,32 @@ const InputMapType : React.FC<InputMapTypeProps> = ({ onMapTypeSelect }) => {
                 rowGap: '64px',
                 justifyContent: 'center',
             }}>
-                {
-                    maps.map((map) => {
-                        return (
-                            <Box
-                                key={map.name}
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    rowGap: '8px',
-                                }}
-                            >
-                                <Image src={map.image} alt={map.name} width={280} height={200} />
-                                <Chip
-                                    onClick={() => handleClick(map.name)}
-                                    label={map.name}
-                                    color={map.name ? "primary" : "default"}
-                                />
-                            </Box>
-                        )
-                    })
-                }
+                {maps.map((map) => (
+                    <Box
+                        key={map.name}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            rowGap: '8px',
+                        }}
+                    >
+                        <Image src={map.image} alt={map.name} width={280} height={200} />
+                        <Chip
+                            onClick={() => handleClick(map.name)}
+                            label={map.name}
+                            sx={{
+                                bgcolor: selectedMapType === map.name ? 'grey.300' : undefined,
+                                '&:hover': {
+                                    bgcolor: selectedMapType === map.name ? 'grey.400' : undefined,
+                                },
+                            }}
+                        />
+                    </Box>
+                ))}
             </Box>
         </Box>
-    )
-}
+    );
+};
 
 export default InputMapType;
