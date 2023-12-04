@@ -1,10 +1,11 @@
 import Header from "@/components/Header";
-import MapContext from "@/components/MapContext";
+
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
 import dynamic from 'next/dynamic';
 import AuthContext from "@/components/authContext";
+import MapContext from "@/components/MapContext";
 import React, { useState } from 'react';
 
 
@@ -18,7 +19,7 @@ export default function MapUpload() {
     const [visibility, setVisibility] = useState('Unlisted');
     const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
-    const chipStyle = (label) => ({
+    const chipStyle = (label: string) => ({
         backgroundColor: visibility === label ? "#E0E0E0" : undefined, // Grey if selected
         cursor: 'pointer',
     });
