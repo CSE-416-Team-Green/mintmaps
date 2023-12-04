@@ -20,6 +20,10 @@ export default async function handler(
         const map = await MapModel.findById(mapId);
         const owner = await User.findOne({ email: map.createdBy });
 
+        if(!user) throw new Error("User not found");
+        if(!map) throw new Error("Map not found");
+        if(!owner) throw new Error("Owner not found");
+
         const dislikedMapIndex = user.dislikedMaps.indexOf(mapId);
         if(dislikedMapIndex > -1) {
             user.dislikedMaps.splice(dislikedMapIndex, 1);
