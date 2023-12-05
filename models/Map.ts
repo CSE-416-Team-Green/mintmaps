@@ -16,7 +16,7 @@ interface IMap extends Document {
     forks?: number;
     shares?: number;
     exports?: number;
-    views?: number;
+    views: number;
     legend?: Object;
     selectedProperty?: string;
     selectedPropertyIndex?: number;
@@ -73,7 +73,7 @@ const mapSchema = new Schema<IMap>({
     forks: Number,
     shares: Number,
     exports: Number,
-    views: Number,
+    views: { type: Number, default: 0 },
     legend: Object,
     selectedProperty: String,
     selectedPropertyIndex: Number,
