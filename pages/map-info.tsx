@@ -117,9 +117,6 @@ export default function MapInfo() {
             if (res.ok) {
                 liked ? setLiked(false) : setLiked(true);
                 setDisliked(false);
-
-                setNumDisikes((n) => n - 1);
-                setNumLikes((n) => n + 1);
             }
         });
     };
@@ -135,9 +132,6 @@ export default function MapInfo() {
             if (res.ok) {
                 disliked ? setDisliked(false) : setDisliked(true);
                 setLiked(false);
-                
-                setNumDisikes((n) => n + 1);
-                setNumLikes((n) => n - 1);
             }
         });
     };
@@ -431,10 +425,6 @@ export default function MapInfo() {
                     <Box sx={{paddingLeft:"20px", paddingBottom:"5px"}}>
                         Reccomended
                     </Box>
-                    <MapPreview />
-                    <MapPreview />
-                    <MapPreview />
-                    <MapPreview />
                 </Grid>
             </Grid>
         </>

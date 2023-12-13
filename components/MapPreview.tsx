@@ -9,13 +9,30 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { IconButton, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import ThemeContext from "@/components/themeContext";
+import * as React from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DownloadIcon from '@mui/icons-material/Download';
+import ForkRightIcon from '@mui/icons-material/ForkRight';
+import ShareIcon from '@mui/icons-material/Share';
+import { FC } from 'react';
+import MapModel from '@/models/Map';
 
-const MapPreview = () => {
+const MapPreview: FC<{
+    map: any
+}> = (props) => {
 
     const router = useRouter();
+    const themeContext = React.useContext(ThemeContext);
+    const isDark = themeContext.mode === "dark";
+    const open = Boolean(anchor);
+    const mapInfo = props.map;
 
     function handleImageClick() {
         console.log("image click");
+        localStorage.mapId = mapInfo._id;
         router.push("/map-info");
     }
 
@@ -44,8 +61,11 @@ const MapPreview = () => {
                                 <Link
                                     href="/map-info"
                                 >
-                                    <Typography sx={{fontSize:'20px', color:'black'}}>
-                                        Map Title
+                                    <Typography sx={{fontSize:'20px', overflow:'hidden', textOverflow: 'ellipsis', width: '150px', height: '25px',
+                                        color: isDark
+                                        ? "white"
+                                        : "black",}}>
+                                        {mapInfo.name}
                                     </Typography>
                                 </Link>
                         </Grid>
@@ -58,14 +78,17 @@ const MapPreview = () => {
                             <Link
                                     href="/user-profile"
                                 >
-                                    <Typography sx={{fontSize:'12px', color: 'black'}}>
-                                        Username
+                                    <Typography sx={{fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '100px', height: '20px',
+                                        color: isDark
+                                        ? "white"
+                                        : "black",}}>
+                                            {mapInfo.createdBy}
                                     </Typography>
                             </Link>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography sx={{float:'right', fontSize:'12px'}}>
-                                3 Weeks Ago
+                            <Typography sx={{float:'right', fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
+                                {mapInfo.uploadDate}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -81,7 +104,7 @@ const MapPreview = () => {
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                1.2k
+                                0 
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -89,7 +112,7 @@ const MapPreview = () => {
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                85%
+                                0
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -97,7 +120,7 @@ const MapPreview = () => {
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                30
+                                0
                             </Typography>
                         </Grid>
                     </Grid>
