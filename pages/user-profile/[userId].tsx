@@ -6,7 +6,7 @@ import * as React from "react";
 import { Container, Grid, Typography, IconButton } from "@mui/material";
 import styles from '@/styles/about.module.css';
 import Link from "next/link";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SortIcon from '@mui/icons-material/Sort';
@@ -71,30 +71,28 @@ export default function UserProfile() {
 
     return (
         <>
+            <Header />
             <Grid
                 container
                 direction={"row"}
-                sx={{ width: "100vw", height: "100vh" }}
                 justifyContent="center"
                 alignItems={"center"}
             >
-                <Grid item sx={{ flexGrow: 1 ,}}>
-                    <Header />
-                </Grid>
-                <Container>
-                    <br></br>
-                    <Grid 
+                <Container sx={{
+                    paddingTop: "50px",
+                }}>
+                    <Grid
                         container
                         direction={"row"}
-                        sx={{ width: "100%", height: "100%" }}
+                        sx={{ width: "100%", height: "100%"}}
                         justifyContent="left"
                         alignItems={"left"}
                     >
                         <Grid item xs={3}>
-                            <Avatar sx={{height:'250px', width:'250px'}}/>  
+                            <Avatar sx={{ height: '250px', width: '250px' }} />
                         </Grid>
                         <Grid item xs={9}>
-                            <Grid 
+                            <Grid
                                 container
                                 direction={"row"}
                                 justifyContent="left"
@@ -103,12 +101,12 @@ export default function UserProfile() {
                             >
                                 <Grid item xs={3}>
                                     <div className={styles.usernameText}>
-                                        Username
+                                        {username}
                                     </div>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Button sx={{ minWidth: 120, minHeight: 40 }} variant="contained">
-                                        Follow 
+                                        Follow
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2}>
@@ -119,74 +117,51 @@ export default function UserProfile() {
                                 <Grid item xs={1}>
                                     <ShareButton />
                                 </Grid>
-                                <Grid item xs={2}>3 Followers</Grid>
-                                <Grid item xs={2}>3 Following</Grid>
+                                <Grid item xs={2}>{followers.length} Followers</Grid>
+                                <Grid item xs={2}>{following.length} Following</Grid>
                                 <Grid item xs={0.5}><WorkspacePremiumIcon /></Grid>
-                                <Grid item xs={0.5}>300 </Grid>
+                                <Grid item xs={0.5}>{reputation}</Grid>
                                 <Grid item xs={6}></Grid>
                                 <Grid item xs={12}>
                                     <Typography className={styles.descriptionText}>
-                                        Description Description Description  Description Description Description Description Description Description Description Description Description Description Description 
+                                        {bio}
                                     </Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
 
-                        
-                        <Grid item xs={3} sx={{paddingTop:"40px"}}>
-                            <Grid 
+
+                        <Grid item xs={3} sx={{ paddingTop: "40px" }}>
+                            <Grid
                                 container
                                 direction={"column"}
-                                sx={{ width: "100%", height: "100%", backgroundColor:"#f1f1f1"}}
+                                sx={{
+                                    width: "100%", height: "100%",
+                                    backgroundColor: isDark
+                                        ? "#272626"
+                                        : "#f1f1f1",
+                                }}
                                 justifyContent="center"
                                 alignItems={"center"}
                             >
-                                <Grid item xs={0.5} sx={{paddingTop:"30px", fontSize:"25px"}}>User's Maps </Grid>
-                                <Grid item xs={0.5} sx={{paddingTop:"30px", fontSize:"25px"}}>Liked Maps</Grid>
-                                <Grid item xs={0.5} sx={{paddingTop:"30px", fontSize:"25px"}}>Saved Maps </Grid>
-                                <Grid item xs={0.5} sx={{paddingTop:"30px", fontSize:"25px"}}>Following </Grid>
-                                <Grid item xs={0.5} sx={{paddingTop:"30px", paddingBottom:"250px", fontSize:"25px"}}>Followers </Grid>
+                                <Grid item xs={0.5} sx={{ paddingTop: "30px", fontSize: "25px", cursor: "pointer" }} onClick={() => handleTabChange('user')}>User's Maps</Grid>
+                                <Grid item xs={0.5} sx={{ paddingTop: "30px", fontSize: "25px", cursor: "pointer" }} onClick={() => handleTabChange('liked')}>Liked Maps</Grid>
+                                <Grid item xs={0.5} sx={{ paddingTop: "30px", fontSize: "25px", cursor: "pointer" }} onClick={() => handleTabChange('saved')}>Saved Maps</Grid>
+                                <Grid item xs={0.5} sx={{ paddingTop: "30px", fontSize: "25px", cursor: "pointer" }} onClick={() => handleTabChange('following')}>Following</Grid>
+                                <Grid item xs={0.5} sx={{ paddingTop: "30px", paddingBottom: "250px", fontSize: "25px", cursor: "pointer" }} onClick={() => handleTabChange('followers')}>Followers</Grid>
                             </Grid>
                         </Grid>
-
-                        <Grid item xs={9} sx={{paddingTop:"40px"}}>
-                            <Grid item xs={12} sx={{fontSize: "25px", paddingBottom: "10px", paddingTop: "4px", paddingLeft: "10px"}}>
-                                <SortIcon /> Sort By
-                            </Grid>
-                            <div className={styles.homeBox}>
-                                <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <MapPreview />
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </Grid>
+                        {
+                            currentTab === 'user' ? <UserMapsTab maps={createdMaps} /> : 
+                            currentTab === 'liked' ? <LikedMapsTab maps={likedMaps} /> :
+                            currentTab === 'saved' ? <SavedMapsTab maps={savedMaps} /> :
+                            currentTab === 'following' ? <FollowingTab following={following} /> :
+                            currentTab === 'followers' ? <FollowersTab followers={followers} /> :
+                            null
+                        }
                     </Grid>
                 </Container>
-                
             </Grid>
-            <br />
-            <br />
-            <br />
-            <br />
         </>
     );
 }
