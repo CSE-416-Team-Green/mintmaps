@@ -29,11 +29,15 @@ import { MapContainer } from "react-leaflet";
 import MapContext from "@/components/MapContext";
 import { useEffect, useContext } from "react";
 import AuthContext from "@/components/authContext";
-import FormatDateText from "../utils/dateTextUtils";
+import FormatDateText from "../../utils/dateTextUtils";
 import CommentContainer from "@/components/CommentContainer";
 
+const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
+    loading: () => <p>loading...</p>,
+    ssr: false,
+});
+
 export default function MapInfo() {
-    // const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
     const email = authContext.email;
     const [liked, setLiked] = React.useState<boolean>(false);
@@ -42,7 +46,6 @@ export default function MapInfo() {
     const [userId, setUserId] = React.useState<string>("");
     const [numLikes, setNumLikes] = React.useState(0);
     const [numDisLikes, setNumDisikes] = React.useState(0);
-    const [numFollowers, setNumFollowers] = React.useState(0);
     const [mapDescription, setMapDescription] = React.useState("");
     const [tags, setTags] = React.useState<string[]>([]);
     const [uploadDate, setUploadDate] = React.useState("");
@@ -50,11 +53,6 @@ export default function MapInfo() {
     const [mapTitle, setMapTitle] = React.useState("");
     const [comments, setComments] = React.useState<any[]>([]);
     const [newComment, setNewComment] = React.useState("");
-
-    const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
-        loading: () => <p>loading...</p>,
-        ssr: false,
-    });
 
     React.useEffect(() => {
         const getMapDetails = async () => {
