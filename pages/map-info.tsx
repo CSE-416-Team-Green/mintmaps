@@ -31,6 +31,10 @@ import { useEffect, useContext } from "react";
 import AuthContext from "@/components/authContext";
 import FormatDateText from "../utils/dateTextUtils";
 import CommentContainer from "@/components/CommentContainer";
+const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
+    loading: () => <p>loading...</p>,
+    ssr: false,
+});
 
 export default function MapInfo() {
     // const mapContext = useContext(MapContext);
@@ -51,11 +55,7 @@ export default function MapInfo() {
     const [comments, setComments] = React.useState<any[]>([]);
     const [newComment, setNewComment] = React.useState("");
 
-    const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
-        loading: () => <p>loading...</p>,
-        ssr: false,
-    });
-
+  
     React.useEffect(() => {
         const getMapDetails = async () => {
             const mapId = localStorage.getItem("mapId");
@@ -93,6 +93,7 @@ export default function MapInfo() {
 
         getMapDetails();
     }, []);
+
     fetch(`/api/getUserById?email=${email}`, {
         method: "GET",
     }).then((res) => {

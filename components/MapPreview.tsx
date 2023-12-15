@@ -27,12 +27,12 @@ const MapPreview: FC<{
     const router = useRouter();
     const themeContext = React.useContext(ThemeContext);
     const isDark = themeContext.mode === "dark";
-    const open = Boolean(anchor);
+    // const open = Boolean(anchor);
     const mapInfo = props.map;
 
     function handleImageClick() {
         console.log("image click");
-        localStorage.mapId = mapInfo._id;
+        localStorage.setItem("mapId", mapInfo._id); 
         router.push("/map-info");
     }
 
