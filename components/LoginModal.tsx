@@ -54,6 +54,7 @@ import * as React from "react";
                     if (response.status === 200) {
         
                         const userDetails = {
+                            userId: JSON.parse((await response.json()).body)._id,
                             email: email,
                             accountType: email,
                             admin: false, //CHANGE THIS LATER
