@@ -23,6 +23,7 @@ const GoogleSignInButton = () => {
                 const data = response.data.data;
 
                 const userDetails = {
+                    userId: data._id,
                     email: data.email,
                     accountType: data.accountType,
                     admin: data.admin,

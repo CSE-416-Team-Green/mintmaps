@@ -10,8 +10,65 @@ import { Button } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SortIcon from '@mui/icons-material/Sort';
+import ThemeContext from "@/components/themeContext";
+import UserMapsTab from '@/components/UserMapsTab';
+import LikedMapsTab from '@/components/LikedMapsTab';
+import SavedMapsTab from '@/components/SavedMapsTab';
+import FollowingTab from '@/components/FollowingTab';
+import FollowersTab from '@/components/FollowersTab';
+import AuthContext from '@/components/authContext';
+import { IUser } from '@/models/User';
+import { useRouter } from 'next/router';
+import ShareButton from '@/components/ShareButton';
+
+type Tabs = 'user' | 'liked' | 'saved' | 'following' | 'followers';
 
 export default function UserProfile() {
+    const router = useRouter();
+    const themeContext = React.useContext(ThemeContext);
+    const isDark = themeContext.mode === "dark";
+
+    const [following, setFollowing] = React.useState<IUser[]>([]);
+    const [followers, setFollowers] = React.useState<IUser[]>([]);
+    const [createdMaps, setCreatedMaps] = React.useState<string[]>([]);
+    const [likedMaps, setLikedMaps] = React.useState<string[]>([]);
+    const [savedMaps, setSavedMaps] = React.useState<string[]>([]);
+    const [reputation, setReputation] = React.useState<number>(0);
+    const [username, setUsername] = React.useState<string>('');
+    const [bio, setBio] = React.useState<string>('');
+
+    const { userId } = router.query;
+    const [currentTab, setCurrentTab] = React.useState<Tabs>('user');
+    const handleTabChange = (tab: Tabs) => {
+        setCurrentTab(tab);
+    }
+
+    React.useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(`/api/getUserSetting?id=${userId}`, {
+                    method: 'GET',
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = (await response.json());
+                setFollowing(data.following ?? []);
+                setFollowers(data.followers ?? []);
+                setCreatedMaps(data.createdMaps ?? []);
+                setLikedMaps(data.likedMaps ?? []);
+                setSavedMaps(data.savedMaps ?? []);
+                setReputation(data.reputation ?? 0);
+                setUsername(data.userName ?? '');
+                setBio(data.bio ?? '');
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, [userId]);
+
     return (
         <>
             <Grid
@@ -60,9 +117,7 @@ export default function UserProfile() {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={1}>
-                                    <IconButton href="/user-profile">
-                                        <ShareIcon />  
-                                    </IconButton>    
+                                    <ShareButton />
                                 </Grid>
                                 <Grid item xs={2}>3 Followers</Grid>
                                 <Grid item xs={2}>3 Following</Grid>
