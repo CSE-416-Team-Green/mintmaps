@@ -31,6 +31,7 @@ import { useEffect, useContext } from "react";
 import AuthContext from "@/components/authContext";
 import FormatDateText from "../../utils/dateTextUtils";
 import CommentContainer from "@/components/CommentContainer";
+import { useRouter } from 'next/router';
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <p>loading...</p>,
@@ -38,8 +39,11 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 });
 
 export default function MapInfo() {
+    const router = useRouter();
     const authContext = useContext(AuthContext);
     const email = authContext.email;
+
+    const { mapId } = router.query;
     const [liked, setLiked] = React.useState<boolean>(false);
     const [disliked, setDisliked] = React.useState<boolean>(false);
     const [saved, setSaved] = React.useState<boolean>(false);
@@ -56,7 +60,6 @@ export default function MapInfo() {
 
     React.useEffect(() => {
         const getMapDetails = async () => {
-            const mapId = localStorage.getItem("mapId");
 
             fetch(`/api/getMapById/${mapId}`, { method: "GET" }).then((res) => {
                 if (res.ok) {
@@ -90,13 +93,13 @@ export default function MapInfo() {
         };
 
         getMapDetails();
-    }, []);
+    }, [mapId]);
+
     fetch(`/api/getUserById?email=${email}`, {
         method: "GET",
     }).then((res) => {
         if (res.ok) {
             res.json().then((data) => {
-                const mapId = localStorage.getItem("mapId");
                 if (data?.likedMaps.includes(mapId)) setLiked(true);
                 if (data?.dislikedMaps.includes(mapId)) setDisliked(true);
                 if (data?.savedMaps.includes(mapId)) setSaved(true);
@@ -108,7 +111,7 @@ export default function MapInfo() {
         fetch(`/api/likeMap`, {
             method: "POST",
             body: JSON.stringify({
-                mapId: localStorage.getItem("mapId"),
+                mapId,
                 email: authContext.email,
             }),
         }).then((res) => {
@@ -123,7 +126,7 @@ export default function MapInfo() {
         fetch(`/api/dislikeMap`, {
             method: "POST",
             body: JSON.stringify({
-                mapId: localStorage.getItem("mapId"),
+                mapId,
                 email: authContext.email,
             }),
         }).then((res) => {
@@ -138,7 +141,7 @@ export default function MapInfo() {
         fetch(`/api/userSaveMap`, {
             method: "POST",
             body: JSON.stringify({
-                mapId: localStorage.getItem("mapId"),
+                mapId,
                 email: authContext.email,
             }),
         }).then((res) => {
@@ -149,11 +152,10 @@ export default function MapInfo() {
     };
 
     const handleDownload = () => {
-        window.open("/api/exportMap?mapId=" + localStorage.getItem("mapId"));
+        window.open(`/api/exportMap?mapId=${mapId}`);
     };
 
     const handleForkMap = async () => {
-        const mapId = localStorage.getItem("mapId") as string;
         const userEmail = localStorage.getItem("email") as string;
 
         // Constructing the payload
@@ -180,13 +182,12 @@ export default function MapInfo() {
     };
 
     const submitComment = async () => {
-        const mapid = localStorage.getItem("mapId") as string;
         const userEmail = localStorage.getItem("email") as string;
 
         fetch(`/api/addComment`, {
             method: "POST",
             body: JSON.stringify({
-                mapId: mapid,
+                mapId,
                 user: userEmail,
                 message: newComment,
             }),

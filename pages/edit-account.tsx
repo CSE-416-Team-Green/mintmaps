@@ -49,14 +49,11 @@ export default function EditAccount() {
         }
     };
     
-    useEffect(() => {
-        const email = localStorage.getItem('email');
-        //console.log("321321"+email)
-        
+    useEffect(() => {        
         const fetchUserData = async () => {
             try {
-                //console.log("321321"+email)
-                const response = await fetch(`/api/getUserSetting?email=${email}`, {
+                const userId = localStorage.getItem('userId');
+                const response = await fetch(`/api/getUserSetting?id=${userId}`, {
                     method: 'GET',
                 });
                 if (!response.ok) {
