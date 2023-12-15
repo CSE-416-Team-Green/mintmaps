@@ -32,6 +32,7 @@ import AuthContext from "@/components/authContext";
 import FormatDateText from "../../utils/dateTextUtils";
 import CommentContainer from "@/components/CommentContainer";
 import { useRouter } from 'next/router';
+import ShareButton from '@/components/ShareButton';
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <p>loading...</p>,
@@ -367,7 +368,7 @@ export default function MapInfo() {
                                     />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <ShareIcon></ShareIcon>
+                                    <ShareButton />
                                 </Grid>
                             </Grid>
                         </Grid>
