@@ -39,7 +39,7 @@ const Header = () => {
 
     const handleProfileClose = () => {
         setAnchor(null);
-        router.push("/user-profile");
+        router.push(`/user-profile/${authContext.userId}`);
     };
 
     const navToLogin = () => {

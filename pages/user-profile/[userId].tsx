@@ -18,10 +18,13 @@ import FollowingTab from '@/components/FollowingTab';
 import FollowersTab from '@/components/FollowersTab';
 import AuthContext from '@/components/authContext';
 import { IUser } from '@/models/User';
+import { useRouter } from 'next/router';
+import ShareButton from '@/components/ShareButton';
 
 type Tabs = 'user' | 'liked' | 'saved' | 'following' | 'followers';
 
 export default function UserProfile() {
+    const router = useRouter();
     const themeContext = React.useContext(ThemeContext);
     const isDark = themeContext.mode === "dark";
 
@@ -34,17 +37,16 @@ export default function UserProfile() {
     const [username, setUsername] = React.useState<string>('');
     const [bio, setBio] = React.useState<string>('');
 
+    const { userId } = router.query;
     const [currentTab, setCurrentTab] = React.useState<Tabs>('user');
     const handleTabChange = (tab: Tabs) => {
         setCurrentTab(tab);
     }
 
     React.useEffect(() => {
-        const email = localStorage.getItem('email');
-        
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`/api/getUserSetting?email=${email}`, {
+                const response = await fetch(`/api/getUserSetting?id=${userId}`, {
                     method: 'GET',
                 });
                 if (!response.ok) {
@@ -65,7 +67,7 @@ export default function UserProfile() {
             }
         };
         fetchUserData();
-    }, []);
+    }, [userId]);
 
     return (
         <>
@@ -113,9 +115,7 @@ export default function UserProfile() {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={1}>
-                                    <IconButton href="/user-profile">
-                                        <ShareIcon />
-                                    </IconButton>
+                                    <ShareButton />
                                 </Grid>
                                 <Grid item xs={2}>{followers.length} Followers</Grid>
                                 <Grid item xs={2}>{following.length} Following</Grid>
