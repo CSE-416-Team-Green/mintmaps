@@ -27,7 +27,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
             const { name, tag, maptype } = fields;
             let geojsonBuffer = null;
-
+            console.log(maptype); 
             if (files.geojson) {
                 try {
                     geojsonBuffer = fs.readFileSync(files.geojson.filepath);

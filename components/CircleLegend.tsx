@@ -54,6 +54,8 @@ const CircleLegend = () => {
         legend.sizeMin = sizeMin;
         legend.sizeMax = sizeMax;
         mapContext.onChange();
+        mapContext.updateLegendColor(colorMin, colorMax);
+
     }, [
         valueMin,
         valueMax,

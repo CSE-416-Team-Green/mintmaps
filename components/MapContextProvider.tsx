@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { SelectChangeEvent } from "@mui/material";
 import { FeatureCollection } from "geojson";
 import { useRouter } from "next/navigation";
+import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 
 interface CustomProviderProps {
     children: React.ReactNode;
@@ -74,6 +75,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         valueMax: 100,
         colorMin: "#FFFFFF",
         colorMax: "#2ECC71",
+        sizeMin: 1,
+        sizeMax: 100,
     });
     const [mapType, setMapType] = React.useState<MapType>("point");
     const [geoJSON, setgeoJSON] = React.useState<any>(null);
@@ -148,16 +151,45 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
         const minValue = Math.min(...values);
         const maxValue = Math.max(...values);
+        let newLegend;
+        if (mapType === "proportional-symbol") {
+            const minSize = interpolateNumber(minValue, maxValue, minValue);
+            const maxSize = interpolateNumber(minValue, maxValue, maxValue);
 
-        const newLegend = {
-            ...legend,
-            valueMin: minValue,
-            valueMax: maxValue,
-        };
-
+            newLegend = {
+                ...legend,
+                valueMin: minValue,
+                valueMax: maxValue,
+                sizeMin: minSize,
+                sizeMax: maxSize,
+            };
+        } else {
+            newLegend = {
+                ...legend,
+                valueMin: minValue,
+                valueMax: maxValue,
+            };
+        }
         setLegend(newLegend);
         const key = uuidv4();
         setMapKey(key);
+    };
+
+    const getCirlceRadius = (legend: any, value: number) => {
+        const normalizedValue =
+            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+
+        interpolateNumber(legend.sizeMin, legend.sizeMax, normalizedValue);
+    };
+
+    const getCircleColor = (legend: any, value: number) => {
+        const normalizedValue =
+            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+        return interpolateColor(
+            legend.colorMin,
+            legend.colorMax,
+            normalizedValue
+        );
     };
 
     const loadMap = async (id: string) => {
@@ -187,8 +219,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 setLegend(res.data.mapProps.legend);
             }
 
-            if (res.data.mapProps.mapType) {
-                setMapType(res.data.mapProps.mapType);
+            if (res.data.mapProps.maptype) {
+                setMapType(res.data.mapProps.maptype);
             }
             const key = uuidv4();
             setMapKey(key);
