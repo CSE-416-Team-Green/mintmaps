@@ -1,6 +1,7 @@
 describe("Test Sign Up Page and Sign Up Modal", () => {
     beforeEach(() => {
         cy.visit("http://localhost:3000/login");
+        cy.viewport(1280, 720)
         cy.contains("Sign Up").click();
     });
 

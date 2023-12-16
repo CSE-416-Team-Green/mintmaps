@@ -55,8 +55,8 @@ const Header = () => {
             </div>
             <Search></Search>
             <div className={styles.right}>
-                <IconButton onClick={toggleTheme}>
-                    {mode === "dark" ? <Brightness5Icon /> : <DarkModeIcon />}
+                <IconButton onClick={toggleTheme} data-cy="theme-toggle">
+                    {mode === "dark"  ? <Brightness5Icon /> : <DarkModeIcon />}
                 </IconButton>
                 <IconButton href="/map-creation" data-cy="map-button">
                     <MapIcon />
@@ -64,7 +64,7 @@ const Header = () => {
                 <IconButton>
                     <NotificationsIcon />
                 </IconButton>
-                <IconButton onClick={handleClick}>
+                <IconButton onClick={handleClick} data-cy="profile-button">
                     <Avatar alt="Richard McKenna" src="" />
                 </IconButton>
 

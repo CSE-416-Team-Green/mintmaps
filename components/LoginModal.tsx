@@ -90,6 +90,7 @@ import * as React from "react";
                 <TextField
                     sx={{ width: 300, mt: 15 }}
                     label="Email"
+                    type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     variant="standard"
