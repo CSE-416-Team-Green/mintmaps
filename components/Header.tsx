@@ -14,14 +14,36 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import AuthContext from "./authContext";
+import React from 'react';
 
 const Header = () => {
     const { theme, toggleTheme, mode } = useContext(ThemeContext);
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+    const [profilePic, setProfilePic] = useState<string>("");
     const authContext = useContext(AuthContext);
 
     const router = useRouter();
     const open = Boolean(anchor);
+
+    React.useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const userId = localStorage.getItem("userId");
+                const response = await fetch(`/api/getUserSetting?id=${userId}`, {
+                    method: 'GET',
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = (await response.json());
+                setProfilePic(data.profilePic ?? '');
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, []);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchor(event.currentTarget);
@@ -65,7 +87,7 @@ const Header = () => {
                     <NotificationsIcon />
                 </IconButton>
                 <IconButton onClick={handleClick}>
-                    <Avatar alt="Richard McKenna" src="" />
+                    <Avatar src={profilePic} />
                 </IconButton>
 
                 {authContext.isLoggedIn ? (
