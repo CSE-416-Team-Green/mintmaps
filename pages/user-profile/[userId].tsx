@@ -36,6 +36,7 @@ export default function UserProfile() {
     const [reputation, setReputation] = React.useState<number>(0);
     const [username, setUsername] = React.useState<string>('');
     const [bio, setBio] = React.useState<string>('');
+    const [profilePic, setProfilePic] = React.useState<string>('');
 
     const { userId } = router.query;
     const [currentTab, setCurrentTab] = React.useState<Tabs>('user');
@@ -45,6 +46,7 @@ export default function UserProfile() {
 
     React.useEffect(() => {
         const fetchUserData = async () => {
+            if (!userId) return;
             try {
                 const response = await fetch(`/api/getUserSetting?id=${userId}`, {
                     method: 'GET',
@@ -61,6 +63,7 @@ export default function UserProfile() {
                 setReputation(data.reputation ?? 0);
                 setUsername(data.userName ?? '');
                 setBio(data.bio ?? '');
+                setProfilePic(data.profilePic ?? '');
                 console.log(data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -84,12 +87,12 @@ export default function UserProfile() {
                     <Grid
                         container
                         direction={"row"}
-                        sx={{ width: "100%", height: "100%"}}
+                        sx={{ width: "100%", height: "100%" }}
                         justifyContent="left"
                         alignItems={"left"}
                     >
                         <Grid item xs={3}>
-                            <Avatar sx={{ height: '250px', width: '250px' }} />
+                            <Avatar sx={{ height: '250px', width: '250px' }} src={profilePic} />
                         </Grid>
                         <Grid item xs={9}>
                             <Grid
@@ -152,12 +155,12 @@ export default function UserProfile() {
                             </Grid>
                         </Grid>
                         {
-                            currentTab === 'user' ? <UserMapsTab maps={createdMaps} /> : 
-                            currentTab === 'liked' ? <LikedMapsTab maps={likedMaps} /> :
-                            currentTab === 'saved' ? <SavedMapsTab maps={savedMaps} /> :
-                            currentTab === 'following' ? <FollowingTab following={following} /> :
-                            currentTab === 'followers' ? <FollowersTab followers={followers} /> :
-                            null
+                            currentTab === 'user' ? <UserMapsTab maps={createdMaps} /> :
+                                currentTab === 'liked' ? <LikedMapsTab maps={likedMaps} /> :
+                                    currentTab === 'saved' ? <SavedMapsTab maps={savedMaps} /> :
+                                        currentTab === 'following' ? <FollowingTab following={following} /> :
+                                            currentTab === 'followers' ? <FollowersTab followers={followers} /> :
+                                                null
                         }
                     </Grid>
                 </Container>

@@ -20,7 +20,7 @@ export default async function handler(
    // console.log(user)
 
     try {
-        const { uname, bio, newFollowersNotification, mapLikedNotification, commentsNotification } = req.body;
+        const { uname, profilePic, bio, newFollowersNotification, mapLikedNotification, commentsNotification } = req.body;
         const email = req.query.email as string;
         //console.log(email);
         const user = await User.findOne({ email: email }).populate('settings')
@@ -35,6 +35,9 @@ export default async function handler(
         }
         if(bio){
             user.bio = bio;
+        }
+        if(profilePic) {
+            user.profilePic = profilePic;
         }
         
         await user.save();

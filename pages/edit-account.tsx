@@ -10,13 +10,14 @@ import { useState,useEffect } from 'react';
 
 import AuthContext from "@/components/authContext";
 import { useRouter } from 'next/navigation';
+import { set } from 'cypress/types/lodash';
 
 export default function EditAccount() {
     const authContext = React.useContext(AuthContext);
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
-    const [profilePic, setProfilePic] = useState<File | null>(null);
+    const [profilePic, setProfilePic] = useState<string>('');
     const [newFollowersNotification, setNewFollowersNotification] = useState(false);
     const [mapLikedNotification, setMapLikedNotification] = useState(false);
     const [commentsNotification, setCommentsNotification] = useState(false);
@@ -45,7 +46,9 @@ export default function EditAccount() {
 
     const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            setProfilePic(event.target.files[0]);
+            toDataURL(URL.createObjectURL(event.target.files[0]), function(dataUrl) {
+                setProfilePic(dataUrl);
+            });
         }
     };
     
@@ -61,6 +64,7 @@ export default function EditAccount() {
                 }
                 const data = (await response.json());
                 setUsername(data.userName);
+                setProfilePic(data.profilePic);
                 setBio(data.bio);
                 setNewFollowersNotification(data.settings[0].notificationsFollowers);
                 setMapLikedNotification(data.settings[0].notificationsLikes);
@@ -79,6 +83,7 @@ export default function EditAccount() {
         const checkemail = authContext.email;
         const payload = {
             uname: username,
+            profilePic: profilePic,
             bio: bio,
             newFollowersNotification: newFollowersNotification,
             mapLikedNotification: mapLikedNotification,
@@ -141,7 +146,7 @@ export default function EditAccount() {
                             Profile Picture
                         </Grid>
                         <Grid item xs={3}>
-                            <Avatar sx={{height:'250px', width:'250px'}}/>  
+                            <Avatar sx={{height:'250px', width:'250px'}} src={profilePic}/>  
                         </Grid>
                         <Grid item xs={9}>
                             Profile Picture must be a square image <br />
@@ -150,7 +155,7 @@ export default function EditAccount() {
                             Must be a .jpg or .png file<br />
                             <Button sx={{ height:50, width: 180, fontSize:"20px", marginTop:"20px"}} variant="contained" component="label">
                                 Choose File
-                                <input type="file" hidden onChange={handleProfilePicChange} />
+                                <input accept="image/*" type="file" hidden onChange={handleProfilePicChange} />
                             </Button>
                         </Grid>
                         <Grid item xs={12} sx={{fontSize:"30px"}}>
@@ -219,4 +224,18 @@ export default function EditAccount() {
             <br />
         </>
     );
+}
+
+function toDataURL(url: string, callback: (dataUrl: string) => void) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        callback(reader.result as string);
+      }
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
 }
