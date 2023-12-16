@@ -1,12 +1,14 @@
 import * as React from "react";
 
 interface UserDetails {
+    userId: string;
     email: string;
     accountType: string;
     admin: boolean;
 }
 
 interface AuthContextType {
+    userId: string;
     email: string;
     admin: boolean;
     onLoggingIn: (userDetails: UserDetails) => void;
@@ -15,6 +17,7 @@ interface AuthContextType {
     accountType: string;
 }
 const AuthContext = React.createContext<AuthContextType>({
+    userId: "",
     email: "",
     admin: false,
     onLoggingIn: () => {},
