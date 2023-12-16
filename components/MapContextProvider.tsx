@@ -186,6 +186,10 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             if (res.data.mapProps.legend) {
                 setLegend(res.data.mapProps.legend);
             }
+
+            if (res.data.mapProps.mapType) {
+                setMapType(res.data.mapProps.mapType);
+            }
             const key = uuidv4();
             setMapKey(key);
         } catch (err) {

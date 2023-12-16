@@ -61,7 +61,7 @@ interface MapContextType {
     
 }
 
-const DynamicMap = () => {
+const DynamiChlorMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
 
@@ -157,4 +157,4 @@ const DynamicMap = () => {
     );
 };
 
-export default DynamicMap;
+export default DynamiChlorMap;

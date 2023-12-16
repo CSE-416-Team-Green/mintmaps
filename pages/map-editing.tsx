@@ -7,7 +7,7 @@ import GeneralTab from '@/components/GeneralTab';
 import OverviewTab from '@/components/OverviewTab';
 import LegendTab from '@/components/LegendTab';
 
-const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
+const DynamicMap = dynamic(() => import("@/components/DynamicPropSymMap"), {
     loading: () => <p>loading...</p>,
     ssr: false
 })
