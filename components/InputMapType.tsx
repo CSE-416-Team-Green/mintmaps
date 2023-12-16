@@ -40,8 +40,8 @@ const mapTypeConvert = (mapType: string) => {
         case "Point Map":
             type = "point";
             break;
-        case "Chloropleth":
-            type = "chloropleth";
+        case "Choropleth":
+            type = "choropleth";
             break;
         case "Bivariate Choropleth":
             type = "bivariate-choropleth";

@@ -34,6 +34,7 @@ async function convertFileToGeoJson(file: File): Promise<GeoJsonObject> {
     });
 }
 
+
 const mapTypeConvert = (mapType: string) => {
     let type;
     switch (mapType) {
@@ -46,8 +47,8 @@ const mapTypeConvert = (mapType: string) => {
         case "Point Map":
             type = "point";
             break;
-        case "Chloropleth":
-            type = "chloropleth";
+        case "Choropleth":
+            type = "choropleth";
             break;
         case "Bivariate Choropleth":
             type = "bivariate-choropleth";
@@ -56,7 +57,6 @@ const mapTypeConvert = (mapType: string) => {
 
     return type;
 };
-
 const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
     uploadedFile,
     mapType,

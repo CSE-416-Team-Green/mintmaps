@@ -4,10 +4,10 @@ import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
-import { Box, SelectChangeEvent } from "@mui/material";
+import { Box, Container, SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
-import DynamiChlorMap from "./DynamicChlorMap";
+import DynamicChlorMap from "./DynamicChlorMap";
 import DynamicPropSymbolMap from "./DynamicPropSymMap";
 
 interface Legend {
@@ -65,9 +65,7 @@ interface MapContextType {
 const DynamicMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
-    const [mapType, setMapType] = useState<string>(
-        mapContext.mapType as string
-    );
+    const [mapType, setMapType] = useState(mapContext.mapType);
 
     useEffect(() => {
         const loadMapData = async () => {
@@ -75,7 +73,7 @@ const DynamicMap = () => {
                 const id = localStorage.getItem("mapId") as string;
                 mapContext.loadMap(id);
                 setMapData(mapContext.geoJSON);
-                setMapType(mapContext.mapType as string);
+                setMapType(mapContext.mapType);
             } catch (error) {
                 console.error("Error connecting to db", error);
             }
@@ -87,9 +85,9 @@ const DynamicMap = () => {
     return mapType === "proportional-symbol" ? (
         <DynamicPropSymbolMap />
     ) : mapType === "choropleth" ? (
-        <DynamiChlorMap />
+        <DynamicChlorMap />
     ) : (
-        <Box />
+        <Container>NO MAP</Container>
     );
 };
 

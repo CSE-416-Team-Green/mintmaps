@@ -248,13 +248,25 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
         const minValue = Math.min(...values);
         const maxValue = Math.max(...values);
+        let newLegend; 
+        if (mapType === "proportional-symbol") {
+            const minSize = interpolateNumber(minValue, maxValue, minValue);
+            const maxSize = interpolateNumber(minValue, maxValue, maxValue);
 
-        const newLegend = {
-            ...legend,
-            valueMin: minValue,
-            valueMax: maxValue,
-        };
-
+            newLegend = {
+                ...legend,
+                valueMin: minValue,
+                valueMax: maxValue,
+                sizeMin: minSize,
+                sizeMax: maxSize,
+            };
+        } else {
+            newLegend = {
+                ...legend,
+                valueMin: minValue,
+                valueMax: maxValue,
+            };
+        }
         setLegend(newLegend);
 
         const key = uuidv4();
