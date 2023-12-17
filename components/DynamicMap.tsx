@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
-import { Box, Container, SelectChangeEvent } from "@mui/material";
+import { Box, Container, SelectChangeEvent, Skeleton } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import DynamicChlorMap from "./DynamicChlorMap";
@@ -78,22 +78,40 @@ const DynamicMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
     const [mapType, setMapType] = useState(mapContext.mapType);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        let isMounted = true;
         const loadMapData = async () => {
             try {
+                setIsLoading(true);
                 const id = localStorage.getItem("mapId") as string;
-                mapContext.loadMap(id);
-                setMapData(mapContext.geoJSON);
-                setMapType(mapContext.mapType);
+                await mapContext.loadMap(id);
+                if (isMounted) {
+                    // Only update state if component is mounted
+                    setMapData(mapContext.geoJSON);
+                    setMapType(mapContext.mapType);
+                    setIsLoading(false);
+                }
             } catch (error) {
                 console.error("Error connecting to db", error);
+                if (isMounted) {
+                    setIsLoading(false);
+                }
             }
         };
 
         loadMapData();
-    }, [mapContext.hasMap, mapContext.mapType]);
+    }, [mapData]);
 
+    if (isLoading) {
+        return (
+            <Skeleton>
+                {" "}
+                <DynamicChlorMap />
+            </Skeleton>
+        );
+    }
     return mapType === "proportional-symbol" ? (
         <DynamicPropSymbolMap />
     ) : mapType === "choropleth" ? (

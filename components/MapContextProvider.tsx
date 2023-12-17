@@ -454,7 +454,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         selectPropertyYBiv,
         updateLegendColorBivX,
         updateLegendColorBivY,
-        updateFeaturePropertyBiv, 
+        updateFeaturePropertyBiv,
     };
 
     return (
