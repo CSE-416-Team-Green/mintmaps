@@ -59,7 +59,6 @@ export default function MapInfo() {
     const [comments, setComments] = React.useState<any[]>([]);
     const [newComment, setNewComment] = React.useState("");
 
-  
     React.useEffect(() => {
         const getMapDetails = async () => {
 
@@ -77,7 +76,7 @@ export default function MapInfo() {
                                     "Uploaded"
                                 )
                             );
-                            setUserId(data?.mapProps?.createdBy.split(".")[0]);
+                            setUserId(data?.mapProps?.createdBy);
                             setMapTitle(data?.mapProps?.name);
                             setComments(
                                 data?.mapProps.comments.sort(
@@ -206,13 +205,13 @@ export default function MapInfo() {
     return (
         <>
             <Header />
-            <br /> 
-            <Grid 
-                    container
-                    direction={"row"}
-                    sx={{ width: "100%", height: "100%"}}
-                    justifyContent="left"
-                    alignItems={"left"}
+            <br />
+            <Grid
+                container
+                direction={"row"}
+                sx={{ width: "100%", height: "100%" }}
+                justifyContent="left"
+                alignItems={"left"}
             >
                 <Grid item xs={9}>
                     <Grid
@@ -228,11 +227,13 @@ export default function MapInfo() {
                         alignItems={"left"}
                     >
                         <Grid item xs={12}>
-                            <Box sx={{
-                                height: "70vh",
-                                width: "70vw",
-                                display: "flex",
-                            }}>
+                            <Box
+                                sx={{
+                                    height: "70vh",
+                                    width: "70vw",
+                                    display: "flex",
+                                }}
+                            >
                                 <DynamicMap />
                             </Box>
                         </Grid>
@@ -265,14 +266,14 @@ export default function MapInfo() {
 
                         <Grid item xs={0.75}>
                             <IconButton href="/user-profile">
-                                <Avatar />  
-                            </IconButton>    
+                                <Avatar />
+                            </IconButton>
                         </Grid>
                         <Grid item xs={8}>
                             <Grid
                                 container
                                 direction={"row"}
-                                sx={{ width: "100%", height: "100%"}}
+                                sx={{ width: "100%", height: "100%" }}
                                 justifyContent="left"
                                 alignItems={"left"}
                             >
@@ -335,7 +336,7 @@ export default function MapInfo() {
                             <Grid
                                 container
                                 direction={"row"}
-                                sx={{ width: "100%", height: "100%"}}
+                                sx={{ width: "100%", height: "100%" }}
                                 justifyContent="left"
                                 alignItems={"left"}
                             >
@@ -391,10 +392,11 @@ export default function MapInfo() {
                         <Grid item xs={10} sx={{ mt: 0 }}>
                             <TextField
                                 fullWidth
-                                size='small'
+                                size="small"
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start">
-                                    </InputAdornment>,
+                                    startAdornment: (
+                                        <InputAdornment position="start"></InputAdornment>
+                                    ),
                                 }}
                                 onChange={handleCommentInput}
                                 value={newComment}
@@ -423,7 +425,7 @@ export default function MapInfo() {
                 </Grid>
 
                 <Grid item xs={3}>
-                    <Box sx={{paddingLeft:"20px", paddingBottom:"5px"}}>
+                    <Box sx={{ paddingLeft: "20px", paddingBottom: "5px" }}>
                         Reccomended
                     </Box>
                 </Grid>
