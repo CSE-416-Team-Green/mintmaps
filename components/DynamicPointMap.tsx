@@ -40,7 +40,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;

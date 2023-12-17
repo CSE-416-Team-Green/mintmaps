@@ -20,6 +20,7 @@ import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
 import { FC } from 'react';
 import MapModel from '@/models/Map';
+import MapContext from './MapContext';
 
 const MapPreview: FC<{
     map: any
@@ -31,6 +32,7 @@ const MapPreview: FC<{
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
     const mapInfo = props.map;
+    const mapContext = React.useContext(MapContext); 
 
     function handleImageClick() {
         //console.log("image click");

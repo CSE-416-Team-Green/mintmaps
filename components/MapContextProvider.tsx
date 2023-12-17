@@ -48,7 +48,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;
@@ -110,23 +110,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [selectedPropertyIndexBiv, setSelectedPropertyIndexBiv] =
         React.useState(0);
     const router = useRouter();
-
-    React.useEffect(() => {
-        if (
-            geoJSON &&
-            geoJSON.features &&
-            geoJSON.features.length > 0 &&
-            geoJSON.features[0].properties &&
-            selectedProperty == ""
-        ) {
-            const propertyKeys = Object.keys(selectedProperty);
-            if (propertyKeys.length > 0) {
-                setSelectedProperty(propertyKeys[0]);
-                setSelectedPropertyIndex(0);
-            }
-        } else {
-        }
-    }, [geoJSON]);
 
     const onChange = () => {};
 
@@ -270,11 +253,13 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     };
     const loadMap = async (id: string) => {
         try {
+            setHasMap(false);
             const res = await axios.get(`/api/getMapById/${id}`);
             setgeoJSON(res.data.map);
             setHasMap(true);
             setMapId(id);
             setTags(res.data.mapProps.tags);
+            setMapType(res.data.mapProps.maptype);
 
             if (res.data.mapProps.name) {
                 setTitle(res.data.mapProps.name);
@@ -302,11 +287,9 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 setLegend(res.data.mapProps.legend);
             }
 
-            if (res.data.mapProps.maptype) {
-                setMapType(res.data.mapProps.maptype);
-            }
             const key = uuidv4();
             setMapKey(key);
+            setHasMap(true);
         } catch (err) {
             console.error("Error loading map from DB", err);
         }

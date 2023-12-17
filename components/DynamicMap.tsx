@@ -43,7 +43,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;
@@ -73,58 +73,42 @@ interface MapContextType {
         axis: string
     ) => void;
 }
-
 const DynamicMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
-    const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
-    const [mapType, setMapType] = useState(mapContext.mapType);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let isMounted = true;
         const loadMapData = async () => {
-            try {
-                setIsLoading(true);
-                const id = localStorage.getItem("mapId") as string;
-                await mapContext.loadMap(id);
-                if (isMounted) {
-                    // Only update state if component is mounted
-                    setMapData(mapContext.geoJSON);
-                    setMapType(mapContext.mapType);
-                    setIsLoading(false);
-                }
-            } catch (error) {
-                console.error("Error connecting to db", error);
-                if (isMounted) {
-                    setIsLoading(false);
-                }
+            const mapId = localStorage.getItem("mapId");
+            setLoading(true);
+            if (mapId) {
+                await mapContext.loadMap(mapId);
             }
+
+            setLoading(false);
         };
 
         loadMapData();
-    }, [mapContext.hasMap, mapType]);
+    }, []);
 
-    if (isLoading) {
+    if (!mapContext.hasMap || !mapContext.mapType || loading) {
         return (
             <Skeleton>
-                {" "}
-                <DynamicChlorMap />
+                <MapContainer/>
             </Skeleton>
         );
     }
-    return (
-        <>
-            {mapType === "proportional-symbol" ? (
-                <DynamicPropSymbolMap />
-            ) : mapType === "choropleth" ? (
-                <DynamicChlorMap />
-            ) : mapType === "bivariate-choropleth" ? (
-                <DynamicBiChlorMap />
-            ) : (
-                <Container>NO MAP</Container>
-            )}
-        </>
-    );
+
+    switch (mapContext.mapType) {
+        case "proportional-symbol":
+            return <DynamicPropSymbolMap />;
+        case "choropleth":
+            return <DynamicChlorMap />;
+        case "bivariate-choropleth":
+            return <DynamicBiChlorMap />;
+        default:
+            return <Container>NO MAP</Container>;
+    }
 };
 
 export default DynamicMap;
