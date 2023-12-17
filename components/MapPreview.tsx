@@ -35,7 +35,7 @@ const MapPreview: FC<{
     function handleImageClick() {
         console.log("image click");
         localStorage.mapId = mapInfo._id;
-        router.push("/map-info");
+        router.push(`/map-info/${mapInfo._id}`);
     }
 
     
