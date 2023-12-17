@@ -44,4 +44,8 @@ describe("Test Login Page and Login Modal", () => {
         cy.contains('button', 'Sign Up').click();
         
     });
+    it("Google Sign In Button Visibility", () => {
+        // Check if the Google Sign In button is visible
+        cy.contains('Sign in with Google').should('be.visible');
+    });
 });

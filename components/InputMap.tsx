@@ -119,7 +119,7 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                                 UPLOAD GEOJSON/FILE
                             </Button>
                         </label>
-                        <Typography>{uploadedFile?.name}</Typography>
+                        <Typography data-cy="filename">{uploadedFile?.name}</Typography >
                         .KML .SHP .GEOJSON or .MINTMAP file
                     </Box>
                     <Divider>or</Divider>
@@ -127,13 +127,14 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                         <InputLabel>Preset Map</InputLabel>
                         <Select
                             value={preset}
+                            data-cy="preset-map-select"
                             label="Preset Map"
                             onChange={handlePresetChange}
                             disabled={uploadedFile !== null}
                         >
                             {presetMaps.map((presetMap) => {
                                 return (
-                                    <MenuItem key={presetMap} value={presetMap}>{presetMap}</MenuItem>
+                                    <MenuItem data-cy="preset-map-select" key={presetMap} value={presetMap}>{presetMap}</MenuItem>
                                 )
                             })}
                         </Select>

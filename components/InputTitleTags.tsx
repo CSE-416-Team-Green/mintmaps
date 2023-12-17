@@ -32,10 +32,12 @@ const InputTitleTags: React.FC<InputTitleTagsProps> = ({ onTitleTagsChange }) =>
                 rowGap: '16px',
             }}>
                 <TextField placeholder="Title"
+                data-cy="title-input"
                 value={title}
                 onChange={handleTitleChange}/>
                 <TextField placeholder="Tags (comma-separated)"
                 value={tags}
+                data-cy="tags-input"
                 onChange={handleTagsChange}/>
             </Box>
         </Box>

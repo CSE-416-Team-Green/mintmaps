@@ -57,12 +57,14 @@ const GeneralTab = () => {
             >
                 <TextField
                     label="Title"
+                    data-cy="title-input"
                     variant="outlined"
                     value={title}
                     onChange={changeTitle}
                 />
                 <TextField
                     label="Description"
+                    data-cy="description-input"
                     variant="outlined"
                     multiline
                     value={description}
@@ -80,6 +82,7 @@ const GeneralTab = () => {
                             width: "100%",
                         }}
                         label="Add Tag"
+                        data-cy="tag-input"
                         variant="outlined"
                         onChange={(e) => setTagInput(e.target.value)}
                         value={tagInput}
@@ -107,7 +110,7 @@ const GeneralTab = () => {
                     ))}
                 </Box>
             </Box>
-            <Button variant="contained" href="map-upload" onClick={onUpload}>
+            <Button data-cy="upload-button" variant="contained" href="map-upload" onClick={onUpload}>
                 Upload
             </Button>
         </Box>

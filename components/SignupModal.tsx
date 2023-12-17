@@ -104,6 +104,7 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
                 <TextField
                     sx={{ width: 300, mt: 5 }}
                     label="Email"
+                    type="email"
                     variant="standard"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -113,6 +114,7 @@ const SignUpModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
                 <TextField
                     sx={{ width: 300 }}
                     label="Username"
+                    type="username"
                     variant="standard"
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}

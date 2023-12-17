@@ -64,7 +64,7 @@ const InputMapType: React.FC<InputMapTypeProps> = ({ onMapTypeSelect }) => {
                         }}
                     >
                         <Image src={map.image} alt={map.name} width={280} height={200} />
-                        <Chip
+                        <Chip data-cy="map-type"
                             onClick={() => handleClick(map.name)}
                             label={map.name}
                             sx={{
