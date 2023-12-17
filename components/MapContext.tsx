@@ -58,6 +58,11 @@ interface MapContextType {
     selectPropertyYBiv: (event: SelectChangeEvent) => void;
     updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
     updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
+    updateFeaturePropertyBiv: (
+        name: string,
+        newValue: any,
+        axis: string
+    ) => void;
 }
 
 const MapContext = React.createContext<MapContextType>({
@@ -89,6 +94,7 @@ const MapContext = React.createContext<MapContextType>({
     selectPropertyYBiv: () => {},
     updateLegendColorBivX: () => {},
     updateLegendColorBivY: () => {},
+    updateFeaturePropertyBiv: () => {},
 });
 
 export default MapContext;

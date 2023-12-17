@@ -78,6 +78,8 @@ const mapSchema = new Schema<IMap>({
     legend: Object,
     selectedProperty: String,
     selectedPropertyIndex: Number,
+    selectedPropertyBiv: String,
+    selectedPropertyIndexBiv: Number,
 });
 
 const MapModel = mongoose.models.Map || model<IMap>("Map", mapSchema);

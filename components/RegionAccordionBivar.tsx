@@ -74,7 +74,7 @@ const RegionAccordion: React.FC<AccordionProps> = ({ geoJSON }) => {
                     [index]: newValue,
                 }));
             }
-            mapContext.updateFeatureProperty(name, newValue);
+            mapContext.updateFeaturePropertyBiv(name, newValue, axis);
         }
     };
 

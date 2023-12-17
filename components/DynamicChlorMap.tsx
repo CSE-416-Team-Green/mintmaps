@@ -64,6 +64,11 @@ interface MapContextType {
     selectPropertyYBiv: (event: SelectChangeEvent) => void;
     updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
     updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
+    updateFeaturePropertyBiv: (
+        name: string,
+        newValue: any,
+        axis: string
+    ) => void;
 }
 const DynamicChlorMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
