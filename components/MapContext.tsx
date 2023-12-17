@@ -34,7 +34,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;
@@ -70,7 +70,7 @@ const MapContext = React.createContext<MapContextType>({
     onChange: () => {},
     saveMap: () => {},
     setMap: () => {},
-    loadMap: () => {},
+    loadMap: async () => {},
     legend: {},
     mapType: null,
     geoJSON: JSON.parse(JSON.stringify({ mapdata: "" })),
