@@ -13,7 +13,7 @@ export default async function handler(
   if (req.method !== "GET") {
     res.status(401).json({ message: "Method not allowed" });
     return;
-  } else console.log("yes");
+  } 
 
   await connectDb();
   try {

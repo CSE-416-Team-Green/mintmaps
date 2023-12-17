@@ -8,53 +8,50 @@ import {
     Chip,
     Typography,
     Button,
- } from "@mui/material";
- import Visibility from "@mui/icons-material/Visibility";
- import styles from "@/styles/login.module.css";
- import LoginButton from "./LoginButton";
- import Link from "next/link";
- import GoogleSignInButton from "./GoogleSigninButton";
- import { useState,useEffect } from 'react';
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import styles from "@/styles/login.module.css";
+import LoginButton from "./LoginButton";
+import Link from "next/link";
+import GoogleSignInButton from "./GoogleSigninButton";
+import { useState, useEffect } from "react";
 import AuthContext from "./authContext";
 import { useRouter } from "next/navigation";
 import * as React from "react";
- 
- interface componentProps {
+
+interface componentProps {
     setIsSigningUp: (isSigningUp: Boolean) => void;
- }
- 
- 
- const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
+}
+
+const LoginModal: React.FC<componentProps> = ({ setIsSigningUp }) => {
     const handleSignUpClick = () => {
         setIsSigningUp(true);
     };
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const authContext = React.useContext(AuthContext);
     const router = useRouter();
 
     const handleLoginClick = async () => {
-
-        if(email && password){
-
+        if (email && password) {
             const payload = {
                 email: email,
-                password: password
-            }
+                password: password,
+            };
             try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const response = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload),
                 });
-        
+
                 if (response.ok) {
                     if (response.status === 200) {
-        
                         const userDetails = {
-                            userId: JSON.parse((await response.json()).body)._id,
+                            userId: JSON.parse((await response.json()).body)
+                                ._id,
                             email: email,
                             accountType: email,
                             admin: false, //CHANGE THIS LATER
@@ -62,21 +59,21 @@ import * as React from "react";
                         authContext.onLoggingIn(userDetails);
                         router.push("/home");
                     }
-        
-                    alert('Logged in successfully');
+
+                    alert("Logged in successfully");
                 } else {
                     // Handle server errors (e.g., validation errors)
                     const errorData = await response.json();
                     alert(`Failed to login: ${errorData.message}`);
                 }
             } catch (error) {
-                console.error('Error logging in:', error);
-                alert('An error occurred while logging in.');
+                console.error("Error logging in:", error);
+                alert("An error occurred while logging in.");
             }
         } else {
-            alert('Please complete every field.');
+            alert("Please complete every field.");
         }
-    }
+    };
 
     return (
         <Grid
@@ -120,7 +117,11 @@ import * as React from "react";
                 </Link>
             </Grid>
             <Grid item>
-                <Button sx={{ minWidth: 150 }} variant="contained" onClick={handleLoginClick}>
+                <Button
+                    sx={{ minWidth: 150 }}
+                    variant="contained"
+                    onClick={handleLoginClick}
+                >
                     Log in
                 </Button>
             </Grid>
@@ -149,7 +150,6 @@ import * as React from "react";
             </Grid>
         </Grid>
     );
- };
- 
- 
- export default LoginModal;
+};
+
+export default LoginModal;

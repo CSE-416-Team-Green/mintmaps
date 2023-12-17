@@ -34,7 +34,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;
@@ -52,6 +52,17 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
+    updateFeaturePropertyBiv: (
+        name: string,
+        newValue: any,
+        axis: string
+    ) => void;
 }
 
 const MapContext = React.createContext<MapContextType>({
@@ -59,7 +70,7 @@ const MapContext = React.createContext<MapContextType>({
     onChange: () => {},
     saveMap: () => {},
     setMap: () => {},
-    loadMap: () => {},
+    loadMap: async () => {},
     legend: {},
     mapType: null,
     geoJSON: JSON.parse(JSON.stringify({ mapdata: "" })),
@@ -77,6 +88,13 @@ const MapContext = React.createContext<MapContextType>({
     updateTags: () => {},
     updateDescription: () => {},
     updateTitle: () => {},
+    selectedPropertyBiv: "",
+    selectedPropertyIndexBiv: 0,
+    selectPropertyXBiv: () => {},
+    selectPropertyYBiv: () => {},
+    updateLegendColorBivX: () => {},
+    updateLegendColorBivY: () => {},
+    updateFeaturePropertyBiv: () => {},
 });
 
 export default MapContext;

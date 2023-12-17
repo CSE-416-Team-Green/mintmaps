@@ -76,7 +76,7 @@ export default function MapInfo() {
                                     "Uploaded"
                                 )
                             );
-                            setUserId(data?.mapProps?.createdBy.split(".")[0]);
+                            setUserId(data?.mapProps?.createdBy);
                             setMapTitle(data?.mapProps?.name);
                             setComments(
                                 data?.mapProps.comments.sort(

@@ -4,9 +4,12 @@ import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
-import { SelectChangeEvent } from "@mui/material";
+import { Box, Container, SelectChangeEvent, Skeleton } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
+import DynamicChlorMap from "./DynamicChlorMap";
+import DynamicPropSymbolMap from "./DynamicPropSymMap";
+import DynamicBiChlorMap from "./DynamicBiChlorMap";
 
 interface Legend {
     title: string;
@@ -40,7 +43,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;
@@ -58,103 +61,54 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
-    
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
+    updateFeaturePropertyBiv: (
+        name: string,
+        newValue: any,
+        axis: string
+    ) => void;
 }
-
 const DynamicMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
-    const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadMapData = async () => {
-            try {
-                const id = localStorage.getItem("mapId") as string;
-                mapContext.loadMap(id);
-                setMapData(mapContext.geoJSON);
-                console.log(mapData);
-            } catch (error) {
-                console.error("Error connecting to db", error);
+            const mapId = localStorage.getItem("mapId");
+            setLoading(true);
+            if (mapId) {
+                await mapContext.loadMap(mapId);
             }
+
+            setLoading(false);
         };
 
         loadMapData();
-    }, [mapContext.hasMap]);
+    }, []);
 
-    useEffect(() => {
-        setMapData(mapContext.geoJSON);
-    }, [
-        mapContext.geoJSON,
-        mapContext.legend.valueMax,
-        mapContext.legend.valueMin,
-        mapContext.selectedProperty,
-    ]);
-
-    const colorRegion = (feature: any) => {
-        const value = feature.properties[mapContext.selectedProperty];
-        const color = getColorForProperty(mapContext.legend, value);
-
-        return {
-            fillColor: color,
-            weight: 2,
-            opacity: 1,
-            color: "white",
-            fillOpacity: 0.7,
-        };
-    };
-
-    const getColorForProperty = (legend: any, value: number) => {
-        const normalizedValue =
-            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
-        return interpolateColor(
-            legend.colorMin,
-            legend.colorMax,
-            normalizedValue
+    if (!mapContext.hasMap || !mapContext.mapType || loading) {
+        return (
+            <Skeleton>
+                <MapContainer/>
+            </Skeleton>
         );
-    };
+    }
 
-    const onEachFeature = (feature: any, layer: any) => {
-        layer.on({
-            mouseover: (event: any) => {
-                const layer = event.target;
-                const value = feature.properties[mapContext.selectedProperty];
-
-                if (value) {
-                    layer
-                        .bindTooltip(value.toString(), {
-                            permanent: false,
-                            sticky: true,
-                        })
-                        .openTooltip();
-                }
-            },
-            mouseout: (event: any) => {
-                const layer = event.target;
-                layer.closeTooltip();
-            },
-        });
-    };
-    return (
-        <MapContainer
-            style={{ height: "100%", width: "100%" }}
-            center={[51.505, -0.09]}
-            zoom={13}
-            scrollWheelZoom={false}
-        >
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {mapContext.hasMap && (
-                <GeoJSON
-                    key={mapContext.mapKey}
-                    data={mapContext.geoJSON}
-                    style={colorRegion}
-                    onEachFeature={onEachFeature}
-                />
-            )}
-            {mapData && <FitBounds mapData={mapData} />}
-        </MapContainer>
-    );
+    switch (mapContext.mapType) {
+        case "proportional-symbol":
+            return <DynamicPropSymbolMap />;
+        case "choropleth":
+            return <DynamicChlorMap />;
+        case "bivariate-choropleth":
+            return <DynamicBiChlorMap />;
+        default:
+            return <Container>NO MAP</Container>;
+    }
 };
 
 export default DynamicMap;
