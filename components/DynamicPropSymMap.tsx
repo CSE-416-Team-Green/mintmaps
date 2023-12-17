@@ -41,7 +41,7 @@ interface MapContextType {
     onChange: () => void;
     saveMap: () => void;
     setMap: (map: any) => void;
-    loadMap: (id: string) => void;
+    loadMap: (id: string) => Promise<void>;
     legend: Partial<Legend>;
     mapType: MapType | null;
     geoJSON: GeoJsonObject;
@@ -81,11 +81,6 @@ const DynamicPropSymbolMap = () => {
     useEffect(() => {
         const loadMapData = async () => {
             try {
-                const id = localStorage.getItem("mapId") as string;
-                mapContext.loadMap(id);
-                setMapData(mapContext.geoJSON);
-                console.log(mapData);
-
                 setMinRadius(calculateMinRadius(mapContext.geoJSON));
                 setMaxRadius(calculateMaxRadius(mapContext.geoJSON));
             } catch (error) {
@@ -94,7 +89,7 @@ const DynamicPropSymbolMap = () => {
         };
 
         loadMapData();
-    }, [mapContext.hasMap]);
+    }, []);
 
     useEffect(() => {
         setMapData(mapContext.geoJSON);
