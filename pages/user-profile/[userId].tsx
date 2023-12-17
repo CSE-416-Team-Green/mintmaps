@@ -105,7 +105,7 @@ export default function UserProfile() {
                                     </div>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Button sx={{ minWidth: 120, minHeight: 40 }} variant="contained">
+                                    <Button sx={{ minWidth: 120, minHeight: 40 }} variant="contained" >
                                         Follow
                                     </Button>
                                 </Grid>

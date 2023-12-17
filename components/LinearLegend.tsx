@@ -97,6 +97,7 @@ const LinearLegend = () => {
                 >
                     <TextField
                         label="Title"
+                        data-cy="title-input"
                         variant="outlined"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -124,6 +125,7 @@ const LinearLegend = () => {
                         Min
                         <TextField
                             type="number"
+                            data-cy="value-min-input"
                             label="Value"
                             variant="outlined"
                             value={valueMin}
@@ -143,6 +145,7 @@ const LinearLegend = () => {
                         <MuiColorInput
                             format="hex"
                             value={colorMin}
+                            data-cy="color-min-input"
                             onChange={setColorMin}
                         />
                     </Box>
@@ -157,6 +160,7 @@ const LinearLegend = () => {
                         <TextField
                             type="number"
                             label="Value"
+                            data-cy="value-max-input"
                             variant="outlined"
                             value={valueMax}
                             onChange={(e) =>
@@ -175,6 +179,7 @@ const LinearLegend = () => {
                         <MuiColorInput
                             format="hex"
                             value={colorMax}
+                            data-cy="color-max-input"
                             onChange={setColorMax}
                         />
                     </Box>
