@@ -1,11 +1,11 @@
-import { Box, Typography } from '@mui/material';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import React, { useState, useEffect } from 'react';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
+import { Box, Typography } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import React, { useState, useEffect } from "react";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 
 const presetMaps = [
     "Select a preset map",
@@ -17,18 +17,18 @@ const presetMaps = [
     "Germany",
     "Spain",
     "Italy",
-]
+];
 interface InputMapProps {
     onFileSelect: (file: File | null) => void;
 }
 const presetMapGeoJsonUrls: PresetMapGeoJsonUrls = {
-    "United States": "/public/presetmap/usa.geo.json"
+    "United States": "/public/presetmap/usa.geo.json",
     // ... other maps
 };
 interface PresetMapGeoJsonUrls {
     [key: string]: string;
 }
-const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
+const InputMap: React.FC<InputMapProps> = ({ onFileSelect }) => {
     const [preset, setPreset] = React.useState<string>("Select a preset map");
     const [uploadedFile, setUploadedFile] = React.useState<File | null>(null);
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,11 +52,17 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                 const url = presetMapGeoJsonUrls[presetMap];
                 const response = await fetch(url);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch GeoJSON for ${presetMap}: ${response.statusText}`);
+                    throw new Error(
+                        `Failed to fetch GeoJSON for ${presetMap}: ${response.statusText}`
+                    );
                 }
                 const geoJson = await response.json();
-                const blob = new Blob([JSON.stringify(geoJson)], { type: 'application/geo+json' });
-                const file = new File([blob], `${presetMap}.geojson`, { type: 'application/geo+json' });
+                const blob = new Blob([JSON.stringify(geoJson)], {
+                    type: "application/geo+json",
+                });
+                const file = new File([blob], `${presetMap}.geojson`, {
+                    type: "application/geo+json",
+                });
                 onFileSelect(file);
             } catch (error) {
                 console.error("Error fetching preset map:", error);
@@ -65,43 +71,52 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
     };
 
     useEffect(() => {
-        
         if (preset !== "Select a preset map") {
-            handlePresetMapSelection(preset); 
+            handlePresetMapSelection(preset);
         }
     }, [preset]);
-    
+
     return (
-        <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '2rem',
-        }}>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "2rem",
+            }}
+        >
             <h1>Upload a map file</h1>
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                columnGap: '64px',
-            }}>
-                <Box sx={{
-                    backgroundColor: '#E0E0E0',
-                    width: '800px',
-                    height: '480px',
-                }}></Box>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    rowGap: '16px',
-                }}>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        rowGap: '12px',
-                    }}>
-                         <input
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    columnGap: "64px",
+                }}
+            >
+                <Box
+                    sx={{
+                        backgroundColor: "#E0E0E0",
+                        width: "800px",
+                        height: "480px",
+                    }}
+                ></Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        rowGap: "16px",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            rowGap: "12px",
+                        }}
+                    >
+                        <input
                             accept=".kml,.geojson,.shp,.zip, .json"
                             type="file"
                             id="file-upload"
@@ -109,9 +124,9 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                             onChange={handleFileChange}
                         />
                         <label htmlFor="file-upload">
-                            <Button 
-                                style={{ height: '48px'}}
-                                variant="contained" 
+                            <Button
+                                style={{ height: "48px" }}
+                                variant="contained"
                                 color="primary"
                                 component="span"
                                 disabled={preset !== "Select a preset map"} // Disable if preset map is selected
@@ -133,15 +148,17 @@ const InputMap : React.FC<InputMapProps> = ({ onFileSelect })=> {
                         >
                             {presetMaps.map((presetMap) => {
                                 return (
-                                    <MenuItem key={presetMap} value={presetMap}>{presetMap}</MenuItem>
-                                )
+                                    <MenuItem key={presetMap} value={presetMap}>
+                                        {presetMap}
+                                    </MenuItem>
+                                );
                             })}
                         </Select>
                     </FormControl>
                 </Box>
             </Box>
         </Box>
-    )
-}
+    );
+};
 
 export default InputMap;

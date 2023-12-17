@@ -4,8 +4,9 @@ import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
-import * as React from "react";
 import { SelectChangeEvent } from "@mui/material";
+import FitBounds from "./FitBounds";
+import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 
 interface Legend {
     title: string;
@@ -57,29 +58,90 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
+    updateFeaturePropertyBiv: (
+        name: string,
+        newValue: any,
+        axis: string
+    ) => void;
 }
-
-interface MapProps {
-    mapId: string;
-}
-
-const DynamicMap: React.FC<MapProps> = ({ mapId }) => {
+const DynamicChlorMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
 
     useEffect(() => {
         const loadMapData = async () => {
             try {
-                mapContext.loadMap(mapId);
+                const id = localStorage.getItem("mapId") as string;
+                mapContext.loadMap(id);
                 setMapData(mapContext.geoJSON);
+                console.log(mapData);
             } catch (error) {
-                console.error("Error loading map data", error);
+                console.error("Error connecting to db", error);
             }
         };
 
         loadMapData();
-    }, [mapContext.mapKey]);
+    }, [mapContext.hasMap]);
 
+    useEffect(() => {
+        setMapData(mapContext.geoJSON);
+    }, [
+        mapContext.geoJSON,
+        mapContext.legend.valueMax,
+        mapContext.legend.valueMin,
+        mapContext.selectedProperty,
+    ]);
+
+    const colorRegion = (feature: any) => {
+        const value = feature.properties[mapContext.selectedProperty];
+        const color = getColorForProperty(mapContext.legend, value);
+
+        return {
+            fillColor: color,
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            fillOpacity: 0.7,
+        };
+    };
+
+    const getColorForProperty = (legend: any, value: number) => {
+        const normalizedValue =
+            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+        return interpolateColor(
+            legend.colorMin,
+            legend.colorMax,
+            normalizedValue
+        );
+    };
+
+    const onEachFeature = (feature: any, layer: any) => {
+        layer.on({
+            mouseover: (event: any) => {
+                const layer = event.target;
+                const value = feature.properties[mapContext.selectedProperty];
+
+                if (value) {
+                    layer
+                        .bindTooltip(value.toString(), {
+                            permanent: false,
+                            sticky: true,
+                        })
+                        .openTooltip();
+                }
+            },
+            mouseout: (event: any) => {
+                const layer = event.target;
+                layer.closeTooltip();
+            },
+        });
+    };
     return (
         <MapContainer
             style={{ height: "100%", width: "100%" }}
@@ -92,10 +154,16 @@ const DynamicMap: React.FC<MapProps> = ({ mapId }) => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {mapContext.hasMap && (
-                <GeoJSON key={mapContext.mapKey} data={mapData} />
+                <GeoJSON
+                    key={mapContext.mapKey}
+                    data={mapContext.geoJSON}
+                    style={colorRegion}
+                    onEachFeature={onEachFeature}
+                />
             )}
+            {mapData && <FitBounds mapData={mapData} />}
         </MapContainer>
     );
 };
 
-export default DynamicMap;
+export default DynamicChlorMap;

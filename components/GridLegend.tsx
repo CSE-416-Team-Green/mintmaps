@@ -69,6 +69,8 @@ const GridLegend = () => {
         legend.yColorMin = yColorMin;
         legend.yColorMax = yColorMax;
         mapContext.onChange();
+        mapContext.updateLegendColorBivX(xColorMin, xColorMax); 
+        mapContext.updateLegendColorBivY(yColorMin, yColorMax); 
     }, [
         xValueMin,
         xValueMax,
