@@ -20,6 +20,8 @@ interface IMap extends Document {
     legend?: Object;
     selectedProperty?: string;
     selectedPropertyIndex?: number;
+    selectedPropertyBiv?: string;
+    selectedPropertyIndexBiv?: number;
 }
 
 const mapSchema = new Schema<IMap>({

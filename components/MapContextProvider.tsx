@@ -66,6 +66,12 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -77,6 +83,14 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         colorMax: "#2ECC71",
         sizeMin: 1,
         sizeMax: 100,
+        xValueMin: 0, 
+        xValueMax: 100, 
+        yValueMin: 0,
+        yValueMax: 100,
+        yColorMin: "#FFFFFF",
+        yColorMax: "#2ECC71",
+        xColorMin: "#FFFFFF",
+        xColorMax: "#2ECC71",
     });
     const [mapType, setMapType] = React.useState<MapType>("point");
     const [geoJSON, setgeoJSON] = React.useState<any>(null);
@@ -87,6 +101,9 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [tags, setTags] = React.useState<string[]>([]);
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
+    const [selectedPropertyBiv, setSelectedPropertyBiv] = React.useState("");
+    const [selectedPropertyIndexBiv, setSelectedPropertyIndexBiv] =
+        React.useState(0);
     const router = useRouter();
 
     React.useEffect(() => {
@@ -118,6 +135,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             legend: legend,
             selectedProperty: selectedProperty,
             selectedPropertyIndex: selectedPropertyIndex,
+            selectedPropertyBiv: selectedPropertyBiv,
+            selectedPropertyIndexBiv: selectedPropertyIndexBiv,
         };
         try {
             const response = await axios.post("/api/saveMap", updatedMap);
@@ -175,23 +194,75 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapKey(key);
     };
 
-    const getCirlceRadius = (legend: any, value: number) => {
-        const normalizedValue =
-            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+    const selectPropertyXBiv = (event: SelectChangeEvent) => {
+        const [property, indexStr] = event.target.value.split(":");
+        setSelectedProperty(property);
+        setSelectedPropertyIndex(parseInt(indexStr, 10));
 
-        interpolateNumber(legend.sizeMin, legend.sizeMax, normalizedValue);
+        const values = geoJSON.features
+            .map((feature: any) => feature.properties[property])
+            .filter((value: any) => typeof value === "number");
+
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+
+        let newLegend;
+
+        newLegend = {
+            ...legend,
+            xValueMin: minValue,
+            xValueMax: maxValue,
+        };
+
+        setLegend(newLegend);
+        const key = uuidv4();
+        setMapKey(key);
     };
 
-    const getCircleColor = (legend: any, value: number) => {
-        const normalizedValue =
-            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
-        return interpolateColor(
-            legend.colorMin,
-            legend.colorMax,
-            normalizedValue
-        );
+    const selectPropertyYBiv = (event: SelectChangeEvent) => {
+        const [property, indexStr] = event.target.value.split(":");
+        setSelectedPropertyBiv(property);
+        setSelectedPropertyIndexBiv(parseInt(indexStr, 10));
+
+        const values = geoJSON.features
+            .map((feature: any) => feature.properties[property])
+            .filter((value: any) => typeof value === "number");
+
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+
+        let newLegend;
+
+        newLegend = {
+            ...legend,
+            yValueMin: minValue,
+            yValueMax: maxValue,
+        };
+
+        setLegend(newLegend);
+        const key = uuidv4();
+        setMapKey(key);
     };
 
+    const updateLegendColorBivX = (colorMin: string, colorMax: string) => {
+        const newLegend = {
+            ...legend,
+            xColorMin: colorMin,
+            xColorMax: colorMax,
+        };
+
+        setLegend(newLegend);
+    };
+
+    const updateLegendColorBivY = (colorMin: string, colorMax: string) => {
+        const newLegend = {
+            ...legend,
+            yColorMin: colorMin,
+            yColorMax: colorMax,
+        };
+
+        setLegend(newLegend);
+    };
     const loadMap = async (id: string) => {
         try {
             const res = await axios.get(`/api/getMapById/${id}`);
@@ -248,7 +319,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
         const minValue = Math.min(...values);
         const maxValue = Math.max(...values);
-        let newLegend; 
+        let newLegend;
         if (mapType === "proportional-symbol") {
             const minSize = interpolateNumber(minValue, maxValue, minValue);
             const maxSize = interpolateNumber(minValue, maxValue, maxValue);
@@ -319,6 +390,12 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         updateTags,
         updateDescription,
         updateTitle,
+        selectedPropertyBiv,
+        selectedPropertyIndexBiv,
+        selectPropertyXBiv,
+        selectPropertyYBiv,
+        updateLegendColorBivX,
+        updateLegendColorBivY,
     };
 
     return (

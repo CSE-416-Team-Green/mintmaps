@@ -58,9 +58,13 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
-    
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
 }
-
 const DynamicChlorMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);

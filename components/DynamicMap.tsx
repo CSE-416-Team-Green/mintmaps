@@ -9,6 +9,7 @@ import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import DynamicChlorMap from "./DynamicChlorMap";
 import DynamicPropSymbolMap from "./DynamicPropSymMap";
+import DynamicBiChlorMap from "./DynamicBiChlorMap";
 
 interface Legend {
     title: string;
@@ -60,6 +61,12 @@ interface MapContextType {
     updateTags: (tags: string[]) => void;
     updateDescription: (desc: string) => void;
     updateTitle: (title: string) => void;
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
 }
 
 const DynamicMap = () => {
@@ -86,6 +93,8 @@ const DynamicMap = () => {
         <DynamicPropSymbolMap />
     ) : mapType === "choropleth" ? (
         <DynamicChlorMap />
+    ) : mapType === "bivariate-choropleth" ? (
+        <DynamicBiChlorMap />
     ) : (
         <Container>NO MAP</Container>
     );
