@@ -33,9 +33,34 @@ const MapPreview: FC<{
     const mapInfo = props.map;
 
     function handleImageClick() {
-        console.log("image click");
+        //console.log("image click");
+        //console.log("created");
+        console.log(mapInfo.createdBy)
         localStorage.mapId = mapInfo._id;
         router.push(`/map-info/${mapInfo._id}`);
+    }
+
+    const handleAvatarClick = async() =>{
+        const email=mapInfo.createdBy
+        try {
+            const response = await fetch(`/api/getUserById?email=${email}`, {
+                method: 'GET',
+            });
+
+
+            if (response.ok) {
+                const data = (await response.json());
+                //console.log(data._id)
+                router.push(`/user-profile/${data._id}`);
+
+            } else {
+                alert('Failed to get email account');
+            }
+        } catch (error) {
+            console.error('Error deleting account:', error);
+        }
+        //localStorage.mapId = mapInfo._id;
+        //router.push(`/user-profile/${mapInfo._id}`);
     }
 
     
@@ -69,7 +94,7 @@ const MapPreview: FC<{
                 <Grid item xs={0.5} > 
                 </Grid>
                 <Grid item xs={2} > 
-                    <IconButton href="/user-profile">
+                    <IconButton  onClick={handleAvatarClick} >
                         <Avatar />  
                     </IconButton>    
                 </Grid>
@@ -78,16 +103,13 @@ const MapPreview: FC<{
                 <Grid item xs={8}> 
                     <Grid container justifyContent="left" alignItems={"center"}>
                         <Grid item xs={10.5}>
-                                <Link
-                                    href="/map-info"
-                                >
-                                    <Typography sx={{fontSize:'20px', overflow:'hidden', textOverflow: 'ellipsis', width: '150px', height: '25px',
-                                        color: isDark
-                                        ? "white"
-                                        : "black",}}>
-                                        {mapInfo.name}
-                                    </Typography>
-                                </Link>
+                            <Typography onClick={handleImageClick} sx={{fontSize:'20px', overflow:'hidden', textOverflow: 'ellipsis', width: '150px', height: '25px',
+                                color: isDark
+                                    ? "white"
+                                    : "black",}}>
+                                    {mapInfo.name}
+                            </Typography>
+                                
                         </Grid>
                         <Grid item xs={1.5}>
                             <IconButton onClick={handleMoreClick}>
@@ -95,16 +117,13 @@ const MapPreview: FC<{
                             </IconButton>
                         </Grid>
                         <Grid item xs={6}>
-                            <Link
-                                    href="/user-profile"
-                                >
-                                    <Typography sx={{fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '100px', height: '20px',
+                                    <Typography  onClick={handleAvatarClick} sx={{fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '100px', height: '20px',
                                         color: isDark
                                         ? "white"
                                         : "black",}}>
                                             {mapInfo.createdBy}
                                     </Typography>
-                            </Link>
+                           
                         </Grid>
                         <Grid item xs={6}>
                             <Typography sx={{float:'right', fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
