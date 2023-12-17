@@ -34,9 +34,9 @@ export default function UserProfile() {
     const [likedMaps, setLikedMaps] = React.useState<string[]>([]);
     const [savedMaps, setSavedMaps] = React.useState<string[]>([]);
     const [reputation, setReputation] = React.useState<number>(0);
-    const [username, setUsername] = React.useState<string>("");
-    const [bio, setBio] = React.useState<string>("");
-    const [profilePic, setProfilePic] = React.useState<string>("");
+    const [username, setUsername] = React.useState<string>('');
+    const [bio, setBio] = React.useState<string>('');
+    const [profilePic, setProfilePic] = React.useState<string>('');
 
     const { userId } = router.query;
     const [currentTab, setCurrentTab] = React.useState<Tabs>("user");
@@ -64,9 +64,9 @@ export default function UserProfile() {
                 setLikedMaps(data.likedMaps ?? []);
                 setSavedMaps(data.savedMaps ?? []);
                 setReputation(data.reputation ?? 0);
-                setUsername(data.userName ?? "");
-                setBio(data.bio ?? "");
-                setProfilePic(data.profilePic ?? "");
+                setUsername(data.userName ?? '');
+                setBio(data.bio ?? '');
+                setProfilePic(data.profilePic ?? '');
                 console.log(data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -97,10 +97,7 @@ export default function UserProfile() {
                         alignItems={"left"}
                     >
                         <Grid item xs={3}>
-                            <Avatar
-                                sx={{ height: "250px", width: "250px" }}
-                                src={profilePic}
-                            />
+                            <Avatar sx={{ height: '250px', width: '250px' }} src={profilePic} />
                         </Grid>
                         <Grid item xs={9}>
                             <Grid

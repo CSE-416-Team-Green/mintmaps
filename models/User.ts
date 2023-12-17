@@ -27,7 +27,7 @@ type UserContext = {
 };
 
 const userSchema = new Schema<IUser>({
-    userName: { type: String, required: true},
+    userName: { type: String, required: true },
     bio: { type: String },
     profilePic: { type: String },
     accountType: { type: String, required: true, enum: ["google", "email"] },

@@ -14,7 +14,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import AuthContext from "./authContext";
-import React from "react";
+import React from 'react';
 
 const Header = () => {
     const { theme, toggleTheme, mode } = useContext(ThemeContext);
@@ -29,20 +29,17 @@ const Header = () => {
         const fetchUserData = async () => {
             try {
                 const userId = localStorage.getItem("userId");
-                const response = await fetch(
-                    `/api/getUserSetting?id=${userId}`,
-                    {
-                        method: "GET",
-                    }
-                );
+                const response = await fetch(`/api/getUserSetting?id=${userId}`, {
+                    method: 'GET',
+                });
                 if (!response.ok) {
-                    throw new Error("Failed to fetch user data");
+                    throw new Error('Failed to fetch user data');
                 }
-                const data = await response.json();
-                setProfilePic(data.profilePic ?? "");
+                const data = (await response.json());
+                setProfilePic(data.profilePic ?? '');
                 console.log(data);
             } catch (error) {
-                console.error("Error fetching user data:", error);
+                console.error('Error fetching user data:', error);
             }
         };
         fetchUserData();

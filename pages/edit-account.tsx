@@ -16,17 +16,16 @@ import ShareIcon from "@mui/icons-material/Share";
 import { useState, useEffect } from "react";
 
 import AuthContext from "@/components/authContext";
-import { useRouter } from "next/navigation";
-import { set } from "cypress/types/lodash";
+import { useRouter } from 'next/navigation';
+import { set } from 'cypress/types/lodash';
 
 export default function EditAccount() {
     const authContext = React.useContext(AuthContext);
     const router = useRouter();
-    const [username, setUsername] = useState("");
-    const [bio, setBio] = useState("");
-    const [profilePic, setProfilePic] = useState<string>("");
-    const [newFollowersNotification, setNewFollowersNotification] =
-        useState(false);
+    const [username, setUsername] = useState('');
+    const [bio, setBio] = useState('');
+    const [profilePic, setProfilePic] = useState<string>('');
+    const [newFollowersNotification, setNewFollowersNotification] = useState(false);
     const [mapLikedNotification, setMapLikedNotification] = useState(false);
     const [commentsNotification, setCommentsNotification] = useState(false);
     const deleteAccount = async () => {
@@ -60,12 +59,9 @@ export default function EditAccount() {
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         if (event.target.files && event.target.files[0]) {
-            toDataURL(
-                URL.createObjectURL(event.target.files[0]),
-                function (dataUrl) {
-                    setProfilePic(dataUrl);
-                }
-            );
+            toDataURL(URL.createObjectURL(event.target.files[0]), function(dataUrl) {
+                setProfilePic(dataUrl);
+            });
         }
     };
 
@@ -167,10 +163,7 @@ export default function EditAccount() {
                             Profile Picture
                         </Grid>
                         <Grid item xs={3}>
-                            <Avatar
-                                sx={{ height: "250px", width: "250px" }}
-                                src={profilePic}
-                            />
+                            <Avatar sx={{height:'250px', width:'250px'}} src={profilePic}/>  
                         </Grid>
                         <Grid item xs={9}>
                             Profile Picture must be a square image <br />
@@ -191,12 +184,7 @@ export default function EditAccount() {
                                 component="label"
                             >
                                 Choose File
-                                <input
-                                    accept="image/*"
-                                    type="file"
-                                    hidden
-                                    onChange={handleProfilePicChange}
-                                />
+                                <input accept="image/*" type="file" hidden onChange={handleProfilePicChange} />
                             </Button>
                         </Grid>
                         <Grid item xs={12} sx={{ fontSize: "30px" }}>
@@ -307,14 +295,14 @@ export default function EditAccount() {
 
 function toDataURL(url: string, callback: (dataUrl: string) => void) {
     var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        var reader = new FileReader();
-        reader.onloadend = function () {
-            callback(reader.result as string);
-        };
-        reader.readAsDataURL(xhr.response);
+    xhr.onload = function() {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        callback(reader.result as string);
+      }
+      reader.readAsDataURL(xhr.response);
     };
-    xhr.open("GET", url);
-    xhr.responseType = "blob";
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
     xhr.send();
 }
