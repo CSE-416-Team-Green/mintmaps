@@ -104,12 +104,13 @@ const InputMapType: React.FC<InputMapTypeProps> = ({ onMapTypeSelect }) => {
                             label={map.name}
                             sx={{
                                 bgcolor:
-                                    selectedMapType === map.name
+                                    selectedMapType === mapTypeConvert(map.name)
                                         ? "grey.300"
                                         : undefined,
                                 "&:hover": {
                                     bgcolor:
-                                        selectedMapType === map.name
+                                        selectedMapType ===
+                                        mapTypeConvert(map.name)
                                             ? "grey.400"
                                             : undefined,
                                 },

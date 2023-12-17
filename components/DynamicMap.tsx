@@ -31,51 +31,51 @@ interface Legend {
     yColorMax: string;
 }
 
-// type MapType =
-//     | "point"
-//     | "heat"
-//     | "choropleth"
-//     | "bivariate-choropleth"
-//     | "proportional-symbol";
+type MapType =
+    | "point"
+    | "heat"
+    | "choropleth"
+    | "bivariate-choropleth"
+    | "proportional-symbol";
 
-// interface MapContextType {
-//     mapId: string;
-//     onChange: () => void;
-//     saveMap: () => void;
-//     setMap: (map: any) => void;
-//     loadMap: (id: string) => void;
-//     legend: Partial<Legend>;
-//     mapType: MapType | null;
-//     geoJSON: GeoJsonObject;
-//     hasMap: boolean;
-//     mapKey: string;
-//     selectedProperty: string;
-//     selectedPropertyIndex: number;
-//     selectProperty: (event: SelectChangeEvent) => void;
-//     updateLegendColor: (colorMin: string, colorMax: string) => void;
-//     updateFeatureProperty: (name: string, newValue: any) => void;
-//     updateFeatureName: (oldName: string, newName: string) => void;
-//     tags: string[];
-//     title: string;
-//     description: string;
-//     updateTags: (tags: string[]) => void;
-//     updateDescription: (desc: string) => void;
-//     updateTitle: (title: string) => void;
-//     selectedPropertyBiv: string;
-//     selectedPropertyIndexBiv: number;
-//     selectPropertyXBiv: (event: SelectChangeEvent) => void;
-//     selectPropertyYBiv: (event: SelectChangeEvent) => void;
-//     updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
-//     updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
-//     updateFeaturePropertyBiv: (
-//         name: string,
-//         newValue: any,
-//         axis: string
-//     ) => void;
-// }
+interface MapContextType {
+    mapId: string;
+    onChange: () => void;
+    saveMap: () => void;
+    setMap: (map: any) => void;
+    loadMap: (id: string) => void;
+    legend: Partial<Legend>;
+    mapType: MapType | null;
+    geoJSON: GeoJsonObject;
+    hasMap: boolean;
+    mapKey: string;
+    selectedProperty: string;
+    selectedPropertyIndex: number;
+    selectProperty: (event: SelectChangeEvent) => void;
+    updateLegendColor: (colorMin: string, colorMax: string) => void;
+    updateFeatureProperty: (name: string, newValue: any) => void;
+    updateFeatureName: (oldName: string, newName: string) => void;
+    tags: string[];
+    title: string;
+    description: string;
+    updateTags: (tags: string[]) => void;
+    updateDescription: (desc: string) => void;
+    updateTitle: (title: string) => void;
+    selectedPropertyBiv: string;
+    selectedPropertyIndexBiv: number;
+    selectPropertyXBiv: (event: SelectChangeEvent) => void;
+    selectPropertyYBiv: (event: SelectChangeEvent) => void;
+    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
+    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
+    updateFeaturePropertyBiv: (
+        name: string,
+        newValue: any,
+        axis: string
+    ) => void;
+}
 
 const DynamicMap = () => {
-    const mapContext = useContext(MapContext);
+    const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
     const [mapType, setMapType] = useState(mapContext.mapType);
     const [isLoading, setIsLoading] = useState(true);
@@ -102,7 +102,7 @@ const DynamicMap = () => {
         };
 
         loadMapData();
-    }, [mapData]);
+    }, [mapContext.hasMap, mapType]);
 
     if (isLoading) {
         return (
