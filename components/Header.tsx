@@ -37,7 +37,7 @@ const Header = () => {
                 }
                 const data = (await response.json());
                 setProfilePic(data.profilePic ?? '');
-                console.log(data);
+                //console.log(data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }

@@ -26,8 +26,9 @@ type Tabs = "user" | "liked" | "saved" | "following" | "followers";
 export default function UserProfile() {
     const router = useRouter();
     const themeContext = React.useContext(ThemeContext);
+    const authContext = React.useContext(AuthContext);
     const isDark = themeContext.mode === "dark";
-
+    const [isFollowing,setisFollowing]=React.useState(Boolean);
     const [following, setFollowing] = React.useState<IUser[]>([]);
     const [followers, setFollowers] = React.useState<IUser[]>([]);
     const [createdMaps, setCreatedMaps] = React.useState<string[]>([]);
@@ -37,8 +38,9 @@ export default function UserProfile() {
     const [username, setUsername] = React.useState<string>('');
     const [bio, setBio] = React.useState<string>('');
     const [profilePic, setProfilePic] = React.useState<string>('');
-
+    const loggedInUserId = localStorage.userId;
     const { userId } = router.query;
+    const isOwnProfile = loggedInUserId === userId;
     const [currentTab, setCurrentTab] = React.useState<Tabs>("user");
     const handleTabChange = (tab: Tabs) => {
         setCurrentTab(tab);
@@ -58,6 +60,15 @@ export default function UserProfile() {
                     throw new Error("Failed to fetch user data");
                 }
                 const data = await response.json();
+                console.log("dsadasd")
+                console.log(data)
+                console.log(data.followers)
+                console.log(localStorage.useid)
+                if(data.followers.includes(authContext.userId)){
+                    console.log("get user")
+                    setisFollowing(true)
+                }
+                
                 setFollowing(data.following ?? []);
                 setFollowers(data.followers ?? []);
                 setCreatedMaps(data.createdMaps ?? []);
@@ -67,13 +78,39 @@ export default function UserProfile() {
                 setUsername(data.userName ?? '');
                 setBio(data.bio ?? '');
                 setProfilePic(data.profilePic ?? '');
-                console.log(data);
+                //console.log(data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
         fetchUserData();
-    }, [userId]);
+    }, [userId,isFollowing]);
+    const followUser = async () => {
+        try {
+            const response = await fetch(`/api/followUser`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userIdToFollow: userId, whofollow:localStorage.userId },),
+            });
+
+            if (!response.ok) {
+                //console.log(response)
+                throw new Error("Failed to follow user");
+            }
+            const data = await response.json();
+            //console.log(data)
+            setisFollowing(!isFollowing)
+
+            // Here, you might want to update your state to reflect the new follow status
+            // For example, incrementing the follower count, or changing the button text to "Following"
+            //console.log("Followe successfully");
+
+        } catch (error) {
+            console.error("Error following user:", error);
+        }
+    };
 
     return (
         <>
@@ -112,14 +149,30 @@ export default function UserProfile() {
                                         {username}
                                     </div>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <Button
-                                        sx={{ minWidth: 120, minHeight: 40 }}
-                                        variant="contained"
-                                    >
-                                        Follow
-                                    </Button>
-                                </Grid>
+                                {isOwnProfile ? (
+                                    <Grid item xs={6}>
+                                        <div style={{ minWidth: 120, minHeight: 40, visibility: 'hidden' }}>
+                                            {/* Invisible Placeholder */}
+                                        </div>
+                                    </Grid>
+                                ) : (
+                                    <Grid item xs={6}>
+                                        <Button
+                                            sx={{ minWidth: 120, minHeight: 40 }}
+                                            variant="contained"
+                                            onClick={followUser}
+                                        >
+                                            {isFollowing ? "Following" : "Follow"}
+                                        </Button>
+                                    </Grid>
+                                )}
+                                {(!isOwnProfile) ? (
+                                    <Grid item xs={2}>
+                                        <div style={{ minWidth: 120, minHeight: 40, visibility: 'hidden' }}>
+                                            {/* Invisible Placeholder */}
+                                        </div>
+                                    </Grid>
+                                ) : (
                                 <Grid item xs={2}>
                                     <Button
                                         sx={{ minWidth: 120, minHeight: 40 }}
@@ -129,6 +182,7 @@ export default function UserProfile() {
                                         Edit
                                     </Button>
                                 </Grid>
+                                )}
                                 <Grid item xs={1}>
                                     <ShareButton />
                                 </Grid>
