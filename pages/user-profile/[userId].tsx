@@ -60,10 +60,6 @@ export default function UserProfile() {
                     throw new Error("Failed to fetch user data");
                 }
                 const data = await response.json();
-                console.log("dsadasd")
-                console.log(data)
-                console.log(data.followers)
-                console.log(localStorage.useid)
                 if(data.followers.includes(authContext.userId)){
                     console.log("get user")
                     setisFollowing(true)

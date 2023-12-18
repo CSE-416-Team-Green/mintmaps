@@ -24,7 +24,6 @@ export default async function handler(
 
     //get all maps
     const allMaps = await Map.find({}, { geoJSON: 0, legend: 0 });
-    console.log(allMaps);
 
     const maps = await Map.find(
         { name: "asdhbasdghaglhjsdgjahlsd" },

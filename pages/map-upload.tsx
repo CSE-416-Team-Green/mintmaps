@@ -30,9 +30,9 @@ export default function MapUpload() {
     };
     const uploadMapToUser = async () => {
         const mapId = localStorage.getItem("mapId") as string;
-        console.log("1" + mapId);
+        //console.log("1" + mapId);
         const userEmail = localStorage.getItem("email") as string;
-        console.log(userEmail);
+        //console.log(userEmail);
 
         // Constructing the payload
         const payload = {
@@ -40,8 +40,7 @@ export default function MapUpload() {
             userEmail,
             visibility,
         };
-        console.log(payload);
-        console.log(JSON.stringify(payload));
+
 
         const response = await fetch("/api/uploadmaptouser", {
             method: "POST",

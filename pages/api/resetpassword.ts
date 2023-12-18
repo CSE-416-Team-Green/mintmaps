@@ -14,7 +14,6 @@ export default async function handler(
     const { token, newPassword } = req.body;
 
     await connectDb();
-    console.log(req.body);
 
     const user = await User.findOne({
         resetToken: token,

@@ -18,8 +18,6 @@ export default async function handler(
   await connectDb();
   try {
     const email = req.query.email as string;
-    console.log(email);
-
     await connectDb();
 
     const user = await User.findOne({ email: email });

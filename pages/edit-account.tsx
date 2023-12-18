@@ -108,8 +108,6 @@ export default function EditAccount() {
         };
 
         const email = localStorage.getItem("email");
-        console.log("213123");
-        console.log(email);
 
         try {
             const response = await fetch(

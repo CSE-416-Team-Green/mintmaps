@@ -29,7 +29,7 @@ export default function Home() {
                 if (response.ok) {
                     const data = await response.json();
                     setRecentMaps(data.reverse() ?? []); //TODO GET RID OF REVERSE HERE< DO IT IN BACK END
-                    console.log(recentMaps);
+                    //console.log(recentMaps);
                 } else {
                     throw new Error("Failed to fetch data");
                 }

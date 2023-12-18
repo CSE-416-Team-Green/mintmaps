@@ -25,7 +25,6 @@ export default async function handler(
         }
         //console.log(nameQuery)
         const user = await MapModel.findOne({ name: nameQuery });
-        console.log(user);
 
         if (!user) {
             return res.status(404).json({ message: "Map not found" });

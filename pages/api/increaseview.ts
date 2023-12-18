@@ -13,11 +13,11 @@ export default async function handler(
     res.status(401).json({ message: "Method not allowed" });
     return;
   } 
-  console.log("dsadasdas")
+ 
 
   await connectDb();
   try {
-    console.log(req.body)
+   
     const mapId = req.body;
     const newid=mapId.substring(10,34);
     const map = await Map.findOne({ _id: newid });

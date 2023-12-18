@@ -40,7 +40,7 @@ export default async function handler(
             description:map.description
 
         });
-        //console.log(newMap)
+       
         await newMap.save()
         user.createdMaps.push(newMap._id)
         await user.save()
