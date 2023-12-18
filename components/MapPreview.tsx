@@ -82,7 +82,7 @@ const MapPreview: FC<{
         <div >
             <Grid container  sx={{width:300, height:250}} justifyContent="left" alignItems={"center"} spacing={0.5} rowSpacing={0.2} paddingBottom={5}>
                 <Grid item xs={12}>
-                    <Container onClick={handleImageClick} component={"img"} src={"/heatmap-preview.png"} sx={{width:300, height:150, float:'left'}}></Container>
+                    <Container onClick={handleImageClick} component={"img"} src={mapInfo.previewImage ?? ''} sx={{width:300, height:150, float:'left'}}></Container>
                 </Grid>
                 <Grid item xs={0.5} > 
                 </Grid>
