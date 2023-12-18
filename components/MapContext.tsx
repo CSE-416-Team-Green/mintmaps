@@ -2,7 +2,7 @@ import * as React from "react";
 import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 
-interface Legend {
+export type Legend = {
     title: string;
     valueMin: number;
     valueMax: number;

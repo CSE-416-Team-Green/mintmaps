@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import AuthContext from "@/components/authContext";
 import MapContext from "@/components/MapContext";
 import React, { useState } from "react";
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <p>loading...</p>,
@@ -17,6 +18,7 @@ export default function MapUpload() {
     const [visibility, setVisibility] = useState("Unlisted");
     const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     const chipStyle = (label: string) => ({
         backgroundColor: visibility === label ? "#E0E0E0" : undefined, // Grey if selected
         cursor: "pointer",

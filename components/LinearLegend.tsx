@@ -11,6 +11,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { MuiColorInput } from "mui-color-input";
 import MapContext from "./MapContext";
+import { drawLinearLegend } from '@/libs/legend';
 
 const LinearLegend = () => {
     const mapContext = useContext(MapContext);
@@ -22,36 +23,9 @@ const LinearLegend = () => {
     const [colorMin, setColorMin] = useState(legend.colorMin ?? "#FFFFFF");
     const [colorMax, setColorMax] = useState(legend.colorMax ?? "#2ECC71");
 
-    const size = 50;
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        const canvas = canvasRef.current as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-        const sketch = new Sketch(canvas);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (let i = 0; i < canvas.width - size; i += size) {
-            ctx.fillStyle = interpolateColor(
-                colorMin,
-                colorMax,
-                i / canvas.width
-            );
-            ctx.fillRect(i, 14, size, size);
-            sketch.text(
-                i,
-                0,
-                `${interpolateNumber(valueMin, valueMax, i / canvas.width)}`,
-                {
-                    strokeStyle: "#000000",
-                    stroke: true,
-                    textAlign: "left",
-                    textBaseline: "top",
-                }
-            );
-        }
-
         legend.title = title;
         legend.valueMin = valueMin;
         legend.valueMax = valueMax;
@@ -59,6 +33,9 @@ const LinearLegend = () => {
         legend.colorMax = colorMax;
         mapContext.onChange();
         mapContext.updateLegendColor(colorMin, colorMax);
+
+        const canvas = canvasRef.current as HTMLCanvasElement;
+        drawLinearLegend(canvas, legend);
     }, [
         valueMin,
         valueMax,
