@@ -159,20 +159,13 @@ const DynamicPropSymbolMap = () => {
             mouseover: (event: any) => {
                 const layer = event.target;
                 const value = feature.properties[mapContext.selectedProperty];
-                const name = feature.name_en;
+                const name = feature.properties.name;
 
-                if (value) {
-                    layer
-                        .bindTooltip(value.toString(), {
-                            permanent: false,
-                            sticky: true,
-                        })
-                        .openTooltip();
-                }
+                const marker = `${feature.properties.name} - ${mapContext.selectedProperty} : ${value}`;
 
-                if (name) {
+                if (marker) {
                     layer
-                        .bindTooltip(name.toString(), {
+                        .bindTooltip(marker.toString(), {
                             permanent: false,
                             sticky: true,
                         })
