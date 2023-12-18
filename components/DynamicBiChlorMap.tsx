@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useImperativeHandle, Ref, FC } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -9,6 +9,8 @@ import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import { blendColors } from "@/libs/blend";
 import GridLegendControl from './GridLegendControl';
+import { Map } from 'leaflet';
+import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter'
 
 interface Legend {
     title: string;
@@ -72,9 +74,30 @@ interface MapContextType {
         axis: string
     ) => void;
 }
-const DynamicBiChlorMap = () => {
+const DynamicBiChlorMap: FC<{
+    reference: React.RefObject<any>;
+}> = ({
+    reference
+}) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
+    const [map, setMap] = useState<Map | null>(null);
+
+    useImperativeHandle(reference, () => ({
+        exportImage() {
+            if(!map) return;
+            const screenshotter = new SimpleMapScreenshoter().addTo(map);
+            screenshotter.takeScreen().then((blob) => {
+                const a = document.createElement('a');
+                const url = URL.createObjectURL(blob as Blob);
+                a.href = url;
+                a.download = 'map.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                screenshotter.remove();
+            });
+        }
+    }));
 
     useEffect(() => {
         setMapData(mapContext.geoJSON);
@@ -155,6 +178,7 @@ const DynamicBiChlorMap = () => {
     };
     return (
         <MapContainer
+            ref={setMap}
             style={{ height: "100%", width: "100%" }}
             center={[51.505, -0.09]}
             zoom={13}
