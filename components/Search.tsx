@@ -31,17 +31,33 @@ const Search = () => {
     const handleClose = () => {
         setAnchor(null);
     };
-    
     const handleFilterTitle = () => {
         localStorage.searchFilter = "title";
     };
-    
     const handleFilterUploader = () => {
         localStorage.searchFilter = "uploader";
     };
-    
     const handleFilterTags = () => {
         localStorage.searchFilter = "tags";
+    };
+
+    const handleTypeBivar = () => {
+        localStorage.searchMapType = "bivariate-choropleth";
+    };
+    const handleTypeChor = () => {
+        localStorage.searchMapType = "choropleth";
+    };
+    const handleTypeProp = () => {
+        localStorage.searchMapType = "proportional-symbol";
+    };
+    const handleTypeHeat = () => {
+        localStorage.searchMapType = "heat";
+    };
+    const handleTypePoint = () => {
+        localStorage.searchMapType = "point";
+    };
+    const handleTypeNone = () => {
+        localStorage.searchMapType = "";
     };
 
     return (
@@ -69,13 +85,32 @@ const Search = () => {
                         }}
                     >
                         <MenuItem onClick={handleFilterTitle}>
-                        Title
+                            Title
                         </MenuItem>
                         <MenuItem onClick={handleFilterUploader}>
-                        Uploader
+                            Uploader
                         </MenuItem>
                         <MenuItem onClick={handleFilterTags}>
-                        Tags
+                            Tags
+                        </MenuItem>
+
+                        <MenuItem onClick={handleTypeBivar}>
+                            Bivariate Choropleth
+                        </MenuItem>
+                        <MenuItem onClick={handleTypeChor}>
+                            Choropleth
+                        </MenuItem>
+                        <MenuItem onClick={handleTypeProp}>
+                            Proportional Symbol
+                        </MenuItem>
+                        <MenuItem onClick={handleTypeHeat}>
+                            Heat
+                        </MenuItem>
+                        <MenuItem onClick={handleTypePoint}>
+                            Point
+                        </MenuItem>
+                        <MenuItem onClick={handleTypeNone}>
+                            None
                         </MenuItem>
                     </Menu>
                 </InputAdornment>

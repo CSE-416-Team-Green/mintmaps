@@ -26,22 +26,34 @@ export default async function handler(
     const allMaps = await Map.find({}, { geoJSON: 0, legend: 0 });
     // console.log(allMaps);
 
-    const maps = await Map.find(
+    let filteredMaps = await Map.find(
         { name: "asdhbasdghaglhjsdgjahlsd" },
         { geoJSON: 0, legend: 0 }
     );
 
     //filter by desired map type
-    if(searchTerm){
-
+    if(type){
+        allMaps.forEach(function (map) {
+            if (map.maptype) {
+                if (map.maptype == type) {
+                    filteredMaps.push(map);
+                }
+            }
+        });
+    } else {
+        filteredMaps = allMaps;
     }
 
 
+    const maps = await Map.find(
+        { name: "asdhbasdghaglhjsdgjahlsd" },
+        { geoJSON: 0, legend: 0 }
+    );
 
     //filter by all, title, uploader, or tags
     if(searchTerm && filter){
         if(filter == "title"){ //title
-            allMaps.forEach(function (map) {
+            filteredMaps.forEach(function (map) {
                 if (map.name) {
                     if (map.name.includes(searchTerm)) {
                         maps.push(map);
@@ -49,7 +61,7 @@ export default async function handler(
                 }
             });
         } else if (filter == "uploader"){ //uploader
-            allMaps.forEach(function (map) {
+            filteredMaps.forEach(function (map) {
                 if (map.createdBy) {
                     if (map.createdBy.includes(searchTerm)) {
                         maps.push(map);
@@ -57,7 +69,7 @@ export default async function handler(
                 }
             });
         } else if (filter == "tags"){ //tags
-            allMaps.forEach(function (map) {
+            filteredMaps.forEach(function (map) {
                 let added=false;
                 if (map.tags) {
                     map.tags.forEach(function (tag:any) {
@@ -69,7 +81,7 @@ export default async function handler(
                 }
             });
         } else {
-            allMaps.forEach(function (map) {
+            filteredMaps.forEach(function (map) {
                 if (map.name) {
                     if (map.name.includes(searchTerm)) {
                         maps.push(map);
@@ -78,7 +90,7 @@ export default async function handler(
             });
         }
     } else {
-        allMaps.forEach(function (map) {
+        filteredMaps.forEach(function (map) {
             if (map.name) {
                 if (map.name.includes(searchTerm)) {
                     maps.push(map);
