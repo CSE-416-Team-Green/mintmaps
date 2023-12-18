@@ -34,6 +34,8 @@ import FormatDateText from "../../utils/dateTextUtils";
 import CommentContainer from "@/components/CommentContainer";
 import { useRouter } from 'next/router';
 import ShareButton from '@/components/ShareButton';
+import EditIcon from '@mui/icons-material/Edit';
+import Chip from '@mui/material/Chip';
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <p>loading...</p>,
@@ -47,7 +49,7 @@ export default function MapInfo() {
     const email = authContext.email;
     //console
     //console.log(mapContext.mapId)
-   
+
     const { mapId } = router.query;
     const [liked, setLiked] = React.useState<boolean>(false);
     const [disliked, setDisliked] = React.useState<boolean>(false);
@@ -64,6 +66,7 @@ export default function MapInfo() {
     const [newComment, setNewComment] = React.useState("");
     const [isMapCreator, setIsMapCreator] = React.useState<boolean>(false);
     const [isFollowing, setisFollowing] = React.useState<boolean>(false);
+    const [numFollowers, setNumFollowers] = React.useState<number>(0);
     const [mapCreatorName, setMapCreatorName] = React.useState<string>("");
     const [mapCreatorId, setMapCreatorId] = React.useState<string>("");
     const [mapCreatorProfilePic, setMapCreatorProfilePic] = React.useState<string>("");
@@ -80,11 +83,11 @@ export default function MapInfo() {
                 if (res.ok) {
                     console.log("view added")
                 }
-                else{
+                else {
                     console.log("error add view")
                 }
             });
-            if(email.length > 0 && email)
+            if (email.length > 0 && email)
                 fetch(`/api/getUserById?email=${email}`, {
                     method: "GET",
                 }).then((res) => {
@@ -96,7 +99,7 @@ export default function MapInfo() {
                         });
                     }
                 });
-            if(mapId)
+            if (mapId)
                 fetch(`/api/getMapById/${mapId}`, { method: "GET" }).then((res) => {
                     if (res.ok) {
                         res.json()
@@ -126,7 +129,7 @@ export default function MapInfo() {
                                 console.error("Error fetching data:", error)
                             );
                     }
-            });
+                });
         };
 
         getMapDetails();
@@ -134,19 +137,20 @@ export default function MapInfo() {
 
     React.useEffect(() => {
         const fetchCreatorData = async () => {
-            if(creatorEmail.length === 0 || !creatorEmail) return;
+            if (creatorEmail.length === 0 || !creatorEmail) return;
             await fetch(`/api/getUserById?email=${creatorEmail}`, {
                 method: 'GET',
             }).then(async (response) => {
-                if(!response.ok) return;
+                if (!response.ok) return;
                 response.json().then(async (data) => {
-                    if(!data) return;
-                    if(data.followers.includes(authContext.userId)){
+                    if (!data) return;
+                    if (data.followers.includes(authContext.userId)) {
                         setisFollowing(true)
                     }
                     setMapCreatorProfilePic(data.profilePic);
                     setMapCreatorName(data.userName);
                     setMapCreatorId(data._id);
+                    setNumFollowers(data.followers.length);
                 });
             });
         };
@@ -269,7 +273,7 @@ export default function MapInfo() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userIdToFollow: mapCreatorId, whofollow:localStorage.userId },),
+                body: JSON.stringify({ userIdToFollow: mapCreatorId, whofollow: localStorage.userId },),
             });
             setisFollowing(!isFollowing)
         } catch (error) {
@@ -278,251 +282,144 @@ export default function MapInfo() {
     };
 
     return (
-        <>
+        <Box>
             <Header />
-            <br />
-            <Grid
-                container
-                direction={"row"}
-                sx={{ width: "100%", height: "100%" }}
-                justifyContent="left"
-                alignItems={"left"}
-            >
-                <Grid item xs={9}>
-                    <Grid
-                        container
-                        direction={"row"}
-                        sx={{
-                            width: "95%",
-                            height: "100%",
-                            position: "relative",
-                            left: "5%",
-                        }}
-                        justifyContent="left"
-                        alignItems={"left"}
-                    >
-                        <Grid item xs={12}>
-                            <Box
-                                sx={{
-                                    height: "70vh",
-                                    width: "70vw",
-                                    display: "flex",
-                                }}
-                            >
-                                <DynamicMap reference={dynamicMapRef}/>
-                            </Box>
-                        </Grid>
-
-                        <Grid
-                            item
-                            xs={9}
-                            sx={{
-                                fontSize: "25px",
-                                paddingBottom: "10px",
-                                paddingTop: "4px",
-                            }}
-                        >
-                            <Typography variant="h4"> {mapTitle}</Typography>
-                            {isMapCreator && (
-                                <Button
-                                    sx={{ marginLeft: 2 }}
-                                    variant="contained"
-                                    onClick={handleEditClick}
-                                >
-                                    Edit
-                                </Button>
-                            )}
-                        </Grid>
-                        <Grid item xs={1} sx={{ paddingTop: "12px" }}>
-                            <Typography variant="body2">
-                                {" "}
-                                {numViews} Views
-                            </Typography>{" "}
-                        </Grid>
-                        <Grid item xs={2} sx={{ paddingTop: "12px" }}>
-                            <Box sx={{ float: "right", paddingRight: "30px" }}>
-                                <Typography variant="body2">
-                                    {" "}
-                                    {uploadDate}
-                                </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid item xs={0.75}>
-                            <IconButton href={`/user-profile/${mapCreatorId}`}>
-                                <Avatar src={mapCreatorProfilePic}/>
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Grid
-                                container
-                                direction={"row"}
-                                sx={{ width: "100%", height: "100%" }}
-                                justifyContent="left"
-                                alignItems={"left"}
-                            >
-                                <Grid item xs={1.25}>
-                                    {mapCreatorName}
-                                </Grid>
-                                <Grid item xs={1.5}>
-                                    {!isMapCreator && <Button
-                                        sx={{
-                                            height: 25,
-                                            width: 80,
-                                            fontSize: "10px",
-                                        }}
-                                        variant="contained"
-                                        onClick={followUser}
-                                    >
-                                        {isFollowing ? "Unfollow" : "Follow"}
-                                    </Button>}
-                                </Grid>
-                                <Grid item xs={10} sx={{ fontSize: "10px" }}>
-                                    32 Followers
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={0.25}>
-                            <Box sx={{ float: "right", paddingRight: "10px" }}>
-                                <Typography variant="body1">
-                                    {" "}
-                                    {numLikes}
-                                </Typography>{" "}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={0.25}>
-                            <ThumbUpIcon
-                                sx={{
-                                    cursor: "pointer",
-                                }}
-                                htmlColor={liked ? "#2ecc71" : "#AAAAAA"}
-                                onClick={handleLike}
-                            />
-                        </Grid>
-                        <Grid item xs={0.25} sx={{}}>
-                            <Box sx={{ float: "right", paddingRight: "3px" }}>
-                                <Typography variant="body1">
-                                    {" "}
-                                    {numDisLikes}
-                                </Typography>{" "}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={0.25}>
-                            <ThumbDownIcon
-                                sx={{
-                                    cursor: "pointer",
-                                }}
-                                htmlColor={disliked ? "#e74c3c" : "#AAAAAA"}
-                                onClick={handleDislike}
-                            />
-                        </Grid>
-                        <Grid item xs={0.5}></Grid>
-                        <Grid item xs={1.5}>
-                            <Grid
-                                container
-                                direction={"row"}
-                                sx={{ width: "100%", height: "100%" }}
-                                justifyContent="left"
-                                alignItems={"left"}
-                            >
-                                <Grid item xs={3}>
-                                    <BookmarkIcon
-                                        sx={{
-                                            cursor: "pointer",
-                                        }}
-                                        htmlColor={
-                                            saved ? "#2ecc71" : "#AAAAAA"
-                                        }
-                                        onClick={handleSaveMap}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <DownloadIcon
-                                        sx={{
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={handleExportMintMaps}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <ImageIcon
-                                        sx={{
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={handleExportImage}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <ForkRightIcon
-                                        sx={{
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={handleForkMap}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <ShareButton />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
-                        <Grid
-                            item
-                            xs={12}
-                            sx={{ paddingTop: "30px", paddingBottom: "30px" }}
-                        >
-                            {mapDescription}
-                        </Grid>
-
-                        {tags?.map((tag) => (
-                            <Grid item sx={{ mb: 2 }}>
-                                <Button variant="contained">{tag}</Button>
-                            </Grid>
-                        ))}
-
-                        <Grid item xs={9}></Grid>
-
-                        <Grid item xs={10} sx={{ mt: 0 }}>
-                            <TextField
-                                fullWidth
-                                size="small"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start"></InputAdornment>
-                                    ),
-                                }}
-                                onChange={handleCommentInput}
-                                value={newComment}
-                            />
-                        </Grid>
-                        <Grid item xs={1.5} sx={{ paddingLeft: "5px" }}>
-                            <Button
-                                sx={{
-                                    height: 40,
-                                    width: 120,
-                                    fontSize: "12px",
-                                }}
-                                variant="contained"
-                                onClick={submitComment}
-                            >
-                                COMMENT
-                            </Button>
-                        </Grid>
-                    </Grid>
-
-                    <Grid item>
-                        <Container>
-                            <CommentContainer comments={comments} />
-                        </Container>
-                    </Grid>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <Box sx={{ paddingLeft: "20px", paddingBottom: "5px" }}>
-                        Reccomended
+            <Box sx={{
+                display: "flex",
+                padding: "24px",
+            }} >
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "75%",
+                    rowGap: "12px",
+                }}>
+                    <Box sx={{ height: "768px" }}>
+                        <DynamicMap reference={dynamicMapRef} />
                     </Box>
-                </Grid>
-            </Grid>
-        </>
+                    <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                    }}>
+                        <Typography variant="h5"> {mapTitle}</Typography>
+                        <Box sx={{
+                            display: "flex",
+                            flex: 1,
+                            flexDirection: "row-reverse",
+                            columnGap: "8px",
+                        }}>
+                            {isMapCreator && <IconButton onClick={handleExportMintMaps}>
+                                <EditIcon />
+                            </IconButton>}
+                            <IconButton onClick={handleSaveMap} color={
+                                saved ? 'primary' : 'default'
+                            } >
+                                <BookmarkIcon />
+                            </IconButton>
+                            <IconButton onClick={handleExportMintMaps}>
+                                <DownloadIcon />
+                            </IconButton>
+                            <IconButton onClick={handleExportImage}>
+                                <ImageIcon />
+                            </IconButton>
+                            <IconButton onClick={handleExportMintMaps}>
+                                <ForkRightIcon />
+                            </IconButton>
+                            <ShareButton />
+                            <Box sx={{
+                                display: "flex",
+                                columnGap: "8px",
+                                alignItems: "center",
+                                paddingRight: "12px",
+                            }}>
+                                <IconButton onClick={handleDislike} color={
+                                    disliked ? 'error' : 'default'
+                                }>
+                                    <ThumbDownIcon />
+                                </IconButton>
+                                <Typography variant="body1">{numDisLikes}</Typography>
+                            </Box>
+                            <Box sx={{
+                                display: "flex",
+                                columnGap: "8px",
+                                alignItems: "center",
+                                paddingLeft: "12px",
+                            }}>
+                                <IconButton onClick={handleLike} color={
+                                    liked ? 'primary' : 'default'
+                                }>
+                                    <ThumbUpIcon />
+                                </IconButton>
+                                <Typography variant="body1">{numLikes}</Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                    <Box sx={{
+                        display: "flex",
+                        columnGap: "12px",
+                    }}>
+                        <Typography variant="body2">{uploadDate}</Typography>
+                        <Typography variant="body2">|</Typography>
+                        <Typography variant="body2">{numViews} Views</Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant="body1">{mapDescription}</Typography>
+                    </Box>
+                    <Box>
+                        {tags?.map((tag) => (
+                            <Chip label={tag} />
+                        ))}
+                    </Box>
+                    <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "16px",
+                    }}>
+                        <IconButton href={`/user-profile/${mapCreatorId}`}>
+                            <Avatar src={mapCreatorProfilePic} />
+                        </IconButton>
+                        <Box sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                        }}>
+                            <Typography variant="body1">{mapCreatorName}</Typography>
+                            <Typography variant="body2">{numFollowers} Followers</Typography>
+                        </Box>
+                        {!isMapCreator && <Button variant="contained" onClick={followUser}>
+                            {isFollowing ? "Unfollow" : "Follow"}
+                        </Button>}
+                    </Box>
+                    <Box sx={{
+                        display: "flex",
+                        columnGap: "12px",
+                    }}>
+                        <TextField
+                            fullWidth
+                            size="small"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start"></InputAdornment>
+                                ),
+                            }}
+                            onChange={handleCommentInput}
+                            value={newComment}
+                        />
+                        <Button
+                            variant="contained"
+                            onClick={submitComment}
+                        >
+                            COMMENT
+                        </Button>
+                    </Box>
+                    <Box>
+                        <CommentContainer comments={comments} />
+                    </Box>
+                </Box>
+                <Box>
+                    Recommended Maps
+                </Box>
+            </Box>
+        </Box>
     );
 }
