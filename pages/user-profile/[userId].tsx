@@ -38,7 +38,7 @@ export default function UserProfile() {
     const [username, setUsername] = React.useState<string>('');
     const [bio, setBio] = React.useState<string>('');
     const [profilePic, setProfilePic] = React.useState<string>('');
-    const loggedInUserId = localStorage.userId;
+    const loggedInUserId = typeof window !== 'undefined' ? localStorage.userId : '';
     const { userId } = router.query;
     const isOwnProfile = loggedInUserId === userId;
     const [currentTab, setCurrentTab] = React.useState<Tabs>("user");
