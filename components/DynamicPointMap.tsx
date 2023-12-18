@@ -1,4 +1,10 @@
-import { MapContainer, TileLayer, CircleMarker, useMap } from "react-leaflet";
+import {
+    MapContainer,
+    TileLayer,
+    CircleMarker,
+    useMap,
+    Tooltip,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
@@ -90,7 +96,14 @@ const RenderPoints = () => {
                     fillOpacity: 1.0,
                 }}
             >
-                {" "}
+                <Tooltip
+                    key={index}
+                    direction="top"
+                    offset={[0, -10]}
+                    opacity={1}
+                >
+                    {feature.properties.name || "No Name"}
+                </Tooltip>{" "}
             </CircleMarker>
         );
     });
@@ -108,41 +121,6 @@ const DynamiPointMap = () => {
         mapContext.selectedProperty,
     ]);
 
-    const onEachFeature = (feature: any, layer: any) => {
-        layer.on({
-            mouseover: (event: any) => {
-                const layer = event.target;
-                const value = feature.properties.name;
-
-                if (value) {
-                    layer
-                        .bindTooltip(value.toString(), {
-                            permanent: false,
-                            sticky: true,
-                        })
-                        .openTooltip();
-                }
-            },
-            mouseout: (event: any) => {
-                const layer = event.target;
-                layer.closeTooltip();
-            },
-        });
-    };
-
-
-    const geoJsonStyle = (feature: any) => {
-        return {
-            fillColor: "transparent", // Fill color of the feature
-            weight: 1.5, // Border line weight
-            opacity: 0.3, // Border line opacity
-            color: "red", // Border line color
-            fillOpacity: 0.7, //dashed line
-            dashArray: "5, 10", // Fill opacity
-        };
-    };
-
-
     return (
         <MapContainer
             style={{ height: "100%", width: "100%" }}
@@ -154,14 +132,7 @@ const DynamiPointMap = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {mapContext.hasMap && (
-                <GeoJSON
-                    key={mapContext.mapKey}
-                    data={mapContext.geoJSON}
-                    onEachFeature={onEachFeature}
-                    style={geoJsonStyle}
-                />
-            )}
+
             <RenderPoints />
             {mapData && <FitBounds mapData={mapData} />}
         </MapContainer>
