@@ -10,6 +10,7 @@ import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import DynamicChlorMap from "./DynamicChlorMap";
 import DynamicPropSymbolMap from "./DynamicPropSymMap";
 import DynamicBiChlorMap from "./DynamicBiChlorMap";
+import DynamicHeatMap from "./DynamicHeatMap";
 
 interface Legend {
     title: string;
@@ -94,7 +95,7 @@ const DynamicMap = () => {
     if (!mapContext.hasMap || !mapContext.mapType || loading) {
         return (
             <Skeleton>
-                <MapContainer/>
+                <MapContainer />
             </Skeleton>
         );
     }
@@ -106,6 +107,8 @@ const DynamicMap = () => {
             return <DynamicChlorMap />;
         case "bivariate-choropleth":
             return <DynamicBiChlorMap />;
+        case "heat":
+            return <DynamicHeatMap />;
         default:
             return <Container>NO MAP</Container>;
     }
