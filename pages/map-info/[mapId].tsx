@@ -21,13 +21,14 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import DownloadIcon from "@mui/icons-material/Download";
 import ForkRightIcon from "@mui/icons-material/ForkRight";
+import ImageIcon from "@mui/icons-material/Image";
 import ShareIcon from "@mui/icons-material/Share";
 import Avatar from "@mui/material/Avatar";
 import InputAdornment from "@mui/material/InputAdornment";
 import SortIcon from "@mui/icons-material/Sort";
 import { MapContainer } from "react-leaflet";
 import MapContext from "@/components/MapContext";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useRef } from "react";
 import AuthContext from "@/components/authContext";
 import FormatDateText from "../../utils/dateTextUtils";
 import CommentContainer from "@/components/CommentContainer";
@@ -138,7 +139,9 @@ export default function MapInfo() {
             }),
         }).then((res) => {
             if (res.ok) {
+                liked ? setNumLikes(numLikes - 1) : setNumLikes(numLikes + 1);
                 liked ? setLiked(false) : setLiked(true);
+                disliked ? setNumDisikes(numDisLikes - 1) : null;
                 setDisliked(false);
             }
         });
@@ -153,7 +156,9 @@ export default function MapInfo() {
             }),
         }).then((res) => {
             if (res.ok) {
+                disliked ? setNumDisikes(numDisLikes - 1) : setNumDisikes(numDisLikes + 1);
                 disliked ? setDisliked(false) : setDisliked(true);
+                liked ? setNumLikes(numLikes - 1) : null;
                 setLiked(false);
             }
         });
@@ -173,9 +178,15 @@ export default function MapInfo() {
         });
     };
 
-    const handleDownload = () => {
+    const handleExportMintMaps = () => {
         window.open(`/api/exportMap?mapId=${mapId}`);
     };
+
+    const dynamicMapRef = useRef<any>(null);
+
+    const handleExportImage = () => {
+        dynamicMapRef.current.exportImage();
+    }
 
     const handleForkMap = async () => {
         const userEmail = authContext.userId
@@ -256,7 +267,7 @@ export default function MapInfo() {
                                     display: "flex",
                                 }}
                             >
-                                <DynamicMap />
+                                <DynamicMap reference={dynamicMapRef}/>
                             </Box>
                         </Grid>
 
@@ -387,7 +398,15 @@ export default function MapInfo() {
                                         sx={{
                                             cursor: "pointer",
                                         }}
-                                        onClick={handleDownload}
+                                        onClick={handleExportMintMaps}
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <ImageIcon
+                                        sx={{
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={handleExportImage}
                                     />
                                 </Grid>
                                 <Grid item xs={3}>

@@ -35,8 +35,6 @@ const PointLegend = () => {
                 flexDirection: "column",
             }}
         >
-          
-
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Spectrum

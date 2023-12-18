@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, FC, useImperativeHandle } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -12,6 +12,9 @@ import "leaflet.heat";
 import { useMap } from "react-leaflet";
 import { blendColors } from "@/libs/blend";
 import LinearLegendControl from './LinearLegendControl';
+import { Map } from 'leaflet';
+import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
+import toDataURL from '@/libs/toDataURL';
 
 interface Legend {
     title: string;
@@ -131,9 +134,53 @@ const HeatLayer = () => {
     return null;
 };
 
-const DynamicHeatMap = () => {
+let previewSaved = false;
+
+const DynamicHeatMap: FC<{
+    reference: React.RefObject<any>;
+}> = ({
+    reference
+}) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
+    const [map, setMap] = useState<Map | null>(null);
+
+    useEffect(() => {
+        if(!map || previewSaved) return;
+        const screenshotter = new SimpleMapScreenshoter().addTo(map);
+        screenshotter.takeScreen().then((blob) => {
+            toDataURL(URL.createObjectURL(blob as Blob), (url) => {
+                fetch(`/api/updatePreviewById`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        mapId: mapContext.mapId,
+                        previewImage: url,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            })
+            screenshotter.remove();
+        });
+        previewSaved = true;
+    }, [map]);
+
+    useImperativeHandle(reference, () => ({
+        exportImage() {
+            if(!map) return;
+            const screenshotter = new SimpleMapScreenshoter().addTo(map);
+            screenshotter.takeScreen().then((blob) => {
+                const a = document.createElement('a');
+                const url = URL.createObjectURL(blob as Blob);
+                a.href = url;
+                a.download = 'map.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                screenshotter.remove();
+            });
+        }
+    }));
 
     useEffect(() => {
         setMapData(mapContext.geoJSON);
@@ -182,6 +229,7 @@ const DynamicHeatMap = () => {
     };
     return (
         <MapContainer
+            ref={setMap}
             style={{ height: "100%", width: "100%" }}
             center={[51.505, -0.09]}
             zoom={13}

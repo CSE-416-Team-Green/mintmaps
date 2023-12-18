@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, FC, useImperativeHandle, useRef } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -75,9 +75,39 @@ interface MapContextType {
         axis: string
     ) => void;
 }
-const DynamicMap = () => {
+const DynamicMap: FC<{
+    reference?: React.RefObject<any>;
+}> = ({
+    reference
+}) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [loading, setLoading] = useState(true);
+    const propSymMapRef = useRef<any>(null);
+    const chlorMapRef = useRef<any>(null);
+    const biChlorMapRef = useRef<any>(null);
+    const heatMapRef = useRef<any>(null);
+    const pointMapRef = useRef<any>(null);
+    useImperativeHandle(reference, () => ({
+        exportImage() {
+            switch (mapContext.mapType) {
+                case "proportional-symbol":
+                    propSymMapRef.current.exportImage();
+                    break;
+                case "choropleth":
+                    chlorMapRef.current.exportImage();
+                    break;
+                case "bivariate-choropleth":
+                    biChlorMapRef.current.exportImage();
+                    break;
+                case "heat":
+                    heatMapRef.current.exportImage();
+                    break;
+                case "point":
+                    pointMapRef.current.exportImage();
+                    break;
+            }
+        }
+    }));
 
     useEffect(() => {
         const loadMapData = async () => {
@@ -103,15 +133,15 @@ const DynamicMap = () => {
 
     switch (mapContext.mapType) {
         case "proportional-symbol":
-            return <DynamicPropSymbolMap />;
+            return <DynamicPropSymbolMap reference = {propSymMapRef} />;
         case "choropleth":
-            return <DynamicChlorMap />;
+            return <DynamicChlorMap reference = {chlorMapRef} />;
         case "bivariate-choropleth":
-            return <DynamicBiChlorMap />;
+            return <DynamicBiChlorMap reference = {biChlorMapRef} />;
         case "heat":
-            return <DynamicHeatMap />;
+            return <DynamicHeatMap reference = {heatMapRef} />;
         case "point": 
-            return <DynamiPointMap/>
+            return <DynamiPointMap reference = {pointMapRef} />
         default:
             return <Container>NO MAP</Container>;
     }
