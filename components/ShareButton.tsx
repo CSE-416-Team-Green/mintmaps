@@ -12,7 +12,7 @@ const ShareButton = () => {
 
     return (
         <>
-            <IconButton onClick={handleClick} color="primary">
+            <IconButton onClick={handleClick}>
                 <ShareIcon />
             </IconButton>
             <Snackbar

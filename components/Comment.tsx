@@ -1,3 +1,5 @@
+import Box from "@mui/material/Box";
+
 import FormatDateText from "@/utils/dateTextUtils";
 import {
     Container,
@@ -22,40 +24,43 @@ interface commentProps {
 
 const Comment: React.FC<commentProps> = ({ comment }) => {
     return (
-        <Container>
-            <Paper elevation={3} sx={{ height: "100%" }}>
-                <Grid container direction={"column"}>
-                    <Grid item>
-                        <Grid container direction="row">
-                            <Grid item sx={{ mt: 1 }}>
-                                <IconButton href="/user-profile">
-                                    <Avatar />
-                                </IconButton>
-                            </Grid>
-                            <Grid item sx={{ mt: 2, ml: 5, minWidth: 250 }}>
-                                <Typography variant="h5">
-                                    {comment.message}
-                                </Typography>
-                            </Grid>
-
-                            <Grid item sx={{ mt: 2, ml: 55, mb: 1 }}>
-                                <Stack direction={"column"}>
-                                    <Typography variant="body1">
-                                        {comment.user.userName}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        {FormatDateText.formatDateText(
-                                            comment.uploadDate,
-                                            ""
-                                        )}
-                                    </Typography>
-                                </Stack>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+        <Paper elevation={1}>
+                <Box sx={{
+                    display: "flex",
+                    columnGap: "16px",
+                    padding: "8px",
+                }}>
+                    <IconButton href="/user-profile">
+                        <Avatar src={comment.user.profilePic} />
+                    </IconButton>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        rowGap: "8px",
+                    }}>
+                        <Box sx={{
+                            display: "flex",
+                            columnGap: "12px",
+                        }}>
+                            <Typography variant="body2">
+                                {comment.user.userName}
+                            </Typography>
+                            <Typography variant="body2">|</Typography>
+                            <Typography variant="body2">
+                                {FormatDateText.formatDateText(
+                                    comment.uploadDate,
+                                    ""
+                                )}
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" sx={{
+                            overflowWrap: "anywhere",
+                        }}>
+                            {comment.message}
+                        </Typography>
+                    </Box>
+                </Box>
             </Paper>
-        </Container>
     );
 };
 
