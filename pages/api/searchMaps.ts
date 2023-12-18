@@ -32,19 +32,62 @@ export default async function handler(
     );
 
     //filter by desired map type
+    if(searchTerm){
+
+    }
+
+
 
     //filter by all, title, uploader, or tags
-
+    if(searchTerm && filter){
+        if(filter == "title"){ //title
+            allMaps.forEach(function (map) {
+                if (map.name) {
+                    if (map.name.includes(searchTerm)) {
+                        maps.push(map);
+                    }
+                }
+            });
+        } else if (filter == "uploader"){ //uploader
+            allMaps.forEach(function (map) {
+                if (map.createdBy) {
+                    if (map.createdBy.includes(searchTerm)) {
+                        maps.push(map);
+                    }
+                }
+            });
+        } else if (filter == "tags"){ //tags
+            allMaps.forEach(function (map) {
+                let added=false;
+                if (map.tags) {
+                    map.tags.forEach(function (tag:any) {
+                        if (tag.includes(searchTerm) && !added) {
+                            maps.push(map);
+                            added = true;
+                        }
+                    });
+                }
+            });
+        } else {
+            allMaps.forEach(function (map) {
+                if (map.name) {
+                    if (map.name.includes(searchTerm)) {
+                        maps.push(map);
+                    }
+                }
+            });
+        }
+    } else {
+        allMaps.forEach(function (map) {
+            if (map.name) {
+                if (map.name.includes(searchTerm)) {
+                    maps.push(map);
+                }
+            }
+        });
+    }
     //sort by parameter
 
-    //title
-    allMaps.forEach(function (map) {
-        if (map.name) {
-            if (map.name.includes(searchTerm)) {
-                maps.push(map);
-            }
-        }
-    });
 
     //return array of maps to be used in search results
     //maybe only want to return certain info? maybe even just mapIds?

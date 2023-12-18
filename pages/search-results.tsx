@@ -14,9 +14,9 @@ export default function SearchResultsPage() {
     React.useEffect(() => {
         const fetchUserData = async () => {
             const payload = {
-                type: "",
-                filter: "",
-                sort: "",
+                type: localStorage.searchMapType,
+                filter: localStorage.searchFilter,
+                sort: localStorage.searchSort,
                 searchTerm: localStorage.searchTerm,
             };
             try {
