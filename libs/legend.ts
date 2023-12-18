@@ -9,7 +9,10 @@ export function drawLinearLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
     const sketch = new Sketch(canvas);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff33";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    const x = 8;
     const y = 48;
 
     sketch.text(160, 16, legend.title!, {
@@ -26,9 +29,9 @@ export function drawLinearLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
             legend.colorMax!,
             i / canvas.width
         );
-        ctx.fillRect(i, y + 14, size, size);
+        ctx.fillRect(x + i, y + 14, size, size);
         sketch.text(
-            i,
+            x + i,
             y,
             `${interpolateNumber(legend.valueMin!, legend.valueMax!, i / canvas.width).toFixed(1)}`,
             {
@@ -42,12 +45,14 @@ export function drawLinearLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
 }
 
 export function drawGridLegend(canvas: HTMLCanvasElement, legend: Partial<Legend>) {
-    const size = 50;
+    const size = 30;
 
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     const sketch = new Sketch(canvas);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff33";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const x = 64;
     const y = 64;
@@ -72,9 +77,9 @@ export function drawGridLegend(canvas: HTMLCanvasElement, legend: Partial<Legend
     });
     ctx.restore();
 
-    for (let i = 0; i < canvas.width - size * 2; i += size) {
+    for (let i = 0; i < canvas.width - size * 3; i += size) {
         ctx.fillStyle = interpolateColor(legend.xColorMin!, legend.xColorMax!, i / canvas.width);
-        ctx.fillRect(i + x, y, size, Math.floor(canvas.height / size - 1) * size);
+        ctx.fillRect(i + x, y, size, Math.floor(canvas.height / size - 2) * size);
         sketch.text(i + x, y - 4, `${interpolateNumber(legend.xValueMin!, legend.xValueMax!, i / canvas.width).toFixed(1)}`, {
             fillStyle: '#000000',
             fill: true,
@@ -83,10 +88,10 @@ export function drawGridLegend(canvas: HTMLCanvasElement, legend: Partial<Legend
         });
     }
 
-    for (let i = 0; i < canvas.height - size * 2; i += size) {
+    for (let i = 0; i < canvas.height - size * 3; i += size) {
         ctx.globalCompositeOperation = 'multiply';
         ctx.fillStyle = interpolateColor(legend.yColorMin!, legend.yColorMax!, i / canvas.width);
-        ctx.fillRect(x, i + y, Math.floor(canvas.width / size - 1) * size, size);
+        ctx.fillRect(x, i + y, Math.floor(canvas.width / size - 2) * size, size);
         ctx.globalCompositeOperation = 'source-over';
         sketch.text(x - 4, i + y, `${interpolateNumber(legend.yValueMin!, legend.yValueMax!, i / canvas.width).toFixed(1)}`, {
             fillStyle: '#000000',
@@ -104,6 +109,8 @@ export function drawCircleLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
     const sketch = new Sketch(canvas);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff33";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     sketch.text(128, 10, legend.title!, {
         fillStyle: '#000000',

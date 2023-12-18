@@ -8,6 +8,7 @@ import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import { blendColors } from "@/libs/blend";
+import GridLegendControl from './GridLegendControl';
 
 interface Legend {
     title: string;
@@ -172,6 +173,7 @@ const DynamicBiChlorMap = () => {
                 />
             )}
             {mapData && <FitBounds mapData={mapData} />}
+            <GridLegendControl legend={mapContext.legend} />
         </MapContainer>
     );
 };
