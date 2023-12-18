@@ -20,6 +20,7 @@ import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
 import { FC } from 'react';
 import MapModel from '@/models/Map';
+import AuthContext from './authContext';
 
 const MapPreview: FC<{
     map: any
@@ -28,9 +29,11 @@ const MapPreview: FC<{
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const router = useRouter();
     const themeContext = React.useContext(ThemeContext);
+    const authContext = React.useContext(AuthContext);
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
     const mapInfo = props.map;
+    const newmapId=mapInfo._id;
     console.log("aaa")
     console.log(mapInfo)
     const [profilePic, setProfilePic] = useState<string>('');
@@ -66,19 +69,51 @@ const MapPreview: FC<{
     const handleClose = () => {
         setAnchor(null);
     };
-
+  
     const handleExportClose = () => {
-        setAnchor(null);
+        window.open(`/api/exportMap?mapId=${newmapId}`);
     };
     const handleShareClose = () => {
         setAnchor(null);
     };
     const handleForkClose = () => {
-        setAnchor(null);
+        const userEmail = authContext.userId
+        const mapId=mapInfo._id;
+        console.log("abc")
+        console.log(userEmail)
+        console.log(mapId)
+
+        // Constructing the payload
+        const payload = {
+            mapId,
+            userEmail,
+        };
+
+        const response =  fetch("/api/forkmap", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        alert("fork successful")
     };
     const handleSaveClose = () => {
-        setAnchor(null);
+        const mapId=mapInfo._id;
+        fetch(`/api/userSaveMap`, {
+            method: "POST",
+            body: JSON.stringify({
+                mapId,
+                email: authContext.email,
+            }),
+        }).then((res) => {
+            if (res.ok) {
+                console.log("saved")
+            }
+        });
     };
+    
 
     return (
         <div >

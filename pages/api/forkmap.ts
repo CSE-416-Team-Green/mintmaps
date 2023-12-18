@@ -17,6 +17,9 @@ export default async function handler(
     try {
         
         const { mapId, userEmail} = req.body;
+        console.log("cccc")
+        console.log(mapId)
+        console.log(userEmail)
 
 
         await connectDb();
@@ -37,7 +40,8 @@ export default async function handler(
             geoJSON: map.geoJSON,
             maptype:map.maptype,
             visibility:"private",
-            description:map.description
+            description:map.description,
+            createdBy:user.email
 
         });
        
