@@ -98,8 +98,8 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                         "geojson",
                         new Blob([buffer], { type: "application/octet-stream" })
                     );
-                    console.log("3");
-                    console.log(formData);
+                    //console.log("3");
+                    //console.log(formData);
 
                     try {
                         const response = await fetch("/api/createMap", {

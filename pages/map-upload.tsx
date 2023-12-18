@@ -30,9 +30,9 @@ export default function MapUpload() {
         setVisibility(newVisibility);
     };
     const uploadMapToUser = async () => {
-        const mapId = localStorage.getItem("mapId") as string;
+        const mapId = mapContext.mapId;
         //console.log("1" + mapId);
-        const userEmail = localStorage.getItem("email") as string;
+        const userEmail = authContext.email;
         //console.log(userEmail);
 
         // Constructing the payload
