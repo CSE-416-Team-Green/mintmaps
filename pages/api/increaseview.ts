@@ -25,7 +25,7 @@ export default async function handler(
     map.views+=1;
     await map.save();
    
-    return res.status(200);
+    return res.status(200).json({});
   } catch (error) {
     console.error("Fetching user error:", error);
     res.status(500).json({ message: "Internal Server Error10989" });
