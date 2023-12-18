@@ -43,7 +43,11 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 export default function MapInfo() {
     const router = useRouter();
     const authContext = useContext(AuthContext);
+    const mapContext = useContext(MapContext);
     const email = authContext.email;
+    //console
+    //console.log(mapContext.mapId)
+   
     const { mapId } = router.query;
     const [liked, setLiked] = React.useState<boolean>(false);
     const [disliked, setDisliked] = React.useState<boolean>(false);
@@ -58,7 +62,9 @@ export default function MapInfo() {
     const [mapTitle, setMapTitle] = React.useState("");
     const [comments, setComments] = React.useState<any[]>([]);
     const [newComment, setNewComment] = React.useState("");
-
+    const isMapCreator = email === userId;
+    //console.log("adadadad")
+    //console.log(userId)
     React.useEffect(() => {
         const getMapDetails = async () => {
             fetch(`/api/increaseview`, {
@@ -119,6 +125,10 @@ export default function MapInfo() {
             });
         }
     });
+
+    const handleEditClick = () => {
+        router.push(`/map-editing/`);
+    };
 
     const handleLike = () => {
         fetch(`/api/likeMap`, {
@@ -271,6 +281,15 @@ export default function MapInfo() {
                             }}
                         >
                             <Typography variant="h4"> {mapTitle}</Typography>
+                            {isMapCreator && (
+                                <Button
+                                    sx={{ marginLeft: 2 }}
+                                    variant="contained"
+                                    onClick={handleEditClick}
+                                >
+                                    Edit
+                                </Button>
+                            )}
                         </Grid>
                         <Grid item xs={1} sx={{ paddingTop: "12px" }}>
                             <Typography variant="body2">

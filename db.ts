@@ -12,7 +12,7 @@ const connectDb = async () => {
     try {
         connection = await mongoose.connect(MONGODB_URI);
 
-        console.log("db connected");
+        //console.log("db connected");
     } catch (err) {
         console.log(err);
         console.log("db not connected");
