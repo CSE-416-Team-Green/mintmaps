@@ -112,10 +112,11 @@ const DynamicChlorMap = () => {
             mouseover: (event: any) => {
                 const layer = event.target;
                 const value = feature.properties[mapContext.selectedProperty];
+                const marker = `${feature.properties.name} - ${mapContext.selectedProperty} : ${value}`;
 
-                if (value) {
+                if (marker) {
                     layer
-                        .bindTooltip(value.toString(), {
+                        .bindTooltip(marker.toString(), {
                             permanent: false,
                             sticky: true,
                         })
