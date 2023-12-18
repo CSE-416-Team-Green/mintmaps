@@ -3,10 +3,15 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-
+import MapContext from "./MapContext";
+import dynamic from "next/dynamic";
+const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
+    loading: () => <Skeleton></Skeleton>,
+    ssr: false,
+});
 const presetMaps = [
     "Select a preset map",
     "United States",
@@ -96,11 +101,11 @@ const InputMap: React.FC<InputMapProps> = ({ onFileSelect }) => {
                 }}
             >
                 <Box
-                    sx={{
-                        backgroundColor: "#E0E0E0",
-                        width: "800px",
-                        height: "480px",
-                    }}
+                    //sx={{
+                        //backgroundColor: "#111111",
+                        //width: "800px",
+                       // height: "480px",
+                    //}}
                 ></Box>
                 <Box
                     sx={{
