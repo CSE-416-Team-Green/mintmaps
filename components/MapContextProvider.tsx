@@ -153,6 +153,9 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setSelectedPropertyBiv(selectedPropertyBiv);
         setSelectedPropertyIndexBiv(selectedPropertyIndexBiv);
         setLegend(legend);
+
+        const key = uuidv4();
+        setMapKey(key);
     }, [state.present]);
 
     const onChange = () => {
@@ -370,7 +373,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 feature.properties[selectedProperty] = properFormatedValue;
             }
         });
-        setgeoJSON(newGeoJSON);
 
         const values = newGeoJSON.features
             .map((feature: any) => feature.properties[selectedProperty])
@@ -400,6 +402,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapState({
             ...state.present,
             legend: newLegend,
+            geoJSON: newGeoJSON, 
         });
         const key = uuidv4();
         setMapKey(key);
@@ -421,7 +424,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 feature.properties[prop] = properFormatedValue;
             }
         });
-        setgeoJSON(newGeoJSON);
 
         const values = newGeoJSON.features
             .map((feature: any) => feature.properties[prop])
@@ -448,6 +450,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapState({
             ...state.present,
             legend: newLegend,
+            geoJSON: newGeoJSON, 
         });
         const key = uuidv4();
         setMapKey(key);
