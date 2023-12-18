@@ -5,7 +5,7 @@ import InvalidAuthError from '@/components/InvalidAuthError';
 
 const ResetPasswordPage = () => {
     const authContext = React.useContext(AuthContext);
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
+    
 
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -38,6 +38,7 @@ const ResetPasswordPage = () => {
         }
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.form}>

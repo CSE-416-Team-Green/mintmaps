@@ -10,6 +10,7 @@ import LinearLegend from "./LinearLegend";
 import GridLegend from "./GridLegend";
 import MapContext from "./MapContext";
 import { useContext, useEffect, useState } from "react";
+import PointLegend from "./PointLegend";
 
 const LegendTab = () => {
     const mapContext = useContext(MapContext);
@@ -31,7 +32,7 @@ const LegendTab = () => {
             ) : mapType === "bivariate-choropleth" ? (
                 <GridLegend />
             ) : mapType === "point" ? (
-                <LinearLegend />
+                <PointLegend />
             ) : (
                 <Box />
             )}

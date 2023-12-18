@@ -11,6 +11,7 @@ import L from "leaflet";
 import "leaflet.heat";
 import { useMap } from "react-leaflet";
 import { blendColors } from "@/libs/blend";
+import LinearLegendControl from './LinearLegendControl';
 
 interface Legend {
     title: string;
@@ -100,7 +101,7 @@ const HeatLayer = () => {
             const value = feature.properties[mapContext.selectedProperty];
             const radius = calculateRadius(feature);
 
-           return [coords.lat, coords.lng, value]
+            return [coords.lat, coords.lng, value];
         });
 
         const heatLayer = L.heatLayer(heatData, {
@@ -114,7 +115,7 @@ const HeatLayer = () => {
                 1.0: mapContext.legend.colorMax as string,
             },
             max: mapContext.legend.valueMax,
-            minOpacity: 0.3
+            minOpacity: 0.25,
         }).addTo(map);
 
         return () => {
@@ -144,7 +145,41 @@ const DynamicHeatMap = () => {
         mapContext.legend.colorMin,
         mapContext.legend.colorMax,
     ]);
+    const onEachFeature = (feature: any, layer: any) => {
+        layer.on({
+            mouseover: (event: any) => {
+                const layer = event.target;
+                const value = feature.properties[mapContext.selectedProperty];
+                const name = feature.properties.name;
 
+                const marker = `${feature.properties.name} - ${mapContext.selectedProperty} : ${value}`;
+
+                if (marker) {
+                    layer
+                        .bindTooltip(marker.toString(), {
+                            permanent: false,
+                            sticky: true,
+                        })
+                        .openTooltip();
+                }
+            },
+            mouseout: (event: any) => {
+                const layer = event.target;
+                layer.closeTooltip();
+            },
+        });
+    };
+
+    const geoJsonStyle = (feature: any) => {
+        return {
+            fillColor: "transparent", // Fill color of the feature
+            weight: 1.5, // Border line weight
+            opacity: 0.3, // Border line opacity
+            color: "red", // Border line color
+            fillOpacity: 0.7, //dashed line
+            dashArray: "5, 10", // Fill opacity
+        };
+    };
     return (
         <MapContainer
             style={{ height: "100%", width: "100%" }}
@@ -156,11 +191,17 @@ const DynamicHeatMap = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {/* {mapContext.hasMap && (
-                <GeoJSON key={mapContext.mapKey} data={mapContext.geoJSON} />
-            )} */}
+            {mapContext.hasMap && (
+                <GeoJSON
+                    key={mapContext.mapKey}
+                    data={mapContext.geoJSON}
+                    onEachFeature={onEachFeature}
+                    style={geoJsonStyle}
+                />
+            )}
             {mapData && <FitBounds mapData={mapData} />}
             <HeatLayer />
+            <LinearLegendControl legend={mapContext.legend} />
         </MapContainer>
     );
 };

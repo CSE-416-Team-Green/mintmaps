@@ -8,6 +8,7 @@ import OverviewTab from "@/components/OverviewTab";
 import OverviewBivarTab from "@/components/OverviewBivar";
 import LegendTab from "@/components/LegendTab";
 import MapContext from "@/components/MapContext";
+import OverviewPoint from "@/components/OverviewPoint";
 import AuthContext from '@/components/authContext';
 import InvalidAuthError from '@/components/InvalidAuthError';
 
@@ -18,7 +19,6 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 
 export default function MapEditing() {
     const authContext = React.useContext(AuthContext);
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     const [tab, setTab] = React.useState("1");
     const mapContext = useContext(MapContext);
 
@@ -26,6 +26,7 @@ export default function MapEditing() {
         setTab(newTab);
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />
@@ -56,9 +57,11 @@ export default function MapEditing() {
                         <TabPanel value="2">
                             {mapContext.mapType === "bivariate-choropleth" ? (
                                 <OverviewBivarTab />
+                            ) : mapContext.mapType === "point" ? (
+                                <OverviewPoint />
                             ) : (
                                 <OverviewTab />
-                            )}{" "}
+                            )}
                         </TabPanel>
                         <TabPanel value="3">
                             <LegendTab />

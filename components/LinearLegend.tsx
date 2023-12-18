@@ -1,6 +1,4 @@
-import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
-import Sketch from "@/libs/sketch";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
     Accordion,
     AccordionDetails,
@@ -11,7 +9,6 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { MuiColorInput } from "mui-color-input";
 import MapContext from "./MapContext";
-import { drawLinearLegend } from '@/libs/legend';
 
 const LinearLegend = () => {
     const mapContext = useContext(MapContext);
@@ -23,8 +20,6 @@ const LinearLegend = () => {
     const [colorMin, setColorMin] = useState(legend.colorMin ?? "#FFFFFF");
     const [colorMax, setColorMax] = useState(legend.colorMax ?? "#2ECC71");
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
     useEffect(() => {
         legend.title = title;
         legend.valueMin = valueMin;
@@ -33,16 +28,13 @@ const LinearLegend = () => {
         legend.colorMax = colorMax;
         mapContext.onChange();
         mapContext.updateLegendColor(colorMin, colorMax);
-
-        const canvas = canvasRef.current as HTMLCanvasElement;
-        drawLinearLegend(canvas, legend);
     }, [
+        title,
         valueMin,
         valueMax,
         colorMin,
         colorMax,
-        mapContext.geoJSON,
-        mapContext.legend,
+        // mapContext.geoJSON,
     ]);
 
     return (
@@ -59,7 +51,6 @@ const LinearLegend = () => {
                     padding: "16px",
                 }}
             >
-                <canvas ref={canvasRef} width={320} height={64} />
             </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>

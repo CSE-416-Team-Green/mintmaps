@@ -1,9 +1,8 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import MapContext from './MapContext';
-import { drawGridLegend } from '@/libs/legend';
 
 const GridLegend = () => {
     const mapContext = useContext(MapContext);
@@ -20,8 +19,6 @@ const GridLegend = () => {
     const [yColorMin, setYColorMin] = useState(legend.yColorMin ?? '#FFFFFF');
     const [yColorMax, setYColorMax] = useState(legend.yColorMax ?? '#2ECC71');
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
     useEffect(() => {        
         legend.xTitle = xTitle;
         legend.yTitle = yTitle;
@@ -34,10 +31,9 @@ const GridLegend = () => {
         legend.yColorMin = yColorMin;
         legend.yColorMax = yColorMax;
         mapContext.onChange();
-
-        const canvas = canvasRef.current as HTMLCanvasElement;
-        drawGridLegend(canvas, legend);
     }, [
+        xTitle,
+        yTitle,
         xValueMin,
         xValueMax,
         xColorMin,
@@ -58,7 +54,6 @@ const GridLegend = () => {
                 justifyContent: 'center',
                 padding: '16px',
             }}>
-                <canvas ref={canvasRef} width={320} height={320} />
             </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>

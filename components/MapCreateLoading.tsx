@@ -91,6 +91,7 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                     formData.append("name", ontitle);
                     formData.append("maptype", type);
                     formData.append("tag", ontags);
+                    formData.append("email", localStorage.getItem("email") ?? '');
 
                     // Append your binary data (buffer)
                     formData.append(

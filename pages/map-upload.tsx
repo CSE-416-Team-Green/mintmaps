@@ -18,7 +18,6 @@ export default function MapUpload() {
     const [visibility, setVisibility] = useState("Unlisted");
     const mapContext = useContext(MapContext);
     const authContext = useContext(AuthContext);
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     const chipStyle = (label: string) => ({
         backgroundColor: visibility === label ? "#E0E0E0" : undefined, // Grey if selected
         cursor: "pointer",
@@ -58,6 +57,7 @@ export default function MapUpload() {
 
         // Handle the response here (e.g., show a success message)
     };
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />

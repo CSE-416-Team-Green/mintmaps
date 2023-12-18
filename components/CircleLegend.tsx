@@ -1,12 +1,8 @@
-import { interpolateColor } from '@/libs/interpolate';
-import { interpolateNumber } from '@/libs/interpolate';
-import Sketch from '@/libs/sketch';
-import React, { useState, useRef, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
 import MapContext from './MapContext';
-import { drawCircleLegend } from '@/libs/legend';
 
 const CircleLegend = () => {
     const mapContext = useContext(MapContext);
@@ -20,8 +16,6 @@ const CircleLegend = () => {
     const [sizeMin, setSizeMin] = useState(legend.sizeMin ?? 0);
     const [sizeMax, setSizeMax] = useState(legend.sizeMax ?? 0);
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
     useEffect(() => {        
         legend.title = title;
         legend.valueMin = valueMin;
@@ -32,11 +26,8 @@ const CircleLegend = () => {
         legend.sizeMax = sizeMax;
         mapContext.onChange();
         mapContext.updateLegendColor(colorMin, colorMax);
-        
-        
-        const canvas = canvasRef.current as HTMLCanvasElement;
-        drawCircleLegend(canvas, legend);
     }, [
+        title,
         valueMin,
         valueMax,
         colorMin,
@@ -55,7 +46,6 @@ const CircleLegend = () => {
                 justifyContent: 'center',
                 padding: '16px',
             }}>
-                <canvas ref={canvasRef} width={256} height={256} />
             </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>

@@ -7,6 +7,7 @@ import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
+import LinearLegendControl from './LinearLegendControl';
 
 interface Legend {
     title: string;
@@ -111,10 +112,11 @@ const DynamicChlorMap = () => {
             mouseover: (event: any) => {
                 const layer = event.target;
                 const value = feature.properties[mapContext.selectedProperty];
+                const marker = `${feature.properties.name} - ${mapContext.selectedProperty} : ${value}`;
 
-                if (value) {
+                if (marker) {
                     layer
-                        .bindTooltip(value.toString(), {
+                        .bindTooltip(marker.toString(), {
                             permanent: false,
                             sticky: true,
                         })
@@ -147,6 +149,7 @@ const DynamicChlorMap = () => {
                 />
             )}
             {mapData && <FitBounds mapData={mapData} />}
+            <LinearLegendControl legend={mapContext.legend} />
         </MapContainer>
     );
 };
