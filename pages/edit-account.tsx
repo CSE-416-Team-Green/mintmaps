@@ -18,9 +18,11 @@ import { useState, useEffect } from "react";
 import AuthContext from "@/components/authContext";
 import { useRouter } from 'next/navigation';
 import { set } from 'cypress/types/lodash';
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 export default function EditAccount() {
     const authContext = React.useContext(AuthContext);
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
