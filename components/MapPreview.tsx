@@ -31,6 +31,8 @@ const MapPreview: FC<{
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
     const mapInfo = props.map;
+    console.log("aaa")
+    console.log(mapInfo)
     const [profilePic, setProfilePic] = useState<string>('');
     let userInfo: any;
 
