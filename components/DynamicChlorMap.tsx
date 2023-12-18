@@ -7,6 +7,7 @@ import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
+import LinearLegendControl from './LinearLegendControl';
 
 interface Legend {
     title: string;
@@ -148,6 +149,7 @@ const DynamicChlorMap = () => {
                 />
             )}
             {mapData && <FitBounds mapData={mapData} />}
+            <LinearLegendControl legend={mapContext.legend} />
         </MapContainer>
     );
 };

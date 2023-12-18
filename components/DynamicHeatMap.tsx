@@ -11,6 +11,7 @@ import L from "leaflet";
 import "leaflet.heat";
 import { useMap } from "react-leaflet";
 import { blendColors } from "@/libs/blend";
+import LinearLegendControl from './LinearLegendControl';
 
 interface Legend {
     title: string;
@@ -200,6 +201,7 @@ const DynamicHeatMap = () => {
             )}
             {mapData && <FitBounds mapData={mapData} />}
             <HeatLayer />
+            <LinearLegendControl legend={mapContext.legend} />
         </MapContainer>
     );
 };

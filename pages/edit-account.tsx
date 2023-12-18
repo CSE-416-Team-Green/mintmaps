@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import AuthContext from "@/components/authContext";
 import { useRouter } from 'next/navigation';
 import { set } from 'cypress/types/lodash';
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 export default function EditAccount() {
     const authContext = React.useContext(AuthContext);
@@ -108,8 +109,6 @@ export default function EditAccount() {
         };
 
         const email = localStorage.getItem("email");
-        console.log("213123");
-        console.log(email);
 
         try {
             const response = await fetch(
@@ -133,6 +132,7 @@ export default function EditAccount() {
         }
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <>
             <Grid

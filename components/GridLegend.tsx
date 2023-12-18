@@ -1,9 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiColorInput } from 'mui-color-input';
-import { interpolateColor, interpolateNumber } from '@/libs/interpolate';
-import Sketch from '@/libs/sketch';
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import MapContext from './MapContext';
 
 const GridLegend = () => {
@@ -20,44 +18,8 @@ const GridLegend = () => {
     const [yValueMax, setYValueMax] = useState(legend.yValueMax ?? 0);
     const [yColorMin, setYColorMin] = useState(legend.yColorMin ?? '#FFFFFF');
     const [yColorMax, setYColorMax] = useState(legend.yColorMax ?? '#2ECC71');
-    
-    const size = 50;
-    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {        
-        const canvas = canvasRef.current as HTMLCanvasElement;
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        const sketch = new Sketch(canvas);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const x = 64;
-        const y = 32;
-
-        for(let i = 0; i < canvas.width - size * 2; i += size) {
-            ctx.fillStyle = interpolateColor(xColorMin, xColorMax, i / canvas.width);
-            ctx.fillRect(i + x, y, size, Math.floor(canvas.height / size - 1) * size);
-            sketch.text(i + x, y - 4, `${interpolateNumber(xValueMin, xValueMax, i / canvas.width)}`, {
-                strokeStyle: '#000000',
-                stroke: true,
-                textAlign: 'left',
-                textBaseline: 'bottom',
-            });
-        }
-
-        for(let i = 0; i < canvas.height - size * 2; i += size) {
-            ctx.globalCompositeOperation = 'multiply';
-            ctx.fillStyle = interpolateColor(yColorMin, yColorMax, i / canvas.width);
-            ctx.fillRect(x, i + y, Math.floor(canvas.width / size - 1) * size, size);
-            ctx.globalCompositeOperation = 'source-over';
-            sketch.text(x - 4, i + y, `${interpolateNumber(yValueMin, yValueMax, i / canvas.width)}`, {
-                strokeStyle: '#000000',
-                stroke: true,
-                textAlign: 'right',
-                textBaseline: 'top',
-            });
-        }
-
         legend.xTitle = xTitle;
         legend.yTitle = yTitle;
         legend.xValueMin = xValueMin;
@@ -69,9 +31,9 @@ const GridLegend = () => {
         legend.yColorMin = yColorMin;
         legend.yColorMax = yColorMax;
         mapContext.onChange();
-        mapContext.updateLegendColorBivX(xColorMin, xColorMax); 
-        mapContext.updateLegendColorBivY(yColorMin, yColorMax); 
     }, [
+        xTitle,
+        yTitle,
         xValueMin,
         xValueMax,
         xColorMin,
@@ -92,7 +54,6 @@ const GridLegend = () => {
                 justifyContent: 'center',
                 padding: '16px',
             }}>
-                <canvas ref={canvasRef} width={320} height={320} />
             </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>

@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import AuthContext from "@/components/authContext";
 import MapContext from "@/components/MapContext";
 import React, { useState } from "react";
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <p>loading...</p>,
@@ -30,9 +31,9 @@ export default function MapUpload() {
     };
     const uploadMapToUser = async () => {
         const mapId = localStorage.getItem("mapId") as string;
-        console.log("1" + mapId);
+        //console.log("1" + mapId);
         const userEmail = localStorage.getItem("email") as string;
-        console.log(userEmail);
+        //console.log(userEmail);
 
         // Constructing the payload
         const payload = {
@@ -40,8 +41,7 @@ export default function MapUpload() {
             userEmail,
             visibility,
         };
-        console.log(payload);
-        console.log(JSON.stringify(payload));
+
 
         const response = await fetch("/api/uploadmaptouser", {
             method: "POST",
@@ -57,6 +57,7 @@ export default function MapUpload() {
 
         // Handle the response here (e.g., show a success message)
     };
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />

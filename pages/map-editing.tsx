@@ -9,6 +9,8 @@ import OverviewBivarTab from "@/components/OverviewBivar";
 import LegendTab from "@/components/LegendTab";
 import MapContext from "@/components/MapContext";
 import OverviewPoint from "@/components/OverviewPoint";
+import AuthContext from '@/components/authContext';
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <Skeleton></Skeleton>,
@@ -16,6 +18,7 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 });
 
 export default function MapEditing() {
+    const authContext = React.useContext(AuthContext);
     const [tab, setTab] = React.useState("1");
     const mapContext = useContext(MapContext);
 
@@ -23,6 +26,7 @@ export default function MapEditing() {
         setTab(newTab);
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />

@@ -11,10 +11,13 @@ import InputMapType from "@/components/InputMapType";
 import InputTitleTags from "@/components/InputTitleTags";
 import MapCreateLoading from "@/components/MapCreateLoading";
 import { useRouter } from "next/navigation";
+import AuthContext from '@/components/authContext';
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 const steps = ["Upload/Choose preset", "Map type", "Description"];
 
 export default function MapCreation() {
+    const authContext = React.useContext(AuthContext);
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const router = useRouter();
@@ -100,6 +103,7 @@ export default function MapCreation() {
         return title !== "" && tags !== "";
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />
