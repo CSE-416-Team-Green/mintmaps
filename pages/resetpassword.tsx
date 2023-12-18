@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import styles from '@/styles/ResetPassword.module.css'; 
+import AuthContext from '@/components/authContext';
+import InvalidAuthError from '@/components/InvalidAuthError';
 
 const ResetPasswordPage = () => {
+    const authContext = React.useContext(AuthContext);
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
+
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 

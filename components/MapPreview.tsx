@@ -20,7 +20,6 @@ import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
 import { FC } from 'react';
 import MapModel from '@/models/Map';
-import MapContext from './MapContext';
 
 const MapPreview: FC<{
     map: any
@@ -32,7 +31,8 @@ const MapPreview: FC<{
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
     const mapInfo = props.map;
-    const mapContext = React.useContext(MapContext); 
+    const [profilePic, setProfilePic] = useState<string>('');
+    let userInfo: any;
 
     function handleImageClick() {
         //console.log("image click");
@@ -42,29 +42,20 @@ const MapPreview: FC<{
         router.push(`/map-info/${mapInfo._id}`);
     }
 
-    const handleAvatarClick = async() =>{
-        const email=mapInfo.createdBy
-        try {
-            const response = await fetch(`/api/getUserById?email=${email}`, {
-                method: 'GET',
+    if(mapInfo.createdBy && mapInfo.createdBy !== 'null') {
+        fetch(`/api/getUserById?email=${mapInfo.createdBy}`, {
+            method: 'GET',
+        }).then((response) => {
+            response.json().then(data => {
+                userInfo = data;
+                setProfilePic(userInfo.profilePic);
             });
-
-
-            if (response.ok) {
-                const data = (await response.json());
-                //console.log(data._id)
-                router.push(`/user-profile/${data._id}`);
-
-            } else {
-                alert('Failed to get email account');
-            }
-        } catch (error) {
-            console.error('Error deleting account:', error);
-        }
-        //localStorage.mapId = mapInfo._id;
-        //router.push(`/user-profile/${mapInfo._id}`);
+        });
     }
 
+    const handleAvatarClick = async() =>{
+        router.push(`/user-profile/${userInfo._id}`);
+    }
     
     const handleMoreClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchor(event.currentTarget);
@@ -96,8 +87,8 @@ const MapPreview: FC<{
                 <Grid item xs={0.5} > 
                 </Grid>
                 <Grid item xs={2} > 
-                    <IconButton  onClick={handleAvatarClick} >
-                        <Avatar />  
+                    <IconButton onClick={handleAvatarClick} >
+                        <Avatar src={profilePic ?? ''} />
                     </IconButton>    
                 </Grid>
                 <Grid item xs={0.5} > 
