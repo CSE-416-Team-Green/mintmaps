@@ -129,7 +129,9 @@ export default function MapInfo() {
             }),
         }).then((res) => {
             if (res.ok) {
+                liked ? setNumLikes(numLikes - 1) : setNumLikes(numLikes + 1);
                 liked ? setLiked(false) : setLiked(true);
+                disliked ? setNumDisikes(numDisLikes - 1) : null;
                 setDisliked(false);
             }
         });
@@ -144,7 +146,9 @@ export default function MapInfo() {
             }),
         }).then((res) => {
             if (res.ok) {
+                disliked ? setNumDisikes(numDisLikes - 1) : setNumDisikes(numDisLikes + 1);
                 disliked ? setDisliked(false) : setDisliked(true);
+                liked ? setNumLikes(numLikes - 1) : null;
                 setLiked(false);
             }
         });
