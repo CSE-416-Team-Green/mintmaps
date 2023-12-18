@@ -52,7 +52,7 @@ export default function MapInfo() {
     const [liked, setLiked] = React.useState<boolean>(false);
     const [disliked, setDisliked] = React.useState<boolean>(false);
     const [saved, setSaved] = React.useState<boolean>(false);
-    const [userId, setUserId] = React.useState<string>("");
+    const [creatorEmail, setcreatorEmail] = React.useState<string>("");
     const [numLikes, setNumLikes] = React.useState(0);
     const [numDisLikes, setNumDisikes] = React.useState(0);
     const [mapDescription, setMapDescription] = React.useState("");
@@ -62,7 +62,10 @@ export default function MapInfo() {
     const [mapTitle, setMapTitle] = React.useState("");
     const [comments, setComments] = React.useState<any[]>([]);
     const [newComment, setNewComment] = React.useState("");
-    const isMapCreator = email === userId;
+    const [isMapCreator, setIsMapCreator] = React.useState<boolean>(false);
+    const [isFollowing, setisFollowing] = React.useState<boolean>(false);
+    const [mapCreatorName, setMapCreatorName] = React.useState<string>("");
+    const [mapCreatorId, setMapCreatorId] = React.useState<string>("");
     //console.log("adadadad")
     //console.log(userId)
     React.useEffect(() => {
@@ -80,51 +83,73 @@ export default function MapInfo() {
                     console.log("error add view")
                 }
             });
-            fetch(`/api/getMapById/${mapId}`, { method: "GET" }).then((res) => {
-                if (res.ok) {
-                    res.json()
-                        .then((data) => {
-                            setNumLikes(data?.mapProps?.likes.length);
-                            setMapDescription(data?.mapProps?.description);
-                            setTags(data?.mapProps?.tags);
-                            setNumDisikes(data?.mapProps?.dislikes.length);
-                            setUploadDate(
-                                FormatDateText.formatDateText(
-                                    data?.mapProps?.uploadDate,
-                                    "Uploaded"
-                                )
+            if(email.length > 0 && email)
+                fetch(`/api/getUserById?email=${email}`, {
+                    method: "GET",
+                }).then((res) => {
+                    if (res.ok) {
+                        res.json().then((data) => {
+                            if (data?.likedMaps.includes(mapId)) setLiked(true);
+                            if (data?.dislikedMaps.includes(mapId)) setDisliked(true);
+                            if (data?.savedMaps.includes(mapId)) setSaved(true);
+                        });
+                    }
+                });
+            if(mapId)
+                fetch(`/api/getMapById/${mapId}`, { method: "GET" }).then((res) => {
+                    if (res.ok) {
+                        res.json()
+                            .then((data) => {
+                                setNumLikes(data?.mapProps?.likes.length);
+                                setMapDescription(data?.mapProps?.description);
+                                setTags(data?.mapProps?.tags);
+                                setNumDisikes(data?.mapProps?.dislikes.length);
+                                setUploadDate(
+                                    FormatDateText.formatDateText(
+                                        data?.mapProps?.uploadDate,
+                                        "Uploaded"
+                                    )
+                                );
+                                setcreatorEmail(data?.mapProps?.createdBy);
+                                setIsMapCreator(data?.mapProps?.createdBy === email);
+                                setMapTitle(data?.mapProps?.name);
+                                setComments(
+                                    data?.mapProps.comments.sort(
+                                        (a: any, b: any) =>
+                                            b.uploadDate - a.uploadDate
+                                    )
+                                );
+                                setNumViews(data?.mapProps?.views + 1);
+                            })
+                            .catch((error) =>
+                                console.error("Error fetching data:", error)
                             );
-                            setUserId(data?.mapProps?.createdBy);
-                            setMapTitle(data?.mapProps?.name);
-                            setComments(
-                                data?.mapProps.comments.sort(
-                                    (a: any, b: any) =>
-                                        b.uploadDate - a.uploadDate
-                                )
-                            );
-                            setNumViews(data?.mapProps?.views + 1);
-                        })
-                        .catch((error) =>
-                            console.error("Error fetching data:", error)
-                        );
-                }
+                    }
             });
         };
 
         getMapDetails();
     }, [mapId]);
 
-    fetch(`/api/getUserById?email=${email}`, {
-        method: "GET",
-    }).then((res) => {
-        if (res.ok) {
-            res.json().then((data) => {
-                if (data?.likedMaps.includes(mapId)) setLiked(true);
-                if (data?.dislikedMaps.includes(mapId)) setDisliked(true);
-                if (data?.savedMaps.includes(mapId)) setSaved(true);
+    React.useEffect(() => {
+        const fetchCreatorData = async () => {
+            if(creatorEmail.length === 0 || !creatorEmail) return;
+            await fetch(`/api/getUserById?email=${creatorEmail}`, {
+                method: 'GET',
+            }).then(async (response) => {
+                if(!response.ok) return;
+                response.json().then(async (data) => {
+                    if(!data) return;
+                    if(data.followers.includes(authContext.userId)){
+                        setisFollowing(true)
+                    }
+                    setMapCreatorName(data.userName);
+                    setMapCreatorId(data._id);
+                });
             });
-        }
-    });
+        };
+        fetchCreatorData();
+    }, [isFollowing, creatorEmail]);
 
     const handleEditClick = () => {
         router.push(`/map-editing/`);
@@ -235,6 +260,21 @@ export default function MapInfo() {
         });
     };
 
+    const followUser = async () => {
+        try {
+            await fetch(`/api/followUser`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userIdToFollow: mapCreatorId, whofollow:localStorage.userId },),
+            });
+            setisFollowing(!isFollowing)
+        } catch (error) {
+            console.error("Error following user:", error);
+        }
+    };
+
     return (
         <>
             <Header />
@@ -307,7 +347,7 @@ export default function MapInfo() {
                         </Grid>
 
                         <Grid item xs={0.75}>
-                            <IconButton href="/user-profile">
+                            <IconButton href={`/user-profile${mapCreatorId}`}>
                                 <Avatar />
                             </IconButton>
                         </Grid>
@@ -320,19 +360,20 @@ export default function MapInfo() {
                                 alignItems={"left"}
                             >
                                 <Grid item xs={1.25}>
-                                    {userId}
+                                    {mapCreatorName}
                                 </Grid>
                                 <Grid item xs={1.5}>
-                                    <Button
+                                    {!isMapCreator && <Button
                                         sx={{
                                             height: 25,
                                             width: 80,
                                             fontSize: "10px",
                                         }}
                                         variant="contained"
+                                        onClick={followUser}
                                     >
-                                        Follow
-                                    </Button>
+                                        {isFollowing ? "Unfollow" : "Follow"}
+                                    </Button>}
                                 </Grid>
                                 <Grid item xs={10} sx={{ fontSize: "10px" }}>
                                     32 Followers
