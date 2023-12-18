@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Circle, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, FC, useImperativeHandle } from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -9,6 +9,8 @@ import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import L, { geoJSON, icon, map } from "leaflet";
 import CircleLegendControl from './CircleLegendControl';
+import { Map } from 'leaflet';
+import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
 
 interface Legend {
     title: string;
@@ -73,11 +75,32 @@ interface MapContextType {
     ) => void;
 }
 
-const DynamicPropSymbolMap = () => {
+const DynamicPropSymbolMap: FC<{
+    reference: React.RefObject<any>;
+}> = ({
+    reference
+}) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
     const [minRadius, setMinRadius] = useState(1);
     const [maxRadius, setMaxRadius] = useState(100);
+    const [map, setMap] = useState<Map | null>(null);
+
+    useImperativeHandle(reference, () => ({
+        exportImage() {
+            if(!map) return;
+            const screenshotter = new SimpleMapScreenshoter().addTo(map);
+            screenshotter.takeScreen().then((blob) => {
+                const a = document.createElement('a');
+                const url = URL.createObjectURL(blob as Blob);
+                a.href = url;
+                a.download = 'map.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                screenshotter.remove();
+            });
+        }
+    }));
 
     useEffect(() => {
         const loadMapData = async () => {
@@ -129,14 +152,14 @@ const DynamicPropSymbolMap = () => {
             const coords = layer.getBounds().getCenter();
             const value = feature.properties[mapContext.selectedProperty];
 
-            const radius = getCirlceRadius(mapContext.legend, value);
+            const radius = getCircleRadius(mapContext.legend, value);
             const color = getCircleColor(mapContext.legend, value);
 
             return { coords, radius, color };
         });
     };
 
-    const getCirlceRadius = (legend: any, value: number) => {
+    const getCircleRadius = (legend: any, value: number) => {
         // const normalizedValue =
         //     (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
 
@@ -192,6 +215,7 @@ const DynamicPropSymbolMap = () => {
     };
     return (
         <MapContainer
+            ref={setMap}
             style={{ height: "100%", width: "100%" }}
             center={[51.505, -0.09]}
             zoom={13}
