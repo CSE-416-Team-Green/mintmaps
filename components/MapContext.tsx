@@ -67,6 +67,12 @@ interface MapContextType {
     redo: () => void;
     canUndo: boolean;
     canRedo: boolean;
+    updateLegendColorsBiv: (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => void;
 }
 
 const MapContext = React.createContext<MapContextType>({
@@ -103,6 +109,7 @@ const MapContext = React.createContext<MapContextType>({
     redo: () => {},
     canUndo: false,
     canRedo: false,
+    updateLegendColorsBiv: () => {},
 });
 
 export default MapContext;

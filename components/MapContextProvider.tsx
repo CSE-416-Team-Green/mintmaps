@@ -82,6 +82,12 @@ interface MapContextType {
     redo: () => void;
     canUndo: boolean;
     canRedo: boolean;
+    updateLegendColorsBiv: (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -158,9 +164,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapKey(key);
     }, [state.present]);
 
-    const onChange = () => {
-
-    };
+    const onChange = () => {};
 
     const saveMap = async () => {
         const updatedMap = {
@@ -239,8 +243,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
     const selectPropertyXBiv = (event: SelectChangeEvent) => {
         const [property, indexStr] = event.target.value.split(":");
-        setSelectedProperty(property);
-        setSelectedPropertyIndex(parseInt(indexStr, 10));
 
         const values = geoJSON.features
             .map((feature: any) => feature.properties[property])
@@ -260,6 +262,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapState({
             ...state.present,
             legend: newLegend,
+            selectedProperty: property,
+            selectedPropertyIndex: parseInt(indexStr, 10),
         });
         const key = uuidv4();
         setMapKey(key);
@@ -267,8 +271,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
     const selectPropertyYBiv = (event: SelectChangeEvent) => {
         const [property, indexStr] = event.target.value.split(":");
-        setSelectedPropertyBiv(property);
-        setSelectedPropertyIndexBiv(parseInt(indexStr, 10));
 
         const values = geoJSON.features
             .map((feature: any) => feature.properties[property])
@@ -288,6 +290,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapState({
             ...state.present,
             legend: newLegend,
+            selectedPropertyBiv: property,
+            selectedPropertyIndexBiv: parseInt(indexStr, 10),
         });
         const key = uuidv4();
         setMapKey(key);
@@ -295,28 +299,44 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
     const updateLegendColorBivX = (colorMin: string, colorMax: string) => {
         const newLegend = {
-            ...state.present.legend,
+            ...legend,
             xColorMin: colorMin,
             xColorMax: colorMax,
         };
 
-        setMapState({
-            ...state.present,
-            legend: newLegend,
-        });
+        setLegend(newLegend);
     };
 
     const updateLegendColorBivY = (colorMin: string, colorMax: string) => {
         const newLegend = {
-            ...state.present.legend,
+            ...legend,
             yColorMin: colorMin,
             yColorMax: colorMax,
+        };
+
+        setLegend(newLegend);
+    };
+
+    const updateLegendColorsBiv = (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => {
+        const newLegend = {
+            ...state.present.legend,
+            yColorMin: yColorMin,
+            yColorMax: yColorMax,
+            xColorMin: xColorMin,
+            xColorMax: xColorMax,
         };
 
         setMapState({
             ...state.present,
             legend: newLegend,
         });
+        const key = uuidv4();
+        setMapKey(key);
     };
     const loadMap = async (id: string) => {
         try {
@@ -402,7 +422,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapState({
             ...state.present,
             legend: newLegend,
-            geoJSON: newGeoJSON, 
+            geoJSON: newGeoJSON,
         });
         const key = uuidv4();
         setMapKey(key);
@@ -450,7 +470,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         setMapState({
             ...state.present,
             legend: newLegend,
-            geoJSON: newGeoJSON, 
+            geoJSON: newGeoJSON,
         });
         const key = uuidv4();
         setMapKey(key);
@@ -525,6 +545,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         redo,
         canUndo,
         canRedo,
+        updateLegendColorsBiv,
     };
 
     return (

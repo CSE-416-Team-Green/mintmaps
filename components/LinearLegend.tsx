@@ -32,7 +32,6 @@ const LinearLegend = () => {
         setColorMax(mapContext.legend.colorMax as string);
         setTitle(mapContext.legend.title as string);
         mapContext.updateLegendColor(colorMin, colorMax);
-        mapContext.onChange();
     }, [title, valueMin, valueMax, colorMin, colorMax, mapContext.geoJSON]);
 
     return (
