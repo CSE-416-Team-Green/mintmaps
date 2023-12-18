@@ -44,7 +44,6 @@ const CircleLegend = () => {
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                padding: '16px',
             }}>
             </Box>
             <Accordion>
