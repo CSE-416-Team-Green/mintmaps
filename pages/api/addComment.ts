@@ -22,8 +22,6 @@ export default async function handler(
         const { user, message, mapId } = JSON.parse(req.body);
 
         const commenter = await User.findOne({ email: user });
-        console.log(commenter._id);
-        console.log(message);
         const newComment = new Comment({
             user: commenter._id,
             message: message,
