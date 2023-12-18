@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, CircleMarker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useContext, useState, useEffect } from "react";
 import MapContext from "./MapContext";
@@ -6,7 +6,7 @@ import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
-import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
+import L, { geoJSON, icon, map } from "leaflet";
 
 interface Legend {
     title: string;
@@ -71,24 +71,33 @@ interface MapContextType {
     ) => void;
 }
 
+const RenderPoints = () => {
+    const mapContext = useContext(MapContext);
+    const gs = mapContext.geoJSON as any;
+
+    return gs.features.map((feature: any, index: any) => {
+        const layer = L.geoJSON(feature);
+        const coords: any = layer.getBounds().getCenter();
+
+        return (
+            <CircleMarker
+                key={index}
+                center={[coords.lat, coords.lng]}
+                radius={mapContext.legend.sizeMax}
+                pathOptions={{
+                    color: mapContext.legend.colorMax,
+                    fillColor: mapContext.legend.colorMax,
+                    fillOpacity: 1.0,
+                }}
+            >
+                {" "}
+            </CircleMarker>
+        );
+    });
+};
 const DynamiPointMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
-
-    useEffect(() => {
-        const loadMapData = async () => {
-            try {
-                const id = localStorage.getItem("mapId") as string;
-                mapContext.loadMap(id);
-                setMapData(mapContext.geoJSON);
-                console.log(mapData);
-            } catch (error) {
-                console.error("Error connecting to db", error);
-            }
-        };
-
-        loadMapData();
-    }, [mapContext.hasMap]);
 
     useEffect(() => {
         setMapData(mapContext.geoJSON);
@@ -99,34 +108,11 @@ const DynamiPointMap = () => {
         mapContext.selectedProperty,
     ]);
 
-    const colorRegion = (feature: any) => {
-        const value = feature.properties[mapContext.selectedProperty];
-        const color = getColorForProperty(mapContext.legend, value);
-
-        return {
-            fillColor: color,
-            weight: 2,
-            opacity: 1,
-            color: "white",
-            fillOpacity: 0.7,
-        };
-    };
-
-    const getColorForProperty = (legend: any, value: number) => {
-        const normalizedValue =
-            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
-        return interpolateColor(
-            legend.colorMin,
-            legend.colorMax,
-            normalizedValue
-        );
-    };
-
     const onEachFeature = (feature: any, layer: any) => {
         layer.on({
             mouseover: (event: any) => {
                 const layer = event.target;
-                const value = feature.properties[mapContext.selectedProperty];
+                const value = feature.properties.name;
 
                 if (value) {
                     layer
@@ -143,6 +129,20 @@ const DynamiPointMap = () => {
             },
         });
     };
+
+
+    const geoJsonStyle = (feature: any) => {
+        return {
+            fillColor: "transparent", // Fill color of the feature
+            weight: 1.5, // Border line weight
+            opacity: 0.3, // Border line opacity
+            color: "red", // Border line color
+            fillOpacity: 0.7, //dashed line
+            dashArray: "5, 10", // Fill opacity
+        };
+    };
+
+
     return (
         <MapContainer
             style={{ height: "100%", width: "100%" }}
@@ -158,10 +158,11 @@ const DynamiPointMap = () => {
                 <GeoJSON
                     key={mapContext.mapKey}
                     data={mapContext.geoJSON}
-                    style={colorRegion}
                     onEachFeature={onEachFeature}
+                    style={geoJsonStyle}
                 />
             )}
+            <RenderPoints />
             {mapData && <FitBounds mapData={mapData} />}
         </MapContainer>
     );
