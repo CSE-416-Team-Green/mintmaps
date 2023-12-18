@@ -20,7 +20,7 @@ export default async function handler(
 
 
         await connectDb();
-        const user =await User.findOne({ email: userEmail })
+        const user =await User.findOne({ _id: userEmail })
         const map =await MapModel.findOne({ _id: mapId })
         if (!user) {
             return res.status(404).json({ error: 'User not found' });

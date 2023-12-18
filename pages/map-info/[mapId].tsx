@@ -43,7 +43,6 @@ export default function MapInfo() {
     const router = useRouter();
     const authContext = useContext(AuthContext);
     const email = authContext.email;
-
     const { mapId } = router.query;
     const [liked, setLiked] = React.useState<boolean>(false);
     const [disliked, setDisliked] = React.useState<boolean>(false);
@@ -61,7 +60,19 @@ export default function MapInfo() {
 
     React.useEffect(() => {
         const getMapDetails = async () => {
-
+            fetch(`/api/increaseview`, {
+                method: "POST",
+                body: JSON.stringify({
+                    mapId,
+                }),
+            }).then((res) => {
+                if (res.ok) {
+                    console.log("view added")
+                }
+                else{
+                    console.log("error add view")
+                }
+            });
             fetch(`/api/getMapById/${mapId}`, { method: "GET" }).then((res) => {
                 if (res.ok) {
                     res.json()
@@ -157,7 +168,7 @@ export default function MapInfo() {
     };
 
     const handleForkMap = async () => {
-        const userEmail = localStorage.getItem("email") as string;
+        const userEmail = authContext.userId
 
         // Constructing the payload
         const payload = {
@@ -176,6 +187,7 @@ export default function MapInfo() {
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
+        alert("fork successful")
     };
 
     const handleCommentInput = (e: any) => {
