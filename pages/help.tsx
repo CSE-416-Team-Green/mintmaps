@@ -52,9 +52,10 @@ export default function Help() {
 
                         <Container
                             component={"img"}
-                            src={"/heatmap-preview.png"}
+                            src={"/login.png"}
                             sx={{ width: 500 }}
                         ></Container>
+                
 
                         <div className={styles.helpText}>
                             The first step is to choose a map file to start
@@ -65,7 +66,7 @@ export default function Help() {
 
                         <Container
                             component={"img"}
-                            src={"/heatmap-preview.png"}
+                            src={"/upload.png"}
                             sx={{ width: 500 }}
                         ></Container>
 
@@ -77,7 +78,7 @@ export default function Help() {
 
                         <Container
                             component={"img"}
-                            src={"/heatmap-preview.png"}
+                            src={"/maptype.png"}
                             sx={{ width: 500 }}
                         ></Container>
 
@@ -89,7 +90,7 @@ export default function Help() {
 
                         <Container
                             component={"img"}
-                            src={"/heatmap-preview.png"}
+                            src={"/titleandtag.png"}
                             sx={{ width: 500 }}
                         ></Container>
 
@@ -110,8 +111,8 @@ export default function Help() {
 
                         <Container
                             component={"img"}
-                            src={"/heatmap-preview.png"}
-                            sx={{ width: 500 }}
+                            src={"/beforeupload.png"}
+                            sx={{ width: 700,height:400 }}
                         ></Container>
 
                         <div className={styles.helpText}>
@@ -124,8 +125,8 @@ export default function Help() {
 
                         <Container
                             component={"img"}
-                            src={"/heatmap-preview.png"}
-                            sx={{ width: 500 }}
+                            src={"/whenupload.png"}
+                            sx={{ width: 700,height:400 }}
                         ></Container>
 
                         <div className={styles.helpText}>
