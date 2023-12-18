@@ -8,6 +8,7 @@ import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import L, { geoJSON, icon, map } from "leaflet";
+import CircleLegendControl from './CircleLegendControl';
 
 interface Legend {
     title: string;
@@ -227,6 +228,7 @@ const DynamicPropSymbolMap = () => {
                     />
                 ))}
             {mapData && <FitBounds mapData={mapData} />}
+            <CircleLegendControl legend={mapContext.legend} />
         </MapContainer>
     );
 };
