@@ -11,6 +11,7 @@ import DynamicChlorMap from "./DynamicChlorMap";
 import DynamicPropSymbolMap from "./DynamicPropSymMap";
 import DynamicBiChlorMap from "./DynamicBiChlorMap";
 import DynamicHeatMap from "./DynamicHeatMap";
+import DynamiPointMap from "./DynamicPointMap";
 
 interface Legend {
     title: string;
@@ -109,6 +110,8 @@ const DynamicMap = () => {
             return <DynamicBiChlorMap />;
         case "heat":
             return <DynamicHeatMap />;
+        case "point": 
+            return <DynamiPointMap/>
         default:
             return <Container>NO MAP</Container>;
     }

@@ -8,6 +8,7 @@ import OverviewTab from "@/components/OverviewTab";
 import OverviewBivarTab from "@/components/OverviewBivar";
 import LegendTab from "@/components/LegendTab";
 import MapContext from "@/components/MapContext";
+import OverviewPoint from "@/components/OverviewPoint";
 import AuthContext from '@/components/authContext';
 import InvalidAuthError from '@/components/InvalidAuthError';
 
@@ -56,9 +57,11 @@ export default function MapEditing() {
                         <TabPanel value="2">
                             {mapContext.mapType === "bivariate-choropleth" ? (
                                 <OverviewBivarTab />
+                            ) : mapContext.mapType === "point" ? (
+                                <OverviewPoint />
                             ) : (
                                 <OverviewTab />
-                            )}{" "}
+                            )}
                         </TabPanel>
                         <TabPanel value="3">
                             <LegendTab />
