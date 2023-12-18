@@ -66,6 +66,7 @@ export default function MapInfo() {
     const [isFollowing, setisFollowing] = React.useState<boolean>(false);
     const [mapCreatorName, setMapCreatorName] = React.useState<string>("");
     const [mapCreatorId, setMapCreatorId] = React.useState<string>("");
+    const [mapCreatorProfilePic, setMapCreatorProfilePic] = React.useState<string>("");
     //console.log("adadadad")
     //console.log(userId)
     React.useEffect(() => {
@@ -143,6 +144,7 @@ export default function MapInfo() {
                     if(data.followers.includes(authContext.userId)){
                         setisFollowing(true)
                     }
+                    setMapCreatorProfilePic(data.profilePic);
                     setMapCreatorName(data.userName);
                     setMapCreatorId(data._id);
                 });
@@ -347,8 +349,8 @@ export default function MapInfo() {
                         </Grid>
 
                         <Grid item xs={0.75}>
-                            <IconButton href={`/user-profile${mapCreatorId}`}>
-                                <Avatar />
+                            <IconButton href={`/user-profile/${mapCreatorId}`}>
+                                <Avatar src={mapCreatorProfilePic}/>
                             </IconButton>
                         </Grid>
                         <Grid item xs={8}>
