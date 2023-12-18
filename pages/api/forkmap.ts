@@ -17,9 +17,9 @@ export default async function handler(
     try {
         
         const { mapId, userEmail} = req.body;
-        console.log("cccc")
-        console.log(mapId)
-        console.log(userEmail)
+        //console.log("cccc")
+        //console.log(mapId)
+        //console.log(userEmail)
 
 
         await connectDb();

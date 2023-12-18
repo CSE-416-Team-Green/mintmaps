@@ -34,8 +34,6 @@ const MapPreview: FC<{
     const open = Boolean(anchor);
     const mapInfo = props.map;
     const newmapId=mapInfo._id;
-    console.log("aaa")
-    console.log(mapInfo)
     const [profilePic, setProfilePic] = useState<string>('');
     let userInfo: any;
 
@@ -79,10 +77,7 @@ const MapPreview: FC<{
     const handleForkClose = () => {
         const userEmail = authContext.userId
         const mapId=mapInfo._id;
-        console.log("abc")
-        console.log(userEmail)
-        console.log(mapId)
-
+    
         // Constructing the payload
         const payload = {
             mapId,
