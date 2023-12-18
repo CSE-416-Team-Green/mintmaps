@@ -45,8 +45,6 @@ const GridLegend = () => {
         setYValueMax(mapContext.legend.yValueMax as number);
         setXTitle(mapContext.legend.xTitle as string);
         setYTitle(mapContext.legend.yTitle as string);
-        // mapContext.updateLegendColorBivX(xColorMin, xColorMax);
-        // mapContext.updateLegendColorBivY(yColorMin, yColorMax);
         mapContext.updateLegendColorsBiv(
             xColorMin,
             xColorMax,
