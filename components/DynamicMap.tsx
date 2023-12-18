@@ -74,6 +74,10 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 const DynamicMap = () => {
     const mapContext = useContext<MapContextType>(MapContext);
@@ -110,8 +114,8 @@ const DynamicMap = () => {
             return <DynamicBiChlorMap />;
         case "heat":
             return <DynamicHeatMap />;
-        case "point": 
-            return <DynamiPointMap/>
+        case "point":
+            return <DynamiPointMap />;
         default:
             return <Container>NO MAP</Container>;
     }

@@ -77,6 +77,10 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -96,6 +100,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         yColorMax: "#2ECC71",
         xColorMin: "#FFFFFF",
         xColorMax: "#2ECC71",
+        title: "",
     });
     const [mapType, setMapType] = React.useState<MapType>("point");
     const [geoJSON, setgeoJSON] = React.useState<any>(null);
@@ -110,9 +115,79 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [selectedPropertyIndexBiv, setSelectedPropertyIndexBiv] =
         React.useState(0);
     const router = useRouter();
+    const [canUndo, setCanUndo] = React.useState(false);
+    const [canRedo, setCanRedo] = React.useState(false);
 
-    const onChange = () => {};
+    const undoStack = React.useRef<any[]>([]);
+    const redoStack = React.useRef<any[]>([]);
 
+    const onChange = () => {
+        const newTransaction = {
+            geoJSON: geoJSON,
+            selectedProperty: selectedProperty,
+            selectedPropertyIndex: selectedPropertyIndex,
+            tags: tags,
+            description: description,
+            title: title,
+            selectedPropertyBiv: selectedPropertyBiv,
+            selectedPropertyIndexBiv: selectedPropertyIndexBiv,
+            legend: legend,
+        };
+
+        undoStack.current.push(newTransaction);
+        setCanUndo(true);
+        if (redoStack.current.length > 0) {
+            redoStack.current = [];
+            setCanRedo(false);
+        }
+    };
+    const undo = () => {
+        if (undoStack.current.length > 0) {
+            const undone = undoStack.current.pop();
+
+            setCanUndo(undoStack.current.length > 0);
+            redoStack.current.push(undone);
+            setCanRedo(true);
+            if (undoStack.current.length > 0) {
+                const restored =
+                    undoStack.current[undoStack.current.length - 1];
+
+                setLegend(restored.legend);
+                setSelectedProperty(restored.selectedProperty);
+                setSelectedPropertyIndex(restored.selectedPropertyIndex);
+                setTags(restored.tags);
+                setDescription(restored.description);
+                setTitle(restored.title);
+                setSelectedPropertyBiv(restored.selectedPropertyBiv);
+                setSelectedPropertyIndexBiv(restored.selectedPropertyIndexBiv);
+                setgeoJSON(restored.geoJSON);
+            }
+
+            const key = uuidv4();
+            setMapKey(key);
+        }
+    };
+
+    const redo = () => {
+        if (redoStack.current.length > 0) {
+            const redone = redoStack.current.pop();
+
+            setCanRedo(redoStack.current.length > 0);
+
+            setgeoJSON(redone.geoJSON);
+            setLegend(redone.legend);
+            setSelectedProperty(redone.selectedProperty);
+            setSelectedPropertyIndex(redone.selectedPropertyIndex);
+            setTags(redone.tags);
+            setDescription(redone.description);
+            setTitle(redone.title);
+            setSelectedPropertyBiv(redone.selectedPropertyBiv);
+            setSelectedPropertyIndexBiv(redone.selectedPropertyIndexBiv);
+
+            const key = uuidv4();
+            setMapKey(key);
+        }
+    };
     const saveMap = async () => {
         const updatedMap = {
             id: localStorage.getItem("mapId"),
@@ -178,6 +253,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             };
         }
         setLegend(newLegend);
+        onChange();
+
         const key = uuidv4();
         setMapKey(key);
     };
@@ -203,6 +280,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         };
 
         setLegend(newLegend);
+        onChange();
+
         const key = uuidv4();
         setMapKey(key);
     };
@@ -228,6 +307,8 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         };
 
         setLegend(newLegend);
+        onChange();
+
         const key = uuidv4();
         setMapKey(key);
     };
@@ -254,6 +335,10 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const loadMap = async (id: string) => {
         try {
             setHasMap(false);
+            setCanRedo(false);
+            setCanRedo(false);
+            undoStack.current = [];
+            redoStack.current = [];
             const res = await axios.get(`/api/getMapById/${id}`);
             setgeoJSON(res.data.map);
             setHasMap(true);
@@ -288,8 +373,10 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             }
 
             const key = uuidv4();
+            onChange();
             setMapKey(key);
             setHasMap(true);
+      
         } catch (err) {
             console.error("Error loading map from DB", err);
         }
@@ -334,6 +421,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             };
         }
         setLegend(newLegend);
+        onChange();
 
         const key = uuidv4();
         setMapKey(key);
@@ -380,6 +468,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         }
 
         setLegend(newLegend);
+        onChange();
 
         const key = uuidv4();
         setMapKey(key);
@@ -393,20 +482,25 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             }
         });
         setgeoJSON(newGeoJSON);
+        onChange();
+
         const key = uuidv4();
         setMapKey(key);
     };
 
     const updateTags = (tags: string[]) => {
         setTags(tags);
+        onChange();
     };
 
     const updateDescription = (desc: string) => {
         setDescription(desc);
+        onChange();
     };
 
     const updateTitle = (title: string) => {
         setTitle(title);
+        onChange();
     };
     const contextValue: MapContextType = {
         mapId,
@@ -438,6 +532,10 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         updateLegendColorBivX,
         updateLegendColorBivY,
         updateFeaturePropertyBiv,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
     };
 
     return (

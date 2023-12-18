@@ -8,7 +8,7 @@ import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import L, { geoJSON, icon, map } from "leaflet";
-import CircleLegendControl from './CircleLegendControl';
+import CircleLegendControl from "./CircleLegendControl";
 
 interface Legend {
     title: string;
@@ -71,6 +71,10 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
 const DynamicPropSymbolMap = () => {

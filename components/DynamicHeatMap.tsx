@@ -11,7 +11,7 @@ import L from "leaflet";
 import "leaflet.heat";
 import { useMap } from "react-leaflet";
 import { blendColors } from "@/libs/blend";
-import LinearLegendControl from './LinearLegendControl';
+import LinearLegendControl from "./LinearLegendControl";
 
 interface Legend {
     title: string;
@@ -74,6 +74,10 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
 const HeatLayer = () => {

@@ -20,7 +20,7 @@ export type Legend = {
     yValueMax: number;
     yColorMin: string;
     yColorMax: string;
-}
+};
 
 type MapType =
     | "point"
@@ -63,6 +63,10 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
 const MapContext = React.createContext<MapContextType>({
@@ -95,6 +99,10 @@ const MapContext = React.createContext<MapContextType>({
     updateLegendColorBivX: () => {},
     updateLegendColorBivY: () => {},
     updateFeaturePropertyBiv: () => {},
+    undo: () => {},
+    redo: () => {},
+    canUndo: false,
+    canRedo: false,
 });
 
 export default MapContext;
