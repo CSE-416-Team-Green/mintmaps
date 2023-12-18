@@ -22,7 +22,6 @@ import InvalidAuthError from '@/components/InvalidAuthError';
 
 export default function EditAccount() {
     const authContext = React.useContext(AuthContext);
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
@@ -135,6 +134,7 @@ export default function EditAccount() {
         }
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <>
             <Grid

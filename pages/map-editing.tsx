@@ -18,7 +18,6 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 
 export default function MapEditing() {
     const authContext = React.useContext(AuthContext);
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     const [tab, setTab] = React.useState("1");
     const mapContext = useContext(MapContext);
 
@@ -26,6 +25,7 @@ export default function MapEditing() {
         setTab(newTab);
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />
