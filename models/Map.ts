@@ -23,6 +23,7 @@ interface IMap extends Document {
     selectedPropertyBiv?: string;
     selectedPropertyIndexBiv?: number;
     createdBy?: string;
+    previewImage?: string;
 }
 
 const mapSchema = new Schema<IMap>({
@@ -82,6 +83,7 @@ const mapSchema = new Schema<IMap>({
     selectedPropertyBiv: String,
     selectedPropertyIndexBiv: Number,
     createdBy: String,
+    previewImage: String,
 });
 
 const MapModel = mongoose.models.Map || model<IMap>("Map", mapSchema);

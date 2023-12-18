@@ -76,7 +76,7 @@ interface MapContextType {
     ) => void;
 }
 const DynamicMap: FC<{
-    reference: React.RefObject<any>;
+    reference?: React.RefObject<any>;
 }> = ({
     reference
 }) => {
