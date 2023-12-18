@@ -18,7 +18,7 @@ export default async function handler(
   await connectDb();
   try {
     const email = req.query.email as string;
-    console.log(email);
+    // console.log(email);
 
     await connectDb();
 

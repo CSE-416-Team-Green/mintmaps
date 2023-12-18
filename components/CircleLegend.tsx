@@ -37,6 +37,7 @@ const CircleLegend = () => {
         const canvas = canvasRef.current as HTMLCanvasElement;
         drawCircleLegend(canvas, legend);
     }, [
+        title,
         valueMin,
         valueMax,
         colorMin,

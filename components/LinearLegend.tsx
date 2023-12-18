@@ -59,7 +59,7 @@ const LinearLegend = () => {
                     padding: "16px",
                 }}
             >
-                <canvas ref={canvasRef} width={320} height={64} />
+                <canvas ref={canvasRef} width={320} height={128} />
             </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>

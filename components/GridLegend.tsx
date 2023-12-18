@@ -38,6 +38,8 @@ const GridLegend = () => {
         const canvas = canvasRef.current as HTMLCanvasElement;
         drawGridLegend(canvas, legend);
     }, [
+        xTitle,
+        yTitle,
         xValueMin,
         xValueMax,
         xColorMin,
