@@ -241,7 +241,11 @@ export default function MapInfo() {
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
-        alert("fork successful")
+        
+        response.json().then((data) => {
+            localStorage.mapId = data._id;
+            router.push(`/map-editing`);
+        })
     };
 
     const handleCommentInput = (e: any) => {
