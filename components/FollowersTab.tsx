@@ -25,7 +25,7 @@ const FollowersTab: FC<{
                 }}>
                     {
                         props.followers.map((follower, index) => (
-                            <ProfileUser key={index} username={follower.userName}/>
+                            <ProfileUser key={index} profilePic={follower.profilePic ?? ''} username={follower.userName}/>
                         ))
                     }
                 </Box>
