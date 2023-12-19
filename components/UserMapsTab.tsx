@@ -22,7 +22,6 @@ const UserMapsTab: FC<{ maps: any[] }> = ({ maps }) => {
     return (
         <Grid item xs={9} sx={{ paddingTop: "40px" }}>
             <Grid item xs={12} sx={{ fontSize: "25px", paddingBottom: "10px", paddingTop: "4px", paddingLeft: "10px" }}>
-                <SortIcon /> Sort By
             </Grid>
             <div className={styles.homeBox}>
                 <Grid container direction={"row"} alignItems={"left"} justifyContent={"left"} >
