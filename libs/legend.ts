@@ -1,4 +1,4 @@
-import { Legend } from '@/components/MapContext';
+import { Legend } from '@/types/Types';
 import Sketch from '@/libs/sketch';
 import { interpolateColor, interpolateNumber } from '@/libs/interpolate';
 
