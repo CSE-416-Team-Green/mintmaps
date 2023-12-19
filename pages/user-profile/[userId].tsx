@@ -226,6 +226,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "user" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("user")}
                                 >
@@ -238,6 +239,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "liked" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("liked")}
                                 >
@@ -250,6 +252,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "saved" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("saved")}
                                 >
@@ -262,6 +265,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "following" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("following")}
                                 >
@@ -275,6 +279,7 @@ export default function UserProfile() {
                                         paddingBottom: "250px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "followers" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("followers")}
                                 >
