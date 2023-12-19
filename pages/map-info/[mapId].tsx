@@ -241,7 +241,11 @@ export default function MapInfo() {
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
-        alert("fork successful")
+        
+        response.json().then((data) => {
+            localStorage.mapId = data._id;
+            router.push(`/map-editing`);
+        })
     };
 
     const handleCommentInput = (e: any) => {
@@ -310,7 +314,7 @@ export default function MapInfo() {
                             flexDirection: "row-reverse",
                             columnGap: "8px",
                         }}>
-                            {isMapCreator && <IconButton onClick={handleExportMintMaps}>
+                            {isMapCreator && <IconButton onClick={handleEditClick}>
                                 <EditIcon />
                             </IconButton>}
                             <IconButton onClick={handleSaveMap} color={
@@ -324,7 +328,7 @@ export default function MapInfo() {
                             <IconButton onClick={handleExportImage}>
                                 <ImageIcon />
                             </IconButton>
-                            <IconButton onClick={handleExportMintMaps}>
+                            <IconButton onClick={handleForkMap}>
                                 <ForkRightIcon />
                             </IconButton>
                             <ShareButton />

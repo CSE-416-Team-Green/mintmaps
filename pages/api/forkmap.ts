@@ -41,15 +41,15 @@ export default async function handler(
             maptype:map.maptype,
             visibility:"private",
             description:map.description,
-            createdBy:user.email
-
+            createdBy:user.email,
+            previewImage: map.previewImage,
         });
        
         await newMap.save()
         user.createdMaps.push(newMap._id)
         await user.save()
     
-        return res.status(200).json(user);
+        return res.status(200).json(newMap);
     } catch (error) {
         console.error('Fetching settings error:', error);
         res.status(500).json({ message: 'Internal Server Error' });
