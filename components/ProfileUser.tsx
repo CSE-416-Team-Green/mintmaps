@@ -3,6 +3,7 @@ import { Box, Avatar } from '@mui/material';
 
 const ProfileUser: FC<{
     username: string;
+    profilePic: string;
 }> = (props) => {
     return (
         <Box sx={{
@@ -11,7 +12,7 @@ const ProfileUser: FC<{
             alignItems: 'center',
             columnGap: '10px',
         }}>
-            <Avatar />
+            <Avatar src={props.profilePic} />
             <Box sx={{
                 fontSize: '20px',
             }}>

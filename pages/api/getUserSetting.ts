@@ -20,7 +20,7 @@ export default async function handler(
 
         await connectDb();
 
-        const user = await User.findOne({ _id: id });
+        const user = await User.findOne({ _id: id }).populate('followers').populate('following').exec();
         //Settings.findById('');
 
         if(!user) {
