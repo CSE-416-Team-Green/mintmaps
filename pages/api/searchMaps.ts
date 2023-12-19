@@ -100,10 +100,35 @@ export default async function handler(
     }
     
     //sort by parameter
-    if(sort == "")
-    maps.sort();
-
-
+    if(sort){
+        if(sort == "recent"){
+            maps.reverse();
+        } else if(sort == "old"){
+            //do nothing to results
+        }else if(sort == "views"){
+            maps.sort((n1,n2) => {
+                if (n1.views > n2.views) {
+                    return 1;
+                }
+            
+                if (n1.views < n2.views) {
+                    return -1;
+                }
+            
+                return 0;
+            });
+        }else if(sort == "likes"){
+            //do nothing to results
+        }else if(sort == "dislikes"){
+            //do nothing to results
+        }else if(sort == "comments"){
+            //do nothing to results
+        } else {
+            maps.reverse();
+        }
+    } else {
+        maps.reverse();
+    }
 
     //return array of maps to be used in search results
     //maybe only want to return certain info? maybe even just mapIds?

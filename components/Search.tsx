@@ -61,7 +61,22 @@ const Search = () => {
     };
 
     const handleSortViews = () => {
-        localStorage.searchMapType = "";
+        localStorage.searchSort = "views";
+    };
+    const handleSortLikes = () => {
+        localStorage.searchSort = "likes";
+    };
+    const handleSortDislikes = () => {
+        localStorage.searchSort = "dislikes";
+    };
+    const handleSortComments = () => {
+        localStorage.searchSort = "comments";
+    };
+    const handleSortDateRecent = () => {
+        localStorage.searchSort = "recent";
+    };
+    const handleSortDateOld = () => {
+        localStorage.searchSort = "old";
     };
 
     return (
@@ -115,6 +130,25 @@ const Search = () => {
                         </MenuItem>
                         <MenuItem onClick={handleTypeNone}>
                             None
+                        </MenuItem>
+
+                        <MenuItem onClick={handleSortViews}>
+                            Views
+                        </MenuItem>
+                        <MenuItem onClick={handleSortLikes}>
+                            Likes
+                        </MenuItem>
+                        <MenuItem onClick={handleSortDislikes}>
+                            Dislikes
+                        </MenuItem>
+                        <MenuItem onClick={handleSortComments}>
+                            Comments
+                        </MenuItem>
+                        <MenuItem onClick={handleSortDateRecent}>
+                            Recent
+                        </MenuItem>
+                        <MenuItem onClick={handleSortDateOld}>
+                            Oldest
                         </MenuItem>
                     </Menu>
                 </InputAdornment>
