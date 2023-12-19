@@ -449,7 +449,6 @@ export default function MapInfo() {
                     </Box>
                 </Box>
                 <Box>
-                    Recommended Maps
                 </Box>
             </Box>
         </Box>

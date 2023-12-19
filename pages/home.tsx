@@ -87,7 +87,6 @@ export default function Home() {
                     <div className={styles.homeBox}>
                         <SearchResults maps={featuredMaps} />
                     </div>
-                    <div className={styles.homeText}>Following</div>
                     <div className={styles.homeBox}>
                         <Grid
                             container

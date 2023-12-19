@@ -140,19 +140,19 @@ export default function UserProfile() {
                                 alignItems={"left"}
                                 rowSpacing={1.5}
                             >
-                                <Grid item xs={3}>
+                                <Grid item xs={5}>
                                     <div className={styles.usernameText}>
                                         {username}
                                     </div>
                                 </Grid>
                                 {isOwnProfile ? (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <div style={{ minWidth: 120, minHeight: 40, visibility: 'hidden' }}>
                                             {/* Invisible Placeholder */}
                                         </div>
                                     </Grid>
                                 ) : (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <Button
                                             sx={{ minWidth: 120, minHeight: 40 }}
                                             variant="contained"
