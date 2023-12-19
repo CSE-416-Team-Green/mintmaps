@@ -1,6 +1,13 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect, FC, useImperativeHandle, useRef } from "react";
+import {
+    useContext,
+    useState,
+    useEffect,
+    FC,
+    useImperativeHandle,
+    useRef,
+} from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -78,12 +85,16 @@ interface MapContextType {
     redo: () => void;
     canUndo: boolean;
     canRedo: boolean;
+    updateLegendColorsBiv: (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => void;
 }
 const DynamicMap: FC<{
     reference?: React.RefObject<any>;
-}> = ({
-    reference
-}) => {
+}> = ({ reference }) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [loading, setLoading] = useState(true);
     const propSymMapRef = useRef<any>(null);
@@ -110,7 +121,7 @@ const DynamicMap: FC<{
                     pointMapRef.current.exportImage();
                     break;
             }
-        }
+        },
     }));
 
     useEffect(() => {
@@ -137,15 +148,15 @@ const DynamicMap: FC<{
 
     switch (mapContext.mapType) {
         case "proportional-symbol":
-            return <DynamicPropSymbolMap reference = {propSymMapRef} />;
+            return <DynamicPropSymbolMap reference={propSymMapRef} />;
         case "choropleth":
-            return <DynamicChlorMap reference = {chlorMapRef} />;
+            return <DynamicChlorMap reference={chlorMapRef} />;
         case "bivariate-choropleth":
-            return <DynamicBiChlorMap reference = {biChlorMapRef} />;
+            return <DynamicBiChlorMap reference={biChlorMapRef} />;
         case "heat":
-            return <DynamicHeatMap reference = {heatMapRef} />;
-        case "point": 
-            return <DynamiPointMap reference = {pointMapRef} />
+            return <DynamicHeatMap reference={heatMapRef} />;
+        case "point":
+            return <DynamiPointMap reference={pointMapRef} />;
         default:
             return <Container>NO MAP</Container>;
     }
