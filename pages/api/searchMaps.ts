@@ -119,11 +119,11 @@ export default async function handler(
             });
         }else if(sort == "likes"){
             maps.sort((n1,n2) => {
-                if (n1.likes.length() < n2.likes.length()) {
+                if (n1.likes.length < n2.likes.length) {
                     return 1;
                 }
             
-                if (n1.likes.length() > n2.likes.length()) {
+                if (n1.likes.length > n2.likes.length) {
                     return -1;
                 }
             
@@ -131,11 +131,11 @@ export default async function handler(
             });
         }else if(sort == "dislikes"){
             maps.sort((n1,n2) => {
-                if (n1.dislikes.length() < n2.dislikes.length()) {
+                if (n1.dislikes.length < n2.dislikes.length) {
                     return 1;
                 }
             
-                if (n1.dislikes.length() > n2.dislikes.length()) {
+                if (n1.dislikes.length > n2.dislikes.length) {
                     return -1;
                 }
             
@@ -143,11 +143,11 @@ export default async function handler(
             });
         }else if(sort == "comments"){
             maps.sort((n1,n2) => {
-                if (n1.comments.length() < n2.comments.length()) {
+                if (n1.comments.length < n2.comments.length) {
                     return 1;
                 }
             
-                if (n1.comments.length() > n2.comments.length()) {
+                if (n1.comments.length > n2.comments.length) {
                     return -1;
                 }
             
