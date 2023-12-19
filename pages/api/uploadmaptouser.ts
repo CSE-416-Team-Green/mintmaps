@@ -20,26 +20,25 @@ export default async function handler(
         // Extract mapId from the request body
         const { mapId, userEmail } = req.body;
 
-        // TODO: Retrieve the user's ID from the session or token
-        //const userId = email; // This is an example; adjust based on your auth strategy
-        // Update the user's createdMaps array
         const user = await User.findOne({ email: userEmail });
-        const map = await MapModel.findOne({ _id: mapId });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        if (!map) {
-            return res.status(404).json({ error: "map not found" });
+       
+        const isMapExisting = user.createdMaps.includes(mapId);
+       
+
+        let map;
+        if (!isMapExisting) {
+            const map = await MapModel.findOne({ _id: mapId });
+            await map.save();
+            user.createdMaps.push(map._id);
+        } else {
+
         }
-        await map.save();
-        //console.log(user)
-        user.createdMaps.push(mapId);
+        
         await user.save();
-        /*await User.findByIdAndUpdate(
-            userEmail,
-            { 
-                $push: { createdMaps: mapId } },
-        );*/
+        
 
         res.status(200).json({ message: "Map uploaded successfully" });
     } catch (error) {

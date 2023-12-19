@@ -13,10 +13,10 @@ export default function GetMap() {
                 }
                 const data = await response.json();
                 if (data) {
-                    console.log("we get data");
+                    //console.log("we get data");
                 }
-                console;
-                console.log("12312");
+                //console;
+                //console.log("12312");
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }

@@ -45,7 +45,6 @@ const LinearLegend = () => {
                 sx={{
                     display: "flex",
                     justifyContent: "center",
-                    padding: "16px",
                 }}
             ></Box>
             <Accordion>

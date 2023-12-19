@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 const SignupButton = () => {
 
     const handleSignUpClick = async () => {
-        console.log("sign up email");
+        //console.log("sign up email");
         
         // check if both password fields are the same
 

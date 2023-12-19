@@ -66,19 +66,15 @@ const GridLegend = () => {
     ]);
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "16px",
-                }}
-            ></Box>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+        }}>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+            </Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     X-axis Title

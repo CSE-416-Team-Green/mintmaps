@@ -20,6 +20,7 @@ import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
 import { FC } from 'react';
 import MapModel from '@/models/Map';
+import AuthContext from './authContext';
 
 const MapPreview: FC<{
     map: any
@@ -28,9 +29,11 @@ const MapPreview: FC<{
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const router = useRouter();
     const themeContext = React.useContext(ThemeContext);
+    const authContext = React.useContext(AuthContext);
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
     const mapInfo = props.map;
+    const newmapId=mapInfo._id;
     const [profilePic, setProfilePic] = useState<string>('');
     let userInfo: any;
 
@@ -64,25 +67,54 @@ const MapPreview: FC<{
     const handleClose = () => {
         setAnchor(null);
     };
-
+  
     const handleExportClose = () => {
-        setAnchor(null);
+        window.open(`/api/exportMap?mapId=${newmapId}`);
     };
     const handleShareClose = () => {
         setAnchor(null);
     };
     const handleForkClose = () => {
-        setAnchor(null);
+        const userEmail = authContext.userId
+        const mapId=mapInfo._id;
+    
+        // Constructing the payload
+        const payload = {
+            mapId,
+            userEmail,
+        };
+
+        const response =  fetch("/api/forkmap", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        alert("fork successful")
     };
     const handleSaveClose = () => {
-        setAnchor(null);
+        const mapId=mapInfo._id;
+        fetch(`/api/userSaveMap`, {
+            method: "POST",
+            body: JSON.stringify({
+                mapId,
+                email: authContext.email,
+            }),
+        }).then((res) => {
+            if (res.ok) {
+                console.log("saved")
+            }
+        });
     };
+    
 
     return (
         <div >
             <Grid container  sx={{width:300, height:250}} justifyContent="left" alignItems={"center"} spacing={0.5} rowSpacing={0.2} paddingBottom={5}>
                 <Grid item xs={12}>
-                    <Container onClick={handleImageClick} component={"img"} src={"/heatmap-preview.png"} sx={{width:300, height:150, float:'left'}}></Container>
+                    <Container onClick={handleImageClick} component={"img"} src={mapInfo.previewImage ?? ''} sx={{width:300, height:150, float:'left'}}></Container>
                 </Grid>
                 <Grid item xs={0.5} > 
                 </Grid>
