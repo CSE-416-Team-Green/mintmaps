@@ -84,15 +84,18 @@ const MapPreview: FC<{
             userEmail,
         };
 
-        const response =  fetch("/api/forkmap", {
+        fetch("/api/forkmap", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
+        }).then((response) => {
+            response.json().then(data => {
+                localStorage.mapId = data._id;
+                router.push(`/map-editing`);
+            });
         });
-
-        alert("fork successful")
     };
     const handleSaveClose = () => {
         const mapId=mapInfo._id;
