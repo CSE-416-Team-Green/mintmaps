@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import { Legend } from './MapContext';
+import { Legend } from '@/types/Types';
 import { drawLinearLegend } from '@/libs/legend';
 
 const LinearLegendControl: FC<{
