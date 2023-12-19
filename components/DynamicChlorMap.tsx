@@ -125,7 +125,7 @@ const DynamicChlorMap: FC<{
                 const a = document.createElement('a');
                 const url = URL.createObjectURL(blob as Blob);
                 a.href = url;
-                a.download = 'map.png';
+                a.download = `map.${localStorage.getItem("imageFormat")}`;
                 a.click();
                 URL.revokeObjectURL(url);
                 screenshotter.remove();
