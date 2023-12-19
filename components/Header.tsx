@@ -83,9 +83,6 @@ const Header = () => {
                 <IconButton href="/map-creation" data-cy="map-button">
                     <MapIcon />
                 </IconButton>
-                <IconButton>
-                    <NotificationsIcon />
-                </IconButton>
                 <IconButton onClick={handleClick}>
                     <Avatar src={profilePic} />
                 </IconButton>
