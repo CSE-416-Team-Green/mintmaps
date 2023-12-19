@@ -18,8 +18,6 @@ interface CustomProviderProps {
     children: React.ReactNode;
 }
 
-
-
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [mapId, setMapId] = React.useState<string>("");
     const [legend, setLegend] = React.useState<any>({
@@ -52,6 +50,9 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [selectedPropertyIndexBiv, setSelectedPropertyIndexBiv] =
         React.useState(0);
     const router = useRouter();
+    const [readyForPoint, setReadyForPoint] = React.useState(false);
+    const [newPointName, setNewPointName] = React.useState("");
+
     const [
         state,
         { set: setMapState, reset: resetState, undo, redo, canUndo, canRedo },
@@ -463,6 +464,37 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             title: title,
         });
     };
+
+    const setPointIntake = (name: string) => {
+        setReadyForPoint(true);
+        setNewPointName(name);
+    };
+    const addNewPoint = (coords: any, name: string) => {
+        const newPoint = {
+            type: "Feature",
+            properties: {
+                name: name,
+            },
+            geometry: {
+                type: "Point",
+                coordinates: [coords.lng, coords.lat],
+            },
+        };
+
+        if (geoJSON && geoJSON.features) {
+            const newGeoJSON = {
+                ...geoJSON,
+                features: [...geoJSON.features, newPoint],
+            };
+
+            setMapState({
+                ...state.present,
+                geoJSON: newGeoJSON,
+            });
+        }
+        setReadyForPoint(false);
+        setNewPointName(""); 
+    };
     const contextValue: MapContextType = {
         mapId,
         onChange,
@@ -499,6 +531,10 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         canRedo,
         updateLegendColorsBiv,
         addNewProperty,
+        readyForPoint,
+        addNewPoint,
+        setPointIntake,
+        newPointName,
     };
 
     return (

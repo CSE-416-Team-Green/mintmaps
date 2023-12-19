@@ -24,6 +24,7 @@ const FloatingActionButton = () => {
     const [propertyName, setPropertyName] = useState("");
     const [initialValue, setInitialValue] = useState("");
     const [badProp, setbadProp] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const handleActionClick = (actionName: string) => {
         if (actionName === "Undo" && mapContext.canUndo) {
@@ -34,13 +35,25 @@ const FloatingActionButton = () => {
     };
 
     const handleAddProperty = () => {
-        if (propertyName && initialValue) {
-            mapContext.addNewProperty(propertyName, initialValue);
-            setOpenModal(false); // Close the modal after adding
-            setPropertyName(""); // Reset the form
-            setInitialValue("");
+        if (mapContext.mapType !== "point") {
+            if (propertyName && initialValue) {
+                mapContext.addNewProperty(propertyName, initialValue);
+                setOpenModal(false); // Close the modal after adding
+                setPropertyName(""); // Reset the form
+                setInitialValue("");
+                setSuccess(true);
+            } else {
+                setbadProp(true);
+            }
         } else {
-            setbadProp(true);
+            if (propertyName) {
+                mapContext.setPointIntake(propertyName);
+                setOpenModal(false); // Close the modal after adding
+                setPropertyName(""); // Reset the form
+                setInitialValue("");
+            } else {
+                setbadProp(true);
+            }
         }
     };
 
@@ -80,7 +93,7 @@ const FloatingActionButton = () => {
                         sx={actionStyle(mapContext.canRedo)}
                     />
                     <SpeedDialAction
-                        key="Redo"
+                        key="Add Prop"
                         icon={<AddLocationAltIcon />}
                         onClick={() => setOpenModal(true)}
                         tooltipTitle="Add Property"
@@ -100,13 +113,15 @@ const FloatingActionButton = () => {
                                         value={propertyName}
                                         onChange={handleChange}
                                     />
-                                    <TextField
-                                        id="initValue"
-                                        label="initValue"
-                                        variant="outlined"
-                                        value={initialValue}
-                                        onChange={handleChange}
-                                    />
+                                    {mapContext.mapType !== "point" && (
+                                        <TextField
+                                            id="initValue"
+                                            label="initValue"
+                                            variant="outlined"
+                                            value={initialValue}
+                                            onChange={handleChange}
+                                        />
+                                    )}
                                     <Button onClick={handleAddProperty}>
                                         Add
                                     </Button>
@@ -126,7 +141,20 @@ const FloatingActionButton = () => {
                     severity="error"
                     sx={{ width: "100%" }}
                 >
-                    A new property must have a name and a initial value
+                    Please add all relevant info to the new property
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={success}
+                autoHideDuration={6000}
+                onClose={() => setSuccess(false)}
+            >
+                <Alert
+                    onClose={() => setSuccess(false)}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    New Property Sucessfully Added!
                 </Alert>
             </Snackbar>
         </>

@@ -73,4 +73,8 @@ export interface MapContextType {
         yColorMax: string
     ) => void;
     addNewProperty: (propertyName: string, initialValue: string) => void;
+    readyForPoint: boolean;
+    addNewPoint: (coords: any, name: string) => void;
+    setPointIntake: (name:string) => void; 
+    newPointName: string; 
 }

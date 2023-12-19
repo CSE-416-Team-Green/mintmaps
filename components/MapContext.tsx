@@ -3,7 +3,6 @@ import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 import { MapContextType } from "@/types/Types";
 
-
 const MapContext = React.createContext<MapContextType>({
     mapId: "",
     onChange: () => {},
@@ -40,6 +39,10 @@ const MapContext = React.createContext<MapContextType>({
     canRedo: false,
     updateLegendColorsBiv: () => {},
     addNewProperty: () => {},
+    readyForPoint: false,
+    addNewPoint: () => {},
+    setPointIntake: () => {},
+    newPointName: "",
 });
 
 export default MapContext;

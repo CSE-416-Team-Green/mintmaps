@@ -24,18 +24,34 @@ import { Map } from "leaflet";
 import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
 import toDataURL from "@/libs/toDataURL";
 import { MapContextType } from "@/types/Types";
+import {Snackbar, Alert} from "@mui/material";
 
 const ClickHandler = () => {
-    const mapContext = useContext(MapContext); 
+    const mapContext = useContext(MapContext);
+    const[success, setSuccess] = useState(false); 
 
     useMapEvents({
         click(e) {
-            // e.latlng contains the latitude and longitude of the clicked point
-            console.log("Map clicked at:", e.latlng);
+            if (mapContext.readyForPoint) {
+                mapContext.addNewPoint(e.latlng, mapContext.newPointName);
+                setSuccess(true); 
+            }
         },
     });
 
-    return null; // This component does not render anything.
+    return (<Snackbar
+        open={success}
+        autoHideDuration={6000}
+        onClose={() => setSuccess(false)}
+    >
+        <Alert
+            onClose={() => setSuccess(false)}
+            severity="success"
+            sx={{ width: "100%" }}
+        >
+            New Point Sucessfully Added!
+        </Alert>
+    </Snackbar>); 
 };
 
 const RenderPoints = () => {
@@ -139,7 +155,7 @@ const DynamiPointMap: FC<{
             />
 
             <RenderPoints />
-            <ClickHandler/>
+            <ClickHandler />
             {mapData && <FitBounds mapData={mapData} />}
         </MapContainer>
     );
