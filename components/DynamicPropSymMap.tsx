@@ -179,7 +179,7 @@ const DynamicPropSymbolMap: FC<{
             .getNorthWest()
             .distanceTo(bounds.getSouthEast());
 
-        return diagonal * 1;
+        return diagonal * 0.08;
     };
 
     const createCircleMarkers = () => {
@@ -190,7 +190,11 @@ const DynamicPropSymbolMap: FC<{
             const coords = layer.getBounds().getCenter();
             const value = feature.properties[mapContext.selectedProperty];
 
-            const radius = getCircleRadius(mapContext.legend, value);
+            let radius = getCircleRadius(mapContext.legend, value);
+
+            if (isNaN(radius)) {
+                radius = minRadius;
+            }
             const color = getCircleColor(mapContext.legend, value);
 
             return { coords, radius, color };
@@ -198,11 +202,12 @@ const DynamicPropSymbolMap: FC<{
     };
 
     const getCircleRadius = (legend: any, value: number) => {
-        // const normalizedValue =
-        //     (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+        const normalizedValue =
+            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
 
         const radius =
-            legend.sizeMin + value * (legend.sizeMax - legend.sizeMin);
+            legend.sizeMin +
+            normalizedValue * (legend.sizeMax - legend.sizeMin);
 
         return Math.max(minRadius, Math.min(radius, maxRadius));
     };

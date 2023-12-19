@@ -122,10 +122,10 @@ export function drawCircleLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
 
     const x = canvas.width / 2;
     for (let i = interval; i > 0; i--) {
-        const radius = interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval);
+        const radius = Math.min(interpolateNumber(1, 115, i / interval), interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval));
         const y = canvas.height - radius;
         sketch.circle(x, y, {
-            radius: interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval),
+            radius: Math.min(interpolateNumber(1, 115, i / interval), interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval)),
             fillStyle: interpolateColor(legend.colorMin!, legend.colorMax!, i / interval),
             fill: true,
         });
