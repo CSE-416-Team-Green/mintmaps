@@ -60,6 +60,10 @@ const Search = () => {
         localStorage.searchMapType = "";
     };
 
+    const handleSortViews = () => {
+        localStorage.searchMapType = "";
+    };
+
     return (
             <TextField
                 size='small'

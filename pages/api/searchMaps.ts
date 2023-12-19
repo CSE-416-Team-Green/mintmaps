@@ -50,7 +50,7 @@ export default async function handler(
         { geoJSON: 0, legend: 0 }
     );
 
-    //filter by all, title, uploader, or tags
+    //filter by title, uploader, or tags
     if(searchTerm && filter){
         if(filter == "title"){ //title
             filteredMaps.forEach(function (map) {
@@ -98,7 +98,11 @@ export default async function handler(
             }
         });
     }
+    
     //sort by parameter
+    if(sort == "")
+    maps.sort();
+
 
 
     //return array of maps to be used in search results
