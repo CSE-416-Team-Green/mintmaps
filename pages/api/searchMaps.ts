@@ -153,6 +153,18 @@ export default async function handler(
             
                 return 0;
             });
+        }else if(sort == "featured"){
+            maps.sort((n1,n2) => {
+                if (n1.comments.length + n1.likes.length + n1.views < n2.comments.length + n2.likes.length + n2.views) {
+                    return 1;
+                }
+            
+                if (n1.comments.length + n1.likes.length + n1.views > n2.comments.length + n2.likes.length + n2.views) {
+                    return -1;
+                }
+            
+                return 0;
+            });
         } else {
             maps.reverse();
         }
