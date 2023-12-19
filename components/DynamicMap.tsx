@@ -1,6 +1,13 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect, FC, useImperativeHandle, useRef } from "react";
+import {
+    useContext,
+    useState,
+    useEffect,
+    FC,
+    useImperativeHandle,
+    useRef,
+} from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -12,74 +19,11 @@ import DynamicPropSymbolMap from "./DynamicPropSymMap";
 import DynamicBiChlorMap from "./DynamicBiChlorMap";
 import DynamicHeatMap from "./DynamicHeatMap";
 import DynamiPointMap from "./DynamicPointMap";
+import { MapContextType } from "@/types/Types";
 
-interface Legend {
-    title: string;
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    sizeMin: number;
-    sizeMax: number;
-    xTitle: string;
-    yTitle: string;
-    xValueMin: number;
-    xValueMax: number;
-    xColorMin: string;
-    xColorMax: string;
-    yValueMin: number;
-    yValueMax: number;
-    yColorMin: string;
-    yColorMax: string;
-}
-
-type MapType =
-    | "point"
-    | "heat"
-    | "choropleth"
-    | "bivariate-choropleth"
-    | "proportional-symbol";
-
-interface MapContextType {
-    mapId: string;
-    onChange: () => void;
-    saveMap: () => void;
-    setMap: (map: any) => void;
-    loadMap: (id: string) => Promise<void>;
-    legend: Partial<Legend>;
-    mapType: MapType | null;
-    geoJSON: GeoJsonObject;
-    hasMap: boolean;
-    mapKey: string;
-    selectedProperty: string;
-    selectedPropertyIndex: number;
-    selectProperty: (event: SelectChangeEvent) => void;
-    updateLegendColor: (colorMin: string, colorMax: string) => void;
-    updateFeatureProperty: (name: string, newValue: any) => void;
-    updateFeatureName: (oldName: string, newName: string) => void;
-    tags: string[];
-    title: string;
-    description: string;
-    updateTags: (tags: string[]) => void;
-    updateDescription: (desc: string) => void;
-    updateTitle: (title: string) => void;
-    selectedPropertyBiv: string;
-    selectedPropertyIndexBiv: number;
-    selectPropertyXBiv: (event: SelectChangeEvent) => void;
-    selectPropertyYBiv: (event: SelectChangeEvent) => void;
-    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
-    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
-    updateFeaturePropertyBiv: (
-        name: string,
-        newValue: any,
-        axis: string
-    ) => void;
-}
 const DynamicMap: FC<{
     reference?: React.RefObject<any>;
-}> = ({
-    reference
-}) => {
+}> = ({ reference }) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [loading, setLoading] = useState(true);
     const propSymMapRef = useRef<any>(null);
@@ -106,7 +50,7 @@ const DynamicMap: FC<{
                     pointMapRef.current.exportImage();
                     break;
             }
-        }
+        },
     }));
 
     useEffect(() => {
@@ -133,15 +77,15 @@ const DynamicMap: FC<{
 
     switch (mapContext.mapType) {
         case "proportional-symbol":
-            return <DynamicPropSymbolMap reference = {propSymMapRef} />;
+            return <DynamicPropSymbolMap reference={propSymMapRef} />;
         case "choropleth":
-            return <DynamicChlorMap reference = {chlorMapRef} />;
+            return <DynamicChlorMap reference={chlorMapRef} />;
         case "bivariate-choropleth":
-            return <DynamicBiChlorMap reference = {biChlorMapRef} />;
+            return <DynamicBiChlorMap reference={biChlorMapRef} />;
         case "heat":
-            return <DynamicHeatMap reference = {heatMapRef} />;
-        case "point": 
-            return <DynamiPointMap reference = {pointMapRef} />
+            return <DynamicHeatMap reference={heatMapRef} />;
+        case "point":
+            return <DynamiPointMap reference={pointMapRef} />;
         default:
             return <Container>NO MAP</Container>;
     }

@@ -51,7 +51,8 @@ const MapPreview: FC<{
         }).then((response) => {
             response.json().then(data => {
                 userInfo = data;
-                setProfilePic(userInfo.profilePic);
+                if(userInfo?.profilePic)
+                    setProfilePic(userInfo.profilePic);
             });
         });
     }
@@ -84,15 +85,18 @@ const MapPreview: FC<{
             userEmail,
         };
 
-        const response =  fetch("/api/forkmap", {
+        fetch("/api/forkmap", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
+        }).then((response) => {
+            response.json().then(data => {
+                localStorage.mapId = data._id;
+                router.push(`/map-editing`);
+            });
         });
-
-        alert("fork successful")
     };
     const handleSaveClose = () => {
         const mapId=mapInfo._id;
@@ -168,7 +172,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                0 
+                                {mapInfo.views}
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -176,7 +180,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                0
+                                {mapInfo.likes.length}
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -184,7 +188,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                0
+                                {mapInfo.comments.length}
                             </Typography>
                         </Grid>
                     </Grid>

@@ -1,4 +1,4 @@
-import { Legend } from '@/components/MapContext';
+import { Legend } from '@/types/Types';
 import Sketch from '@/libs/sketch';
 import { interpolateColor, interpolateNumber } from '@/libs/interpolate';
 
@@ -15,7 +15,7 @@ export function drawLinearLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
     const x = 8;
     const y = 48;
 
-    sketch.text(160, 16, legend.title!, {
+    sketch.text(160, 16, legend.title ?? '', {
         fillStyle: '#000000',
         fill: true,
         textAlign: 'center',
@@ -57,7 +57,7 @@ export function drawGridLegend(canvas: HTMLCanvasElement, legend: Partial<Legend
     const x = 64;
     const y = 64;
 
-    sketch.text(160, 10, legend.xTitle!, {
+    sketch.text(160, 10, legend.xTitle ?? '', {
         fillStyle: '#000000',
         fill: true,
         textAlign: 'center',
@@ -68,7 +68,7 @@ export function drawGridLegend(canvas: HTMLCanvasElement, legend: Partial<Legend
     ctx.save();
     ctx.translate(10, 160);
     ctx.rotate(-Math.PI / 2);
-    sketch.text(0, 0, legend.yTitle!, {
+    sketch.text(0, 0, legend.yTitle ?? '', {
         fillStyle: '#000000',
         fill: true,
         textAlign: 'center',
@@ -112,7 +112,7 @@ export function drawCircleLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
     ctx.fillStyle = "#ffffff33";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    sketch.text(128, 10, legend.title!, {
+    sketch.text(128, 10, legend.title ?? '', {
         fillStyle: '#000000',
         fill: true,
         textAlign: 'center',
@@ -122,10 +122,10 @@ export function drawCircleLegend(canvas: HTMLCanvasElement, legend: Partial<Lege
 
     const x = canvas.width / 2;
     for (let i = interval; i > 0; i--) {
-        const radius = interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval);
+        const radius = Math.min(interpolateNumber(1, 115, i / interval), interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval));
         const y = canvas.height - radius;
         sketch.circle(x, y, {
-            radius: interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval),
+            radius: Math.min(interpolateNumber(1, 115, i / interval), interpolateNumber(legend.sizeMin!, legend.sizeMax!, i / interval)),
             fillStyle: interpolateColor(legend.colorMin!, legend.colorMax!, i / interval),
             fill: true,
         });

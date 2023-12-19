@@ -1,107 +1,50 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect, FC, useImperativeHandle } from "react";
+import {
+    useContext,
+    useState,
+    useEffect,
+    FC,
+    useImperativeHandle,
+} from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
-import LinearLegendControl from './LinearLegendControl';
-import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
-import { Map } from 'leaflet';
-import toDataURL from '@/libs/toDataURL';
+import LinearLegendControl from "./LinearLegendControl";
+import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
+import { Map } from "leaflet";
+import toDataURL from "@/libs/toDataURL";
+import { MapContextType } from "@/types/Types";
 
-interface Legend {
-    title: string;
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    sizeMin: number;
-    sizeMax: number;
-    xTitle: string;
-    yTitle: string;
-    xValueMin: number;
-    xValueMax: number;
-    xColorMin: string;
-    xColorMax: string;
-    yValueMin: number;
-    yValueMax: number;
-    yColorMin: string;
-    yColorMax: string;
-}
-
-type MapType =
-    | "point"
-    | "heat"
-    | "choropleth"
-    | "bivariate-choropleth"
-    | "proportional-symbol";
-
-interface MapContextType {
-    mapId: string;
-    onChange: () => void;
-    saveMap: () => void;
-    setMap: (map: any) => void;
-    loadMap: (id: string) => Promise<void>;
-    legend: Partial<Legend>;
-    mapType: MapType | null;
-    geoJSON: GeoJsonObject;
-    hasMap: boolean;
-    mapKey: string;
-    selectedProperty: string;
-    selectedPropertyIndex: number;
-    selectProperty: (event: SelectChangeEvent) => void;
-    updateLegendColor: (colorMin: string, colorMax: string) => void;
-    updateFeatureProperty: (name: string, newValue: any) => void;
-    updateFeatureName: (oldName: string, newName: string) => void;
-    tags: string[];
-    title: string;
-    description: string;
-    updateTags: (tags: string[]) => void;
-    updateDescription: (desc: string) => void;
-    updateTitle: (title: string) => void;
-    selectedPropertyBiv: string;
-    selectedPropertyIndexBiv: number;
-    selectPropertyXBiv: (event: SelectChangeEvent) => void;
-    selectPropertyYBiv: (event: SelectChangeEvent) => void;
-    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
-    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
-    updateFeaturePropertyBiv: (
-        name: string,
-        newValue: any,
-        axis: string
-    ) => void;
-}
 
 let previewSaved = false;
 
 const DynamicChlorMap: FC<{
     reference: React.RefObject<any>;
-}> = ({
-    reference
-}) => {
+}> = ({ reference }) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
     const [map, setMap] = useState<Map | null>(null);
 
     useEffect(() => {
-        if(!map || previewSaved) return;
+        if (!map || previewSaved) return;
         const screenshotter = new SimpleMapScreenshoter().addTo(map);
         screenshotter.takeScreen().then((blob) => {
             toDataURL(URL.createObjectURL(blob as Blob), (url) => {
                 fetch(`/api/updatePreviewById`, {
-                    method: 'POST',
+                    method: "POST",
                     body: JSON.stringify({
                         mapId: mapContext.mapId,
                         previewImage: url,
                     }),
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        "Content-Type": "application/json",
+                    },
                 });
-            })
+            });
             screenshotter.remove();
         });
         previewSaved = true;
@@ -109,18 +52,18 @@ const DynamicChlorMap: FC<{
 
     useImperativeHandle(reference, () => ({
         exportImage() {
-            if(!map) return;
+            if (!map) return;
             const screenshotter = new SimpleMapScreenshoter().addTo(map);
             screenshotter.takeScreen().then((blob) => {
-                const a = document.createElement('a');
+                const a = document.createElement("a");
                 const url = URL.createObjectURL(blob as Blob);
                 a.href = url;
-                a.download = 'map.png';
+                a.download = `map.${localStorage.getItem("imageFormat")}`;
                 a.click();
                 URL.revokeObjectURL(url);
                 screenshotter.remove();
             });
-        }
+        },
     }));
 
     useEffect(() => {
