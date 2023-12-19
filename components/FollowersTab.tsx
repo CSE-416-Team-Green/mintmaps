@@ -9,6 +9,7 @@ import { IUser } from '@/models/User';
 const FollowersTab: FC<{
     followers: IUser[]
 }> = (props) => {
+    console.log(props);
     return (
         <Grid item xs={9} sx={{ paddingTop: "40px" }}>
             <Grid item xs={12} sx={{ fontSize: "25px", paddingBottom: "10px", paddingTop: "4px", paddingLeft: "10px" }}>

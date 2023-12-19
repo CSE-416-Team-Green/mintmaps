@@ -155,7 +155,7 @@ const MapPreview: FC<{
                            
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography sx={{float:'right', fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
+                            <Typography sx={{float:'right', fontSize:'8px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
                                 {mapInfo.uploadDate}
                             </Typography>
                         </Grid>
