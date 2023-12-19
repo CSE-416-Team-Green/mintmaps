@@ -90,6 +90,7 @@ interface MapContextType {
         yColorMin: string,
         yColorMax: string
     ) => void;
+    addNewProperty: (propertyName: string, initialValue: string) => void;
 }
 let previewSaved = false;
 

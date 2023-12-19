@@ -88,6 +88,7 @@ interface MapContextType {
         yColorMin: string,
         yColorMax: string
     ) => void;
+    addNewProperty: (propertyName: string, initialValue: string) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -165,6 +166,28 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     }, [state.present]);
 
     const onChange = () => {};
+
+    const addNewProperty = (propertyName: string, initialValue: any) => {
+        const newGeoJSON = JSON.parse(JSON.stringify(geoJSON));
+
+        if (
+            newGeoJSON.features.some(
+                (feature: any) => propertyName in feature.properties
+            )
+        ) {
+            console.warn(`Property '${propertyName}' already exists.`);
+            return;
+        }
+
+        newGeoJSON.features.forEach((feature: any) => {
+            feature.properties[propertyName] = parseFloat(initialValue);
+        });
+
+        setMapState({
+            ...state.present,
+            geoJSON: newGeoJSON,
+        });
+    };
 
     const saveMap = async () => {
         const updatedMap = {
@@ -546,6 +569,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         canUndo,
         canRedo,
         updateLegendColorsBiv,
+        addNewProperty,
     };
 
     return (

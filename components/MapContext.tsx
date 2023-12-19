@@ -73,6 +73,7 @@ interface MapContextType {
         yColorMin: string,
         yColorMax: string
     ) => void;
+    addNewProperty: (propertyName: string, initialValue: string) => void;
 }
 
 const MapContext = React.createContext<MapContextType>({
@@ -110,6 +111,7 @@ const MapContext = React.createContext<MapContextType>({
     canUndo: false,
     canRedo: false,
     updateLegendColorsBiv: () => {},
+    addNewProperty: () => {},
 });
 
 export default MapContext;
