@@ -214,6 +214,8 @@ export default function MapInfo() {
     };
 
     const dynamicMapRef = useRef<any>(null);
+    //console.log("adad")
+    //console.log(dynamicMapRef)
 
     const handleExportImage = () => {
         dynamicMapRef.current.exportImage();

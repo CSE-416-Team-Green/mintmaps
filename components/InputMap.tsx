@@ -3,27 +3,33 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-
+import MapContext from "./MapContext";
+import dynamic from "next/dynamic";
+/*const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
+    loading: () => <Skeleton></Skeleton>,
+    ssr: false,
+});*/
 const presetMaps = [
     "Select a preset map",
-    "United States",
-    "Canada",
-    "Mexico",
-    "United Kingdom",
-    "France",
-    "Germany",
-    "Spain",
-    "Italy",
+    "North America",
+    "Asia",
+    "South America",
+    "Europe",
+    "Africa",
+    
 ];
 interface InputMapProps {
     onFileSelect: (file: File | null) => void;
 }
 const presetMapGeoJsonUrls: PresetMapGeoJsonUrls = {
-    "United States": "/public/presetmap/usa.geo.json",
-    // ... other maps
+    "North America": "/northamerica.geo.json",
+    "South America": "/southamerica.geo.json",
+    "Europe": "/europe.geo.json",
+    "Africa": "/africa.geo.json",
+    "Asia": "/asia.geo.json",
 };
 interface PresetMapGeoJsonUrls {
     [key: string]: string;
@@ -49,21 +55,23 @@ const InputMap: React.FC<InputMapProps> = ({ onFileSelect }) => {
     const handlePresetMapSelection = async (presetMap: string) => {
         if (presetMap in presetMapGeoJsonUrls) {
             try {
+                // Correcting the URL path to fetch from the public directory
                 const url = presetMapGeoJsonUrls[presetMap];
+                console.log(url)
                 const response = await fetch(url);
+    
                 if (!response.ok) {
-                    throw new Error(
-                        `Failed to fetch GeoJSON for ${presetMap}: ${response.statusText}`
-                    );
+                    throw new Error(`Failed to fetch GeoJSON for ${presetMap}: ${response.statusText}`);
                 }
+    
                 const geoJson = await response.json();
-                const blob = new Blob([JSON.stringify(geoJson)], {
-                    type: "application/geo+json",
-                });
-                const file = new File([blob], `${presetMap}.geojson`, {
-                    type: "application/geo+json",
-                });
+                console.log("aabb")
+                console.log(geoJson)
+                const blob = new Blob([JSON.stringify(geoJson)], { type: "application/geo+json" });
+                const file = new File([blob], `${presetMap}.geojson`, { type: "application/geo+json" });
+    
                 onFileSelect(file);
+                setUploadedFile(file); // Update the uploadedFile state
             } catch (error) {
                 console.error("Error fetching preset map:", error);
             }
@@ -96,11 +104,11 @@ const InputMap: React.FC<InputMapProps> = ({ onFileSelect }) => {
                 }}
             >
                 <Box
-                    sx={{
-                        backgroundColor: "#E0E0E0",
-                        width: "800px",
-                        height: "480px",
-                    }}
+                    //sx={{
+                        //backgroundColor: "#111111",
+                        //width: "800px",
+                       // height: "480px",
+                    //}}
                 ></Box>
                 <Box
                     sx={{
