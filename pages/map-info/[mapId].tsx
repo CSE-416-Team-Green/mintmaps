@@ -12,6 +12,11 @@ import {
     TextField,
     Stack,
     Paper,
+    FormControl,
+    MenuItem,
+    Select,
+    InputLabel,
+    SelectChangeEvent,
 } from "@mui/material";
 import styles from "@/styles/about.module.css";
 import Link from "next/link";
@@ -70,6 +75,8 @@ export default function MapInfo() {
     const [mapCreatorName, setMapCreatorName] = React.useState<string>("");
     const [mapCreatorId, setMapCreatorId] = React.useState<string>("");
     const [mapCreatorProfilePic, setMapCreatorProfilePic] = React.useState<string>("");
+    const [imageFormat, setImageFormat] = React.useState<string>('png');
+
     //console.log("adadadad")
     //console.log(userId)
     React.useEffect(() => {
@@ -241,7 +248,7 @@ export default function MapInfo() {
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
-        
+
         response.json().then((data) => {
             localStorage.mapId = data._id;
             router.push(`/map-editing`);
@@ -287,6 +294,14 @@ export default function MapInfo() {
         }
     };
 
+    useEffect(() => {
+        localStorage.setItem('imageFormat', imageFormat);
+    }, [imageFormat]);
+
+    const handleImageFormatChange = (event: SelectChangeEvent<string>) => {
+        setImageFormat(event.target.value)
+    }
+
     return (
         <Box>
             <Header />
@@ -325,13 +340,24 @@ export default function MapInfo() {
                             <IconButton onClick={handleExportMintMaps}>
                                 <DownloadIcon />
                             </IconButton>
-                            <IconButton onClick={handleExportImage}>
-                                <ImageIcon />
-                            </IconButton>
                             <IconButton onClick={handleForkMap}>
                                 <ForkRightIcon />
                             </IconButton>
                             <ShareButton />
+                            <IconButton onClick={handleExportImage}>
+                                <ImageIcon />
+                            </IconButton>
+                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                <InputLabel >Format</InputLabel>
+                                <Select
+                                    value={imageFormat}
+                                    label="Format"
+                                    onChange={handleImageFormatChange}
+                                >
+                                    <MenuItem value={'png'}>PNG</MenuItem>
+                                    <MenuItem value={'jpg'}>JPG</MenuItem>
+                                </Select>
+                            </FormControl>
                             <Box sx={{
                                 display: "flex",
                                 columnGap: "8px",
