@@ -12,7 +12,7 @@ const GoogleSignInButton = () => {
     const onSuccess = async (res: any) => {
         const token = res.credential;
 
-        console.log(res);
+        //console.log(res);
 
         try {
             const response = await axios.post("/api/loginGoogle", {
@@ -23,6 +23,7 @@ const GoogleSignInButton = () => {
                 const data = response.data.data;
 
                 const userDetails = {
+                    userId: data._id,
                     email: data.email,
                     accountType: data.accountType,
                     admin: data.admin,

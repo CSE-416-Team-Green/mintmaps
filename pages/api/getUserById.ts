@@ -1,28 +1,34 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDb from '@/db';
-import User from '@/models/User';
-import Settings from '@/models/Settings';
+import type { NextApiRequest, NextApiResponse } from "next";
+import connectDb from "@/db";
+import User from "@/models/User";
+import Settings from "@/models/Settings";
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<any>
+  req: NextApiRequest,
+  res: NextApiResponse<any>
 ) {
-    if(req.method !== "GET") {
-        res.status(401).json({message: "Method not allowed"})
-        return
-    }
+  
+  //res.status(500).json({ message: "Internal Server Error123" });
+
+  if (req.method !== "GET") {
+    res.status(401).json({ message: "Method not allowed" });
+    return;
+  } 
+
+  await connectDb();
+  try {
+    const email = req.query.email as string;
+    // console.log(email);
 
     await connectDb();
-    try {
-        const email = req.query.email as string;
 
-        await connectDb();
-
-        const user = await User.findOne({ email: email });
-    
-        return res.status(200).json(user);
-    } catch (error) {
-        console.error('Fetching user error:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
+    const user = await User.findOne({ email: email });
+   
+    return res.status(200).json(user);
+    // return res.status(200).
+    //res.status(200).json({ message: "Status code 200" });
+  } catch (error) {
+    console.error("Fetching user error:", error);
+    res.status(500).json({ message: "Internal Server Error10989" });
+  }
 }

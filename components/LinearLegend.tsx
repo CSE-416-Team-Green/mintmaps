@@ -1,6 +1,4 @@
-import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
-import Sketch from "@/libs/sketch";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
     Accordion,
     AccordionDetails,
@@ -22,51 +20,19 @@ const LinearLegend = () => {
     const [colorMin, setColorMin] = useState(legend.colorMin ?? "#FFFFFF");
     const [colorMax, setColorMax] = useState(legend.colorMax ?? "#2ECC71");
 
-    const size = 50;
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
     useEffect(() => {
-        const canvas = canvasRef.current as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-        const sketch = new Sketch(canvas);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (let i = 0; i < canvas.width - size; i += size) {
-            ctx.fillStyle = interpolateColor(
-                colorMin,
-                colorMax,
-                i / canvas.width
-            );
-            ctx.fillRect(i, 14, size, size);
-            sketch.text(
-                i,
-                0,
-                `${interpolateNumber(valueMin, valueMax, i / canvas.width)}`,
-                {
-                    strokeStyle: "#000000",
-                    stroke: true,
-                    textAlign: "left",
-                    textBaseline: "top",
-                }
-            );
-        }
-
         legend.title = title;
         legend.valueMin = valueMin;
         legend.valueMax = valueMax;
         legend.colorMin = colorMin;
         legend.colorMax = colorMax;
-        mapContext.onChange();
+        setValueMin(mapContext.legend.valueMin as number);
+        setValueMax(mapContext.legend.valueMax as number);
+        setColorMin(mapContext.legend.colorMin as string);
+        setColorMax(mapContext.legend.colorMax as string);
+        setTitle(mapContext.legend.title as string);
         mapContext.updateLegendColor(colorMin, colorMax);
-    }, [
-        valueMin,
-        valueMax,
-        colorMin,
-        colorMax,
-        mapContext.geoJSON,
-        mapContext.legend,
-    ]);
+    }, [title, valueMin, valueMax, colorMin, colorMax, mapContext.geoJSON]);
 
     return (
         <Box
@@ -79,11 +45,8 @@ const LinearLegend = () => {
                 sx={{
                     display: "flex",
                     justifyContent: "center",
-                    padding: "16px",
                 }}
-            >
-                <canvas ref={canvasRef} width={320} height={64} />
-            </Box>
+            ></Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Title
@@ -98,7 +61,7 @@ const LinearLegend = () => {
                     <TextField
                         label="Title"
                         variant="outlined"
-                        value={title}
+                        value={mapContext.legend.title as string}
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </AccordionDetails>
@@ -142,7 +105,7 @@ const LinearLegend = () => {
                         Min
                         <MuiColorInput
                             format="hex"
-                            value={colorMin}
+                            value={mapContext.legend.colorMin as string}
                             onChange={setColorMin}
                         />
                     </Box>
@@ -174,7 +137,7 @@ const LinearLegend = () => {
                         Max
                         <MuiColorInput
                             format="hex"
-                            value={colorMax}
+                            value={mapContext.legend.colorMax as string}
                             onChange={setColorMax}
                         />
                     </Box>

@@ -6,6 +6,7 @@ interface CustomProviderProps {
 }
 
 interface AuthContextType {
+    userId: string;
     email: string;
     admin: boolean;
     onLoggingIn: (userDetails: UserDetails) => void;
@@ -15,6 +16,7 @@ interface AuthContextType {
 }
 
 interface UserDetails {
+    userId: string;
     email: string;
     accountType: string;
     admin: boolean;
@@ -22,6 +24,7 @@ interface UserDetails {
 
 const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [id, setId] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [accountType, setAccountType] = React.useState("");
     const [admin, setIsAdmin] = React.useState(false);
@@ -29,6 +32,7 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     React.useEffect(() => {
         const updateLogIn = async () => {
             if (typeof window !== "undefined") {
+                setId(localStorage.getItem("userId") || "");
                 setEmail(localStorage.getItem("email") || "");
                 setAccountType(localStorage.getItem("accountType") || "");
                 setIsAdmin(
@@ -49,12 +53,14 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
     const onLoggingIn = (userDetails: UserDetails) => {
         if (userDetails) {
+            setId(userDetails.userId);
             setEmail(userDetails.email);
             setAccountType(userDetails.accountType);
             setIsAdmin(userDetails.admin);
             setIsLoggedIn(true);
         }
 
+        localStorage.setItem("userId", userDetails.userId);
         localStorage.setItem("email", userDetails.email);
         localStorage.setItem("accountType", userDetails.accountType);
         localStorage.setItem("admin", userDetails.admin ? "true" : "false");
@@ -62,6 +68,7 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     };
 
     const onLoggingOut = () => {
+        setId("");
         setEmail("");
         setAccountType("");
         setIsAdmin(false);
@@ -70,6 +77,7 @@ const AuthContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     };
 
     const contextValue: AuthContextType = {
+        userId: id,
         email,
         admin,
         onLoggingIn,

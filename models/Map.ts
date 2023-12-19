@@ -20,7 +20,10 @@ interface IMap extends Document {
     legend?: Object;
     selectedProperty?: string;
     selectedPropertyIndex?: number;
-    createdBy: string;
+    selectedPropertyBiv?: string;
+    selectedPropertyIndexBiv?: number;
+    createdBy?: string;
+    previewImage?: string;
 }
 
 const mapSchema = new Schema<IMap>({
@@ -77,7 +80,10 @@ const mapSchema = new Schema<IMap>({
     legend: Object,
     selectedProperty: String,
     selectedPropertyIndex: Number,
+    selectedPropertyBiv: String,
+    selectedPropertyIndexBiv: Number,
     createdBy: String,
+    previewImage: String,
 });
 
 const MapModel = mongoose.models.Map || model<IMap>("Map", mapSchema);

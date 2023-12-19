@@ -1,27 +1,33 @@
 import Header from "@/components/Header";
 import dynamic from "next/dynamic";
 import { Box, Skeleton, Tab } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { TabContext, TabPanel, TabList } from "@mui/lab";
 import GeneralTab from "@/components/GeneralTab";
 import OverviewTab from "@/components/OverviewTab";
+import OverviewBivarTab from "@/components/OverviewBivar";
 import LegendTab from "@/components/LegendTab";
+import MapContext from "@/components/MapContext";
+import OverviewPoint from "@/components/OverviewPoint";
+import AuthContext from '@/components/authContext';
+import InvalidAuthError from '@/components/InvalidAuthError';
+import FloatingActionButton from "@/components/FloatingActionButton";
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
-    loading: () => (
-        <Skeleton>
-        </Skeleton>
-    ),
+    loading: () => <Skeleton></Skeleton>,
     ssr: false,
 });
 
 export default function MapEditing() {
+    const authContext = React.useContext(AuthContext);
     const [tab, setTab] = React.useState("1");
+    const mapContext = useContext(MapContext);
 
     const handleTabChange = (event: React.SyntheticEvent, newTab: string) => {
         setTab(newTab);
     };
 
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />
@@ -50,14 +56,23 @@ export default function MapEditing() {
                             <GeneralTab />
                         </TabPanel>
                         <TabPanel value="2">
-                            <OverviewTab />
+                            {mapContext.mapType === "bivariate-choropleth" ? (
+                                <OverviewBivarTab />
+                            ) : mapContext.mapType === "point" ? (
+                                <OverviewPoint />
+                            ) : (
+                                <OverviewTab />
+                            )}
                         </TabPanel>
                         <TabPanel value="3">
                             <LegendTab />
                         </TabPanel>
                     </TabContext>
                 </Box>
+
             </Box>
+            <FloatingActionButton/>
+
         </div>
     );
 }

@@ -16,12 +16,12 @@ export default async function handler(
     await connectDb();
 
     try {
-        const email = req.query.email as string;
+        const id = req.query.id as string;
 
         await connectDb();
 
-        const user = await User.findOne({ email: email }).populate('settings');
-        Settings.findById('');
+        const user = await User.findOne({ _id: id });
+        //Settings.findById('');
 
         if(!user) {
             return res.status(404).json({ message: 'User not found' });

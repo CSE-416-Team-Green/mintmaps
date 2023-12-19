@@ -1,27 +1,30 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Header from '@/components/Header';
-import InputMap from '@/components/InputMap';
-import InputMapType from '@/components/InputMapType';
-import InputTitleTags from '@/components/InputTitleTags';
-import MapCreateLoading from '@/components/MapCreateLoading';
-import { useRouter } from 'next/navigation';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Header from "@/components/Header";
+import InputMap from "@/components/InputMap";
+import InputMapType from "@/components/InputMapType";
+import InputTitleTags from "@/components/InputTitleTags";
+import MapCreateLoading from "@/components/MapCreateLoading";
+import { useRouter } from "next/navigation";
+import AuthContext from '@/components/authContext';
+import InvalidAuthError from '@/components/InvalidAuthError';
 
-const steps = ['Upload/Choose preset', 'Map type', 'Description'];
+const steps = ["Upload/Choose preset", "Map type", "Description"];
 
 export default function MapCreation() {
+    const authContext = React.useContext(AuthContext);
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const router = useRouter();
     const [uploadedFile, setUploadedFile] = React.useState<File | null>(null);
-    const [selectedMapType, setSelectedMapType] = React.useState('');
-    const [title, setTitle] = React.useState('');
-    const [tags, setTags] = React.useState('');
+    const [selectedMapType, setSelectedMapType] = React.useState("");
+    const [title, setTitle] = React.useState("");
+    const [tags, setTags] = React.useState("");
     const handleFileSelect = (file: File | null) => {
         setUploadedFile(file);
     };
@@ -32,7 +35,7 @@ export default function MapCreation() {
     const handleTitleTagsChange = (title: string, tags: string) => {
         setTitle(title);
         setTags(tags);
-    }
+    };
 
     const isStepOptional = (step: number) => {
         return false;
@@ -52,7 +55,7 @@ export default function MapCreation() {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
 
-        if(activeStep === steps.length - 1) {
+        if (activeStep === steps.length - 1) {
             setTimeout(() => {
                 router.push("/map-editing");
             }, 1000);
@@ -62,19 +65,18 @@ export default function MapCreation() {
     const handleBack = () => {
         const newActiveStep = activeStep - 1;
 
-    
         if (newActiveStep === 0) {
             // If going back to Step 0, reset the uploaded file
             setUploadedFile(null);
         } else if (newActiveStep === 1) {
             // If going back to Step 1, reset the selected map type
-            setSelectedMapType('');
+            setSelectedMapType("");
         } else if (newActiveStep === 2) {
             // If going back to Step 2, reset title and tags
-            setTitle('');
-            setTags('');
+            setTitle("");
+            setTags("");
         }
-            setActiveStep(newActiveStep);
+        setActiveStep(newActiveStep);
     };
 
     const handleSkip = () => {
@@ -92,20 +94,20 @@ export default function MapCreation() {
     const isStepOneCompleted = () => {
         return uploadedFile !== null;
     };
-    
-    const isStepTwoCompleted = () => {
-        return selectedMapType !== '';
-    };
-    
-    const isStepThreeCompleted = () => {
-        return title !== '' && tags !== '';
-    };
-    
 
+    const isStepTwoCompleted = () => {
+        return selectedMapType !== "";
+    };
+
+    const isStepThreeCompleted = () => {
+        return title !== "" && tags !== "";
+    };
+
+    if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div>
             <Header />
-            <Box sx={{ padding: '24px' }}>
+            <Box sx={{ padding: "24px" }}>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};
@@ -114,7 +116,9 @@ export default function MapCreation() {
                         } = {};
                         if (isStepOptional(index)) {
                             labelProps.optional = (
-                                <Typography variant="caption">Optional</Typography>
+                                <Typography variant="caption">
+                                    Optional
+                                </Typography>
                             );
                         }
                         if (isStepSkipped(index)) {
@@ -129,27 +133,49 @@ export default function MapCreation() {
                 </Stepper>
                 {activeStep === steps.length ? (
                     <MapCreateLoading
-                    uploadedFile={uploadedFile}
-                    mapType={selectedMapType}
-                    ontitle={title}
-                    ontags={tags}
-                />
+                        uploadedFile={uploadedFile}
+                        mapType={selectedMapType}
+                        ontitle={title}
+                        ontags={tags}
+                    />
                 ) : (
                     <React.Fragment>
                         <div>
                             {(() => {
-                                switch(activeStep) {
+                                switch (activeStep) {
                                     case 0:
-                                        return  <InputMap onFileSelect={handleFileSelect} />  ;
-                                    case 1:                                     
-                                        return <InputMapType onMapTypeSelect={handleSelectedMapType} /> ;
+                                        return (
+                                            <InputMap
+                                                onFileSelect={handleFileSelect}
+                                            />
+                                        );
+                                    case 1:
+                                        return (
+                                            <InputMapType
+                                                onMapTypeSelect={
+                                                    handleSelectedMapType
+                                                }
+                                            />
+                                        );
                                     case 2:
                                         //console.log(typeof selectedMapType)
-                                        return <InputTitleTags onTitleTagsChange={handleTitleTagsChange} />;
+                                        return (
+                                            <InputTitleTags
+                                                onTitleTagsChange={
+                                                    handleTitleTagsChange
+                                                }
+                                            />
+                                        );
                                 }
                             })()}
                         </div>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                pt: 2,
+                            }}
+                        >
                             <Button
                                 color="inherit"
                                 disabled={activeStep === 0}
@@ -158,18 +184,30 @@ export default function MapCreation() {
                             >
                                 Back
                             </Button>
-                            <Box sx={{ flex: '1 1 auto' }} />
+                            <Box sx={{ flex: "1 1 auto" }} />
                             {isStepOptional(activeStep) && (
-                                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                                <Button
+                                    color="inherit"
+                                    onClick={handleSkip}
+                                    sx={{ mr: 1 }}
+                                >
                                     Skip
                                 </Button>
                             )}
-                            <Button onClick={handleNext}
-                                 disabled={(activeStep === 0 && !isStepOneCompleted()) ||
-                                 (activeStep === 1 && !isStepTwoCompleted()) || 
-                                 (activeStep === 2 && !isStepThreeCompleted()) }
-                                 >
-                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                            <Button
+                                onClick={handleNext}
+                                disabled={
+                                    (activeStep === 0 &&
+                                        !isStepOneCompleted()) ||
+                                    (activeStep === 1 &&
+                                        !isStepTwoCompleted()) ||
+                                    (activeStep === 2 &&
+                                        !isStepThreeCompleted())
+                                }
+                            >
+                                {activeStep === steps.length - 1
+                                    ? "Finish"
+                                    : "Next"}
                             </Button>
                         </Box>
                     </React.Fragment>

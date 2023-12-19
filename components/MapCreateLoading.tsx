@@ -34,6 +34,29 @@ async function convertFileToGeoJson(file: File): Promise<GeoJsonObject> {
     });
 }
 
+
+const mapTypeConvert = (mapType: string) => {
+    let type;
+    switch (mapType) {
+        case "Heat Map":
+            type = "heat";
+            break;
+        case "Proportional Symbol":
+            type = "proportional-symbol";
+            break;
+        case "Point Map":
+            type = "point";
+            break;
+        case "Choropleth":
+            type = "choropleth";
+            break;
+        case "Bivariate Choropleth":
+            type = "bivariate-choropleth";
+            break;
+    }
+
+    return type;
+};
 const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
     uploadedFile,
     mapType,
@@ -53,6 +76,7 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
             try {
                 // Convert the file to a GeoJSON object
                 const geoJson = await convertFileToGeoJson(uploadedFile);
+                let type = mapTypeConvert(mapType) as string;
 
                 // Encode the GeoJSON object
                 const buffer = geobuf.encode(
@@ -63,20 +87,19 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                 // Check if buffer is not null before proceeding
                 if (buffer) {
                     var formData = new FormData();
-                    const email = localStorage.getItem("email") as string;
                     // Append your text fields
                     formData.append("name", ontitle);
-                    formData.append("maptype", mapType);
+                    formData.append("maptype", type);
                     formData.append("tag", ontags);
-                    formData.append("email", email);
+                    formData.append("email", localStorage.getItem("email") ?? '');
 
                     // Append your binary data (buffer)
                     formData.append(
                         "geojson",
                         new Blob([buffer], { type: "application/octet-stream" })
                     );
-                    console.log("3");
-                    console.log(formData);
+                    //console.log("3");
+                    //console.log(formData);
 
                     try {
                         const response = await fetch("/api/createMap", {

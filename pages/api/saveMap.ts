@@ -29,11 +29,12 @@ export default async function handler(
             legend,
             selectedProperty,
             selectedPropertyIndex,
+            selectedPropertyBiv,
+            selectedPropertyIndexBiv,
         } = req.body;
         const uint8 = geobuf.encode(geoJSON, new Pbf());
         const buffer = Buffer.from(uint8);
-        console.log(id);
-        console.log(legend);
+       
         const updatedMap = await MapModel.findByIdAndUpdate(
             id,
             {
@@ -44,6 +45,8 @@ export default async function handler(
                 legend: legend,
                 selectedProperty,
                 selectedPropertyIndex,
+                selectedPropertyBiv,
+                selectedPropertyIndexBiv,
             },
             { new: true }
         );

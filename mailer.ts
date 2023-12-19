@@ -15,7 +15,7 @@ async function sendResetEmail(email: any, resetLink: string) {
 
   try {
     await sgMail.send(message);
-    console.log('Email sent');
+    //console.log('Email sent');
   } catch (error) {
     console.error('Error sending reset email:', error);
     throw new Error('Failed to send reset email');

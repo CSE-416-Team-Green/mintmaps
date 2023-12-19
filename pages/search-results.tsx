@@ -3,9 +3,9 @@ import MapPreview from "@/components/MapPreview";
 import LogoLarge from "@/components/LogoLarge";
 import * as React from "react";
 import { Container, Grid, Typography } from "@mui/material";
-import styles from '@/styles/about.module.css';
+import styles from "@/styles/about.module.css";
 import Link from "next/link";
-import SearchResults from "@/components/SearchResults"
+import SearchResults from "@/components/SearchResults";
 
 export default function SearchResultsPage() {
     const [isSigningUp, setIsSigningUp] = React.useState<Boolean>(false);
@@ -17,25 +17,25 @@ export default function SearchResultsPage() {
                 type: "",
                 filter: "",
                 sort: "",
-                searchTerm: localStorage.searchTerm
-            }
+                searchTerm: localStorage.searchTerm,
+            };
             try {
-                const response = await fetch('/api/searchMaps', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                const response = await fetch("/api/searchMaps", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload),
                 });
-        
+
                 if (response.ok) {
-                    const data = (await response.json());
+                    const data = await response.json();
                     setResultMaps(data.reverse() ?? []); //TODO GET RID OF REVERSE HERE< DO IT IN BACK END
-                    console.log(resultMaps);
+                    //console.log(resultMaps);
                 } else {
-                    throw new Error('Failed to fetch data');
+                    throw new Error("Failed to fetch data");
                 }
-            }catch (error) {
-                console.error('Error performing search:', error);
-                alert('An error occurred while performing your search.');
+            } catch (error) {
+                console.error("Error performing search:", error);
+                alert("An error occurred while performing your search.");
             }
         };
         fetchUserData();
@@ -60,9 +60,7 @@ export default function SearchResultsPage() {
                     <div className={styles.resultsBox}>
                         <SearchResults maps={resultMaps} />
                     </div>
-                    
                 </Container>
-                
             </Grid>
             <br />
             <br />

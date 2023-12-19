@@ -20,6 +20,7 @@ import ForkRightIcon from '@mui/icons-material/ForkRight';
 import ShareIcon from '@mui/icons-material/Share';
 import { FC } from 'react';
 import MapModel from '@/models/Map';
+import AuthContext from './authContext';
 
 const MapPreview: FC<{
     map: any
@@ -28,16 +29,36 @@ const MapPreview: FC<{
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const router = useRouter();
     const themeContext = React.useContext(ThemeContext);
+    const authContext = React.useContext(AuthContext);
     const isDark = themeContext.mode === "dark";
     const open = Boolean(anchor);
     const mapInfo = props.map;
+    const newmapId=mapInfo._id;
+    const [profilePic, setProfilePic] = useState<string>('');
+    let userInfo: any;
 
     function handleImageClick() {
-        console.log("image click");
+        //console.log("image click");
+        //console.log("created");
+        //console.log(mapInfo.createdBy)
         localStorage.mapId = mapInfo._id;
-        router.push("/map-info");
+        router.push(`/map-info/${mapInfo._id}`);
     }
 
+    if(mapInfo.createdBy && mapInfo.createdBy !== 'null') {
+        fetch(`/api/getUserById?email=${mapInfo.createdBy}`, {
+            method: 'GET',
+        }).then((response) => {
+            response.json().then(data => {
+                userInfo = data;
+                setProfilePic(userInfo.profilePic);
+            });
+        });
+    }
+
+    const handleAvatarClick = async() =>{
+        router.push(`/user-profile/${userInfo._id}`);
+    }
     
     const handleMoreClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchor(event.currentTarget);
@@ -46,31 +67,63 @@ const MapPreview: FC<{
     const handleClose = () => {
         setAnchor(null);
     };
-
+  
     const handleExportClose = () => {
-        setAnchor(null);
+        window.open(`/api/exportMap?mapId=${newmapId}`);
     };
     const handleShareClose = () => {
         setAnchor(null);
     };
     const handleForkClose = () => {
-        setAnchor(null);
+        const userEmail = authContext.userId
+        const mapId=mapInfo._id;
+    
+        // Constructing the payload
+        const payload = {
+            mapId,
+            userEmail,
+        };
+
+        fetch("/api/forkmap", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }).then((response) => {
+            response.json().then(data => {
+                localStorage.mapId = data._id;
+                router.push(`/map-editing`);
+            });
+        });
     };
     const handleSaveClose = () => {
-        setAnchor(null);
+        const mapId=mapInfo._id;
+        fetch(`/api/userSaveMap`, {
+            method: "POST",
+            body: JSON.stringify({
+                mapId,
+                email: authContext.email,
+            }),
+        }).then((res) => {
+            if (res.ok) {
+                console.log("saved")
+            }
+        });
     };
+    
 
     return (
         <div >
             <Grid container  sx={{width:300, height:250}} justifyContent="left" alignItems={"center"} spacing={0.5} rowSpacing={0.2} paddingBottom={5}>
                 <Grid item xs={12}>
-                    <Container onClick={handleImageClick} component={"img"} src={"/heatmap-preview.png"} sx={{width:300, height:150, float:'left'}}></Container>
+                    <Container onClick={handleImageClick} component={"img"} src={mapInfo.previewImage ?? ''} sx={{width:300, height:150, float:'left'}}></Container>
                 </Grid>
                 <Grid item xs={0.5} > 
                 </Grid>
                 <Grid item xs={2} > 
-                    <IconButton href="/user-profile">
-                        <Avatar />  
+                    <IconButton onClick={handleAvatarClick} >
+                        <Avatar src={profilePic ?? ''} />
                     </IconButton>    
                 </Grid>
                 <Grid item xs={0.5} > 
@@ -78,16 +131,13 @@ const MapPreview: FC<{
                 <Grid item xs={8}> 
                     <Grid container justifyContent="left" alignItems={"center"}>
                         <Grid item xs={10.5}>
-                                <Link
-                                    href="/map-info"
-                                >
-                                    <Typography sx={{fontSize:'20px', overflow:'hidden', textOverflow: 'ellipsis', width: '150px', height: '25px',
-                                        color: isDark
-                                        ? "white"
-                                        : "black",}}>
-                                        {mapInfo.name}
-                                    </Typography>
-                                </Link>
+                            <Typography onClick={handleImageClick} sx={{fontSize:'20px', overflow:'hidden', textOverflow: 'ellipsis', width: '150px', height: '25px',
+                                color: isDark
+                                    ? "white"
+                                    : "black",}}>
+                                    {mapInfo.name}
+                            </Typography>
+                                
                         </Grid>
                         <Grid item xs={1.5}>
                             <IconButton onClick={handleMoreClick}>
@@ -95,16 +145,13 @@ const MapPreview: FC<{
                             </IconButton>
                         </Grid>
                         <Grid item xs={6}>
-                            <Link
-                                    href="/user-profile"
-                                >
-                                    <Typography sx={{fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '100px', height: '20px',
+                                    <Typography  onClick={handleAvatarClick} sx={{fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '100px', height: '20px',
                                         color: isDark
                                         ? "white"
                                         : "black",}}>
                                             {mapInfo.createdBy}
                                     </Typography>
-                            </Link>
+                           
                         </Grid>
                         <Grid item xs={6}>
                             <Typography sx={{float:'right', fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
@@ -124,7 +171,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                0 
+                                {mapInfo.views}
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -132,7 +179,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                0
+                                {mapInfo.likes.length}
                             </Typography>
                         </Grid>
                         <Grid item xs={1.2}>
@@ -140,7 +187,7 @@ const MapPreview: FC<{
                         </Grid>
                         <Grid item xs={2}>
                             <Typography sx={{fontSize:'10px'}}>
-                                0
+                                {mapInfo.comments.length}
                             </Typography>
                         </Grid>
                     </Grid>
