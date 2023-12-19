@@ -28,7 +28,7 @@ export default function SearchResultsPage() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setResultMaps(data.reverse() ?? []); //TODO GET RID OF REVERSE HERE< DO IT IN BACK END
+                    setResultMaps(data ?? []); 
                     //console.log(resultMaps);
                 } else {
                     throw new Error("Failed to fetch data");

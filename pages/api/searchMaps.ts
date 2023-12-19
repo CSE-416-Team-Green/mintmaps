@@ -107,22 +107,52 @@ export default async function handler(
             //do nothing to results
         }else if(sort == "views"){
             maps.sort((n1,n2) => {
-                if (n1.views > n2.views) {
+                if (n1.views < n2.views) {
                     return 1;
                 }
             
-                if (n1.views < n2.views) {
+                if (n1.views > n2.views) {
                     return -1;
                 }
             
                 return 0;
             });
         }else if(sort == "likes"){
-            //do nothing to results
+            maps.sort((n1,n2) => {
+                if (n1.likes.length() < n2.likes.length()) {
+                    return 1;
+                }
+            
+                if (n1.likes.length() > n2.likes.length()) {
+                    return -1;
+                }
+            
+                return 0;
+            });
         }else if(sort == "dislikes"){
-            //do nothing to results
+            maps.sort((n1,n2) => {
+                if (n1.dislikes.length() < n2.dislikes.length()) {
+                    return 1;
+                }
+            
+                if (n1.dislikes.length() > n2.dislikes.length()) {
+                    return -1;
+                }
+            
+                return 0;
+            });
         }else if(sort == "comments"){
-            //do nothing to results
+            maps.sort((n1,n2) => {
+                if (n1.comments.length() < n2.comments.length()) {
+                    return 1;
+                }
+            
+                if (n1.comments.length() > n2.comments.length()) {
+                    return -1;
+                }
+            
+                return 0;
+            });
         } else {
             maps.reverse();
         }
