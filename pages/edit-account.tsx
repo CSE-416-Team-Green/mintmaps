@@ -27,9 +27,6 @@ export default function EditAccount() {
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [profilePic, setProfilePic] = useState<string>('');
-    const [newFollowersNotification, setNewFollowersNotification] = useState(false);
-    const [mapLikedNotification, setMapLikedNotification] = useState(false);
-    const [commentsNotification, setCommentsNotification] = useState(false);
     const deleteAccount = async () => {
         const email = localStorage.getItem("email");
         if (
@@ -61,9 +58,22 @@ export default function EditAccount() {
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         if (event.target.files && event.target.files[0]) {
-            toDataURL(URL.createObjectURL(event.target.files[0]), function(dataUrl) {
-                setProfilePic(dataUrl);
-            });
+            const image = new Image();
+            const src = URL.createObjectURL(event.target.files[0]);
+            image.src = src;
+            image.onload = () => {
+                if (image.width < 100 || image.height < 100) {
+                    alert("Minimum dimensions of 100x100");
+                    return;
+                }
+                if (image.width > 500 || image.height > 500) {
+                    alert("Maximum dimensions of 500x500");
+                    return;
+                }
+                toDataURL(src, function(dataUrl) {
+                    setProfilePic(dataUrl);
+                });
+            }
         }
     };
 
@@ -84,11 +94,6 @@ export default function EditAccount() {
                 setUsername(data.userName);
                 setProfilePic(data.profilePic);
                 setBio(data.bio);
-                setNewFollowersNotification(
-                    data.settings[0].notificationsFollowers
-                );
-                setMapLikedNotification(data.settings[0].notificationsLikes);
-                setCommentsNotification(data.settings[0].notificationsComments);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -104,9 +109,6 @@ export default function EditAccount() {
             uname: username,
             profilePic: profilePic,
             bio: bio,
-            newFollowersNotification: newFollowersNotification,
-            mapLikedNotification: mapLikedNotification,
-            commentsNotification: commentsNotification,
         };
 
         const email = localStorage.getItem("email");
@@ -133,7 +135,7 @@ export default function EditAccount() {
         }
     };
 
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
+    if (!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <>
             <Grid
@@ -164,7 +166,7 @@ export default function EditAccount() {
                             Profile Picture
                         </Grid>
                         <Grid item xs={3}>
-                            <Avatar sx={{height:'250px', width:'250px'}} src={profilePic}/>  
+                            <Avatar sx={{ height: '250px', width: '250px' }} src={profilePic} />
                         </Grid>
                         <Grid item xs={9}>
                             Profile Picture must be a square image <br />
@@ -223,36 +225,6 @@ export default function EditAccount() {
                     >
                         Save Changes
                     </Button>
-                    <br />
-                    <br />
-                    <Grid item xs={12}>
-                        <div className={styles.usernameText}>
-                            Notification Settings
-                        </div>
-                    </Grid>
-                    <Checkbox
-                        checked={newFollowersNotification}
-                        onChange={(e) =>
-                            setNewFollowersNotification(e.target.checked)
-                        }
-                    />{" "}
-                    New Followers <br />
-                    <Checkbox
-                        checked={mapLikedNotification}
-                        onChange={(e) =>
-                            setMapLikedNotification(e.target.checked)
-                        }
-                    />{" "}
-                    Map Liked
-                    <br />
-                    <Checkbox
-                        checked={commentsNotification}
-                        onChange={(e) =>
-                            setCommentsNotification(e.target.checked)
-                        }
-                    />{" "}
-                    Comments
-                    <br />
                     <br />
                     <Grid item xs={12}>
                         <div className={styles.usernameText}>
