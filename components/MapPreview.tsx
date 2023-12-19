@@ -51,7 +51,8 @@ const MapPreview: FC<{
         }).then((response) => {
             response.json().then(data => {
                 userInfo = data;
-                setProfilePic(userInfo.profilePic);
+                if(userInfo.profilePic)
+                    setProfilePic(userInfo.profilePic);
             });
         });
     }
