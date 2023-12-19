@@ -26,16 +26,13 @@ const LinearLegend = () => {
         legend.valueMax = valueMax;
         legend.colorMin = colorMin;
         legend.colorMax = colorMax;
-        mapContext.onChange();
+        setValueMin(mapContext.legend.valueMin as number);
+        setValueMax(mapContext.legend.valueMax as number);
+        setColorMin(mapContext.legend.colorMin as string);
+        setColorMax(mapContext.legend.colorMax as string);
+        setTitle(mapContext.legend.title as string);
         mapContext.updateLegendColor(colorMin, colorMax);
-    }, [
-        title,
-        valueMin,
-        valueMax,
-        colorMin,
-        colorMax,
-        // mapContext.geoJSON,
-    ]);
+    }, [title, valueMin, valueMax, colorMin, colorMax, mapContext.geoJSON]);
 
     return (
         <Box
@@ -49,8 +46,7 @@ const LinearLegend = () => {
                     display: "flex",
                     justifyContent: "center",
                 }}
-            >
-            </Box>
+            ></Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Title
@@ -65,7 +61,7 @@ const LinearLegend = () => {
                     <TextField
                         label="Title"
                         variant="outlined"
-                        value={title}
+                        value={mapContext.legend.title as string}
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </AccordionDetails>
@@ -109,7 +105,7 @@ const LinearLegend = () => {
                         Min
                         <MuiColorInput
                             format="hex"
-                            value={colorMin}
+                            value={mapContext.legend.colorMin as string}
                             onChange={setColorMin}
                         />
                     </Box>
@@ -141,7 +137,7 @@ const LinearLegend = () => {
                         Max
                         <MuiColorInput
                             format="hex"
-                            value={colorMax}
+                            value={mapContext.legend.colorMax as string}
                             onChange={setColorMax}
                         />
                     </Box>

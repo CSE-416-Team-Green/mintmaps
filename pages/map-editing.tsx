@@ -11,6 +11,7 @@ import MapContext from "@/components/MapContext";
 import OverviewPoint from "@/components/OverviewPoint";
 import AuthContext from '@/components/authContext';
 import InvalidAuthError from '@/components/InvalidAuthError';
+import FloatingActionButton from "@/components/FloatingActionButton";
 
 const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
     loading: () => <Skeleton></Skeleton>,
@@ -68,7 +69,10 @@ export default function MapEditing() {
                         </TabPanel>
                     </TabContext>
                 </Box>
+
             </Box>
+            <FloatingActionButton/>
+
         </div>
     );
 }
