@@ -4,91 +4,55 @@ import {
     CircleMarker,
     useMap,
     Tooltip,
+    useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect, FC, useImperativeHandle } from "react";
+import {
+    useContext,
+    useState,
+    useEffect,
+    FC,
+    useImperativeHandle,
+} from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
 import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import L, { geoJSON, icon, map } from "leaflet";
-import { Map } from 'leaflet';
-import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
-import toDataURL from '@/libs/toDataURL';
+import { Map } from "leaflet";
+import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
+import toDataURL from "@/libs/toDataURL";
+import { MapContextType } from "@/types/Types";
+import {Snackbar, Alert} from "@mui/material";
 
-interface Legend {
-    title: string;
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    sizeMin: number;
-    sizeMax: number;
-    xTitle: string;
-    yTitle: string;
-    xValueMin: number;
-    xValueMax: number;
-    xColorMin: string;
-    xColorMax: string;
-    yValueMin: number;
-    yValueMax: number;
-    yColorMin: string;
-    yColorMax: string;
-}
+const ClickHandler = () => {
+    const mapContext = useContext(MapContext);
+    const[success, setSuccess] = useState(false); 
 
-type MapType =
-    | "point"
-    | "heat"
-    | "choropleth"
-    | "bivariate-choropleth"
-    | "proportional-symbol";
+    useMapEvents({
+        click(e) {
+            if (mapContext.readyForPoint) {
+                mapContext.addNewPoint(e.latlng, mapContext.newPointName);
+                setSuccess(true); 
+            }
+        },
+    });
 
-interface MapContextType {
-    mapId: string;
-    onChange: () => void;
-    saveMap: () => void;
-    setMap: (map: any) => void;
-    loadMap: (id: string) => Promise<void>;
-    legend: Partial<Legend>;
-    mapType: MapType | null;
-    geoJSON: GeoJsonObject;
-    hasMap: boolean;
-    mapKey: string;
-    selectedProperty: string;
-    selectedPropertyIndex: number;
-    selectProperty: (event: SelectChangeEvent) => void;
-    updateLegendColor: (colorMin: string, colorMax: string) => void;
-    updateFeatureProperty: (name: string, newValue: any) => void;
-    updateFeatureName: (oldName: string, newName: string) => void;
-    tags: string[];
-    title: string;
-    description: string;
-    updateTags: (tags: string[]) => void;
-    updateDescription: (desc: string) => void;
-    updateTitle: (title: string) => void;
-    selectedPropertyBiv: string;
-    selectedPropertyIndexBiv: number;
-    selectPropertyXBiv: (event: SelectChangeEvent) => void;
-    selectPropertyYBiv: (event: SelectChangeEvent) => void;
-    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
-    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
-    updateFeaturePropertyBiv: (
-        name: string,
-        newValue: any,
-        axis: string
-    ) => void;
-    undo: () => void;
-    redo: () => void;
-    canUndo: boolean;
-    canRedo: boolean;
-    updateLegendColorsBiv: (
-        xColorMin: string,
-        xColorMax: string,
-        yColorMin: string,
-        yColorMax: string
-    ) => void;
-}
+    return (<Snackbar
+        open={success}
+        autoHideDuration={6000}
+        onClose={() => setSuccess(false)}
+    >
+        <Alert
+            onClose={() => setSuccess(false)}
+            severity="success"
+            sx={{ width: "100%" }}
+        >
+            New Point Sucessfully Added!
+        </Alert>
+    </Snackbar>); 
+};
 
 const RenderPoints = () => {
     const mapContext = useContext(MapContext);
@@ -126,40 +90,38 @@ let previewSaved = false;
 
 const DynamiPointMap: FC<{
     reference: React.RefObject<any>;
-}> = ({
-    reference
-}) => {
+}> = ({ reference }) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
     const [map, setMap] = useState<Map | null>(null);
 
     useEffect(() => {
-        if(!map || previewSaved) return;
+        if (!map || previewSaved) return;
         const screenshotter = new SimpleMapScreenshoter().addTo(map);
         screenshotter.takeScreen().then((blob) => {
             toDataURL(URL.createObjectURL(blob as Blob), (url) => {
                 fetch(`/api/updatePreviewById`, {
-                    method: 'POST',
+                    method: "POST",
                     body: JSON.stringify({
                         mapId: mapContext.mapId,
                         previewImage: url,
                     }),
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        "Content-Type": "application/json",
+                    },
                 });
-            })
+            });
             screenshotter.remove();
         });
         previewSaved = true;
     }, [map]);
-    
+
     useImperativeHandle(reference, () => ({
         exportImage() {
-            if(!map) return;
+            if (!map) return;
             const screenshotter = new SimpleMapScreenshoter().addTo(map);
             screenshotter.takeScreen().then((blob) => {
-                const a = document.createElement('a');
+                const a = document.createElement("a");
                 const url = URL.createObjectURL(blob as Blob);
                 a.href = url;
                 a.download = `map.${localStorage.getItem("imageFormat")}`;
@@ -167,7 +129,7 @@ const DynamiPointMap: FC<{
                 URL.revokeObjectURL(url);
                 screenshotter.remove();
             });
-        }
+        },
     }));
 
     useEffect(() => {
@@ -185,7 +147,7 @@ const DynamiPointMap: FC<{
             style={{ height: "100%", width: "100%" }}
             center={[51.505, -0.09]}
             zoom={13}
-            scrollWheelZoom={false}
+            scrollWheelZoom={true}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -193,6 +155,7 @@ const DynamiPointMap: FC<{
             />
 
             <RenderPoints />
+            <ClickHandler />
             {mapData && <FitBounds mapData={mapData} />}
         </MapContainer>
     );

@@ -15,7 +15,9 @@ const MapDataSelector = () => {
         mapContext.geoJSON as FeatureCollection
     );
 
-    useEffect(() => {});
+    useEffect(() => {
+        setgeoJSON(mapContext.geoJSON as FeatureCollection);
+    }, [mapContext.geoJSON]);
     return (
         <Container sx={{ mb: 10 }}>
             <FormControl fullWidth>

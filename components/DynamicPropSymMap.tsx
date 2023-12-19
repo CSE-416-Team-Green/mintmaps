@@ -18,79 +18,8 @@ import CircleLegendControl from "./CircleLegendControl";
 import { Map } from "leaflet";
 import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
 import toDataURL from "@/libs/toDataURL";
+import { MapContextType } from "@/types/Types";
 
-interface Legend {
-    title: string;
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    sizeMin: number;
-    sizeMax: number;
-    xTitle: string;
-    yTitle: string;
-    xValueMin: number;
-    xValueMax: number;
-    xColorMin: string;
-    xColorMax: string;
-    yValueMin: number;
-    yValueMax: number;
-    yColorMin: string;
-    yColorMax: string;
-}
-
-type MapType =
-    | "point"
-    | "heat"
-    | "choropleth"
-    | "bivariate-choropleth"
-    | "proportional-symbol";
-
-interface MapContextType {
-    mapId: string;
-    onChange: () => void;
-    saveMap: () => void;
-    setMap: (map: any) => void;
-    loadMap: (id: string) => Promise<void>;
-    legend: Partial<Legend>;
-    mapType: MapType | null;
-    geoJSON: GeoJsonObject;
-    hasMap: boolean;
-    mapKey: string;
-    selectedProperty: string;
-    selectedPropertyIndex: number;
-    selectProperty: (event: SelectChangeEvent) => void;
-    updateLegendColor: (colorMin: string, colorMax: string) => void;
-    updateFeatureProperty: (name: string, newValue: any) => void;
-    updateFeatureName: (oldName: string, newName: string) => void;
-    tags: string[];
-    title: string;
-    description: string;
-    updateTags: (tags: string[]) => void;
-    updateDescription: (desc: string) => void;
-    updateTitle: (title: string) => void;
-    selectedPropertyBiv: string;
-    selectedPropertyIndexBiv: number;
-    selectPropertyXBiv: (event: SelectChangeEvent) => void;
-    selectPropertyYBiv: (event: SelectChangeEvent) => void;
-    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
-    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
-    updateFeaturePropertyBiv: (
-        name: string,
-        newValue: any,
-        axis: string
-    ) => void;
-    undo: () => void;
-    redo: () => void;
-    canUndo: boolean;
-    canRedo: boolean;
-    updateLegendColorsBiv: (
-        xColorMin: string,
-        xColorMax: string,
-        yColorMin: string,
-        yColorMax: string
-    ) => void;
-}
 let previewSaved = false;
 
 const DynamicPropSymbolMap: FC<{
@@ -178,7 +107,7 @@ const DynamicPropSymbolMap: FC<{
             .getNorthWest()
             .distanceTo(bounds.getSouthEast());
 
-        return diagonal * 1;
+        return diagonal * 0.08;
     };
 
     const createCircleMarkers = () => {
@@ -189,7 +118,11 @@ const DynamicPropSymbolMap: FC<{
             const coords = layer.getBounds().getCenter();
             const value = feature.properties[mapContext.selectedProperty];
 
-            const radius = getCircleRadius(mapContext.legend, value);
+            let radius = getCircleRadius(mapContext.legend, value);
+
+            if (isNaN(radius)) {
+                radius = minRadius;
+            }
             const color = getCircleColor(mapContext.legend, value);
 
             return { coords, radius, color };
@@ -197,11 +130,12 @@ const DynamicPropSymbolMap: FC<{
     };
 
     const getCircleRadius = (legend: any, value: number) => {
-        // const normalizedValue =
-        //     (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
+        const normalizedValue =
+            (value - legend.valueMin) / (legend.valueMax - legend.valueMin);
 
         const radius =
-            legend.sizeMin + value * (legend.sizeMax - legend.sizeMin);
+            legend.sizeMin +
+            normalizedValue * (legend.sizeMax - legend.sizeMin);
 
         return Math.max(minRadius, Math.min(radius, maxRadius));
     };
