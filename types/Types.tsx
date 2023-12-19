@@ -75,6 +75,7 @@ export interface MapContextType {
     addNewProperty: (propertyName: string, initialValue: string) => void;
     readyForPoint: boolean;
     addNewPoint: (coords: any, name: string) => void;
-    setPointIntake: (name:string) => void; 
-    newPointName: string; 
+    setPointIntake: (name: string) => void;
+    newPointName: string;
+    updateLegendPoint: (color: string, size: number) => void;
 }

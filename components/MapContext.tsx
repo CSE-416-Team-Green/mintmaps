@@ -43,6 +43,7 @@ const MapContext = React.createContext<MapContextType>({
     addNewPoint: () => {},
     setPointIntake: () => {},
     newPointName: "",
+    updateLegendPoint: () => {},
 });
 
 export default MapContext;

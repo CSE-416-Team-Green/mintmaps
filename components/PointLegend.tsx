@@ -17,16 +17,17 @@ const PointLegend = () => {
     const mapContext = useContext(MapContext);
     const legend = mapContext.legend ?? {};
     const [colorMax, setColorMax] = useState(legend.colorMax ?? "#2ECC71");
-    const [sizeMax, setSizeMax] = useState(legend.sizeMax ?? 0);
+    const [sizeMax, setSizeMax] = useState(legend.sizeMin ?? 0);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
     
         legend.colorMax = colorMax;
         legend.sizeMax = sizeMax;
-        mapContext.onChange();
-        mapContext.updateLegendColor(colorMax, colorMax);
-    }, [colorMax, sizeMax]);
+        setColorMax(mapContext.legend.colorMax as string)
+        setSizeMax(mapContext.legend.sizeMax as number); 
+        mapContext.updateLegendPoint(colorMax, sizeMax);
+    }, [colorMax, sizeMax, mapContext.geoJSON]);
 
     return (
         <Box
@@ -58,7 +59,7 @@ const PointLegend = () => {
                             type="number"
                             label="Size"
                             variant="outlined"
-                            value={sizeMax}
+                            value={mapContext.legend.sizeMax as number}
                             onChange={(e) =>
                                 setSizeMax(parseInt(e.target.value))
                             }
@@ -74,7 +75,7 @@ const PointLegend = () => {
                         Max
                         <MuiColorInput
                             format="hex"
-                            value={colorMax}
+                            value={mapContext.legend.colorMax as string}
                             onChange={setColorMax}
                         />
                     </Box>

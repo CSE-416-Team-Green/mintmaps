@@ -291,6 +291,22 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         const key = uuidv4();
         setMapKey(key);
     };
+
+    const updateLegendPoint = (color: string, size: number) => {
+        const newLegend = {
+            ...state.present.legend,
+            colorMax: color,
+            colorMin: color,
+            sizeMax: size,
+        };
+
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+        });
+        const key = uuidv4();
+        setMapKey(key);
+    };
     const loadMap = async (id: string) => {
         try {
             setHasMap(false);
@@ -493,7 +509,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             });
         }
         setReadyForPoint(false);
-        setNewPointName(""); 
+        setNewPointName("");
     };
     const contextValue: MapContextType = {
         mapId,
@@ -535,6 +551,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         addNewPoint,
         setPointIntake,
         newPointName,
+        updateLegendPoint,
     };
 
     return (

@@ -66,7 +66,7 @@ const RenderPoints = () => {
             <CircleMarker
                 key={index}
                 center={[coords.lat, coords.lng]}
-                radius={mapContext.legend.sizeMin}
+                radius={mapContext.legend.sizeMax}
                 pathOptions={{
                     color: mapContext.legend.colorMax,
                     fillColor: mapContext.legend.colorMax,
@@ -147,7 +147,7 @@ const DynamiPointMap: FC<{
             style={{ height: "100%", width: "100%" }}
             center={[51.505, -0.09]}
             zoom={13}
-            scrollWheelZoom={false}
+            scrollWheelZoom={true}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
