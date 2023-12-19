@@ -30,7 +30,7 @@ const Comment: React.FC<commentProps> = ({ comment }) => {
                     columnGap: "16px",
                     padding: "8px",
                 }}>
-                    <IconButton href="/user-profile">
+                    <IconButton href={`/user-profile/${comment.user._id}`}>
                         <Avatar src={comment.user.profilePic} />
                     </IconButton>
                     <Box sx={{
