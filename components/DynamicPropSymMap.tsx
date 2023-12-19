@@ -1,6 +1,12 @@
 import { MapContainer, TileLayer, Circle, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useState, useEffect, FC, useImperativeHandle } from "react";
+import {
+    useContext,
+    useState,
+    useEffect,
+    FC,
+    useImperativeHandle,
+} from "react";
 import MapContext from "./MapContext";
 import { GeoJSON } from "react-leaflet";
 import { GeoJsonObject } from "geojson";
@@ -8,10 +14,10 @@ import { SelectChangeEvent } from "@mui/material";
 import FitBounds from "./FitBounds";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import L, { geoJSON, icon, map } from "leaflet";
-import CircleLegendControl from './CircleLegendControl';
-import { Map } from 'leaflet';
-import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
-import toDataURL from '@/libs/toDataURL';
+import CircleLegendControl from "./CircleLegendControl";
+import { Map } from "leaflet";
+import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
+import toDataURL from "@/libs/toDataURL";
 
 interface Legend {
     title: string;
@@ -74,15 +80,22 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
+    updateLegendColorsBiv: (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => void;
 }
-
 let previewSaved = false;
 
 const DynamicPropSymbolMap: FC<{
     reference: React.RefObject<any>;
-}> = ({
-    reference
-}) => {
+}> = ({ reference }) => {
     const mapContext = useContext<MapContextType>(MapContext);
     const [mapData, setMapData] = useState<GeoJsonObject>(mapContext.geoJSON);
     const [minRadius, setMinRadius] = useState(1);
@@ -90,21 +103,21 @@ const DynamicPropSymbolMap: FC<{
     const [map, setMap] = useState<Map | null>(null);
 
     useEffect(() => {
-        if(!map || previewSaved) return;
+        if (!map || previewSaved) return;
         const screenshotter = new SimpleMapScreenshoter().addTo(map);
         screenshotter.takeScreen().then((blob) => {
             toDataURL(URL.createObjectURL(blob as Blob), (url) => {
                 fetch(`/api/updatePreviewById`, {
-                    method: 'POST',
+                    method: "POST",
                     body: JSON.stringify({
                         mapId: mapContext.mapId,
                         previewImage: url,
                     }),
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        "Content-Type": "application/json",
+                    },
                 });
-            })
+            });
             screenshotter.remove();
         });
         previewSaved = true;
@@ -112,18 +125,18 @@ const DynamicPropSymbolMap: FC<{
 
     useImperativeHandle(reference, () => ({
         exportImage() {
-            if(!map) return;
+            if (!map) return;
             const screenshotter = new SimpleMapScreenshoter().addTo(map);
             screenshotter.takeScreen().then((blob) => {
-                const a = document.createElement('a');
+                const a = document.createElement("a");
                 const url = URL.createObjectURL(blob as Blob);
                 a.href = url;
-                a.download = 'map.png';
+                a.download = "map.png";
                 a.click();
                 URL.revokeObjectURL(url);
                 screenshotter.remove();
             });
-        }
+        },
     }));
 
     useEffect(() => {

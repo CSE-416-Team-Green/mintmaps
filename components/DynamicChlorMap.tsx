@@ -73,6 +73,16 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
+    updateLegendColorsBiv: (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => void;
 }
 
 let previewSaved = false;

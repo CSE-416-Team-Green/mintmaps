@@ -11,6 +11,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { FeatureCollection } from "geojson";
 import { useRouter } from "next/navigation";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
+import useUndo from "use-undo";
 
 interface CustomProviderProps {
     children: React.ReactNode;
@@ -77,6 +78,16 @@ interface MapContextType {
         newValue: any,
         axis: string
     ) => void;
+    undo: () => void;
+    redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
+    updateLegendColorsBiv: (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -96,6 +107,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         yColorMax: "#2ECC71",
         xColorMin: "#FFFFFF",
         xColorMax: "#2ECC71",
+        title: "",
     });
     const [mapType, setMapType] = React.useState<MapType>("point");
     const [geoJSON, setgeoJSON] = React.useState<any>(null);
@@ -110,6 +122,47 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [selectedPropertyIndexBiv, setSelectedPropertyIndexBiv] =
         React.useState(0);
     const router = useRouter();
+    const [
+        state,
+        { set: setMapState, reset: resetState, undo, redo, canUndo, canRedo },
+    ] = useUndo({
+        geoJSON: geoJSON,
+        selectedProperty: selectedProperty,
+        selectedPropertyIndex: selectedPropertyIndex,
+        tags: tags,
+        description: description,
+        title: title,
+        selectedPropertyBiv: selectedPropertyBiv,
+        selectedPropertyIndexBiv: selectedPropertyIndexBiv,
+        legend: legend,
+    });
+
+    React.useEffect(() => {
+        const {
+            geoJSON,
+            selectedProperty,
+            selectedPropertyIndex,
+            tags,
+            description,
+            title,
+            selectedPropertyBiv,
+            selectedPropertyIndexBiv,
+            legend,
+        } = state.present;
+
+        setgeoJSON(geoJSON);
+        setSelectedProperty(selectedProperty);
+        setSelectedPropertyIndex(selectedPropertyIndex);
+        setTags(tags);
+        setDescription(description);
+        setTitle(title);
+        setSelectedPropertyBiv(selectedPropertyBiv);
+        setSelectedPropertyIndexBiv(selectedPropertyIndexBiv);
+        setLegend(legend);
+
+        const key = uuidv4();
+        setMapKey(key);
+    }, [state.present]);
 
     const onChange = () => {};
 
@@ -140,18 +193,18 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
     const updateLegendColor = (colorMin: string, colorMax: string) => {
         const newLegend = {
-            ...legend,
+            ...state.present.legend,
             colorMin,
             colorMax,
         };
 
-        setLegend(newLegend);
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+        });
     };
     const selectProperty = (event: SelectChangeEvent) => {
         const [property, indexStr] = event.target.value.split(":");
-        setSelectedProperty(property);
-        setSelectedPropertyIndex(parseInt(indexStr, 10));
-
         const values = geoJSON.features
             .map((feature: any) => feature.properties[property])
             .filter((value: any) => typeof value === "number");
@@ -164,7 +217,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             const maxSize = interpolateNumber(minValue, maxValue, maxValue);
 
             newLegend = {
-                ...legend,
+                ...state.present.legend,
                 valueMin: minValue,
                 valueMax: maxValue,
                 sizeMin: minSize,
@@ -172,20 +225,24 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             };
         } else {
             newLegend = {
-                ...legend,
+                ...state.present.legend,
                 valueMin: minValue,
                 valueMax: maxValue,
             };
         }
-        setLegend(newLegend);
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+            selectedProperty: property,
+            selectedPropertyIndex: parseInt(indexStr, 10),
+        });
+
         const key = uuidv4();
         setMapKey(key);
     };
 
     const selectPropertyXBiv = (event: SelectChangeEvent) => {
         const [property, indexStr] = event.target.value.split(":");
-        setSelectedProperty(property);
-        setSelectedPropertyIndex(parseInt(indexStr, 10));
 
         const values = geoJSON.features
             .map((feature: any) => feature.properties[property])
@@ -197,20 +254,23 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         let newLegend;
 
         newLegend = {
-            ...legend,
+            ...state.present.legend,
             xValueMin: minValue,
             xValueMax: maxValue,
         };
 
-        setLegend(newLegend);
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+            selectedProperty: property,
+            selectedPropertyIndex: parseInt(indexStr, 10),
+        });
         const key = uuidv4();
         setMapKey(key);
     };
 
     const selectPropertyYBiv = (event: SelectChangeEvent) => {
         const [property, indexStr] = event.target.value.split(":");
-        setSelectedPropertyBiv(property);
-        setSelectedPropertyIndexBiv(parseInt(indexStr, 10));
 
         const values = geoJSON.features
             .map((feature: any) => feature.properties[property])
@@ -222,12 +282,17 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         let newLegend;
 
         newLegend = {
-            ...legend,
+            ...state.present.legend,
             yValueMin: minValue,
             yValueMax: maxValue,
         };
 
-        setLegend(newLegend);
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+            selectedPropertyBiv: property,
+            selectedPropertyIndexBiv: parseInt(indexStr, 10),
+        });
         const key = uuidv4();
         setMapKey(key);
     };
@@ -251,45 +316,67 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
         setLegend(newLegend);
     };
+
+    const updateLegendColorsBiv = (
+        xColorMin: string,
+        xColorMax: string,
+        yColorMin: string,
+        yColorMax: string
+    ) => {
+        const newLegend = {
+            ...state.present.legend,
+            yColorMin: yColorMin,
+            yColorMax: yColorMax,
+            xColorMin: xColorMin,
+            xColorMax: xColorMax,
+        };
+
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+        });
+        const key = uuidv4();
+        setMapKey(key);
+    };
     const loadMap = async (id: string) => {
         try {
             setHasMap(false);
             const res = await axios.get(`/api/getMapById/${id}`);
-            setgeoJSON(res.data.map);
-            setHasMap(true);
-            setMapId(id);
-            setTags(res.data.mapProps.tags);
             setMapType(res.data.mapProps.maptype);
+            setgeoJSON(res.data.map);
+            setMapId(id);
+            // Gather all data first
+            const newGeoJSON = res.data.map;
+            const newTags = res.data.mapProps.tags;
+            const newTitle = res.data.mapProps.name || "";
+            const newDescription = res.data.description || "";
+            const newSelectedProperty =
+                res.data.mapProps.selectedProperty || "";
+            const newSelectedPropertyIndex =
+                res.data.mapProps.selectedPropertyIndex || 0;
+            const newSelectedPropertyBiv =
+                res.data.mapProps.selectedPropertyBiv || "";
+            const newSelectedPropertyIndexBiv =
+                res.data.mapProps.selectedPropertyIndexBiv || 0;
+            const newLegend = res.data.mapProps.legend || {
+                ...legend,
+            };
 
-            if (res.data.mapProps.name) {
-                setTitle(res.data.mapProps.name);
-            }
+            resetState({
+                geoJSON: newGeoJSON,
+                selectedProperty: newSelectedProperty,
+                selectedPropertyIndex: newSelectedPropertyIndex,
+                tags: newTags,
+                description: newDescription,
+                title: newTitle,
+                selectedPropertyBiv: newSelectedPropertyBiv,
+                selectedPropertyIndexBiv: newSelectedPropertyIndexBiv,
+                legend: newLegend,
+            });
 
-            if (res.data.mapProps.description) {
-                setDescription(res.data.description);
-            }
-
-            if (res.data.mapProps.selectedProperty) {
-                setSelectedProperty(res.data.mapProps.selectedProperty);
-                setSelectedPropertyIndex(
-                    res.data.mapProps.selectedPropertyIndex
-                );
-            }
-
-            if (res.data.mapProps.selectedPropertyBiv) {
-                setSelectedPropertyBiv(res.data.mapProps.selectedPropertyBiv);
-                setSelectedPropertyIndexBiv(
-                    res.data.mapProps.selectedPropertyIndexBiv
-                );
-            }
-
-            if (res.data.mapProps.legend) {
-                setLegend(res.data.mapProps.legend);
-            }
-
+            setHasMap(true);
             const key = uuidv4();
             setMapKey(key);
-            setHasMap(true);
         } catch (err) {
             console.error("Error loading map from DB", err);
         }
@@ -306,7 +393,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 feature.properties[selectedProperty] = properFormatedValue;
             }
         });
-        setgeoJSON(newGeoJSON);
 
         const values = newGeoJSON.features
             .map((feature: any) => feature.properties[selectedProperty])
@@ -320,7 +406,7 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             const maxSize = interpolateNumber(minValue, maxValue, maxValue);
 
             newLegend = {
-                ...legend,
+                ...state.present.legend,
                 valueMin: minValue,
                 valueMax: maxValue,
                 sizeMin: minSize,
@@ -328,13 +414,16 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             };
         } else {
             newLegend = {
-                ...legend,
+                ...state.present.legend,
                 valueMin: minValue,
                 valueMax: maxValue,
             };
         }
-        setLegend(newLegend);
-
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+            geoJSON: newGeoJSON,
+        });
         const key = uuidv4();
         setMapKey(key);
     };
@@ -355,7 +444,6 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 feature.properties[prop] = properFormatedValue;
             }
         });
-        setgeoJSON(newGeoJSON);
 
         const values = newGeoJSON.features
             .map((feature: any) => feature.properties[prop])
@@ -367,20 +455,23 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
 
         if (axis === "X") {
             newLegend = {
-                ...legend,
+                ...state.present.legend,
                 xValueMin: minValue,
                 xValueMax: maxValue,
             };
         } else if (axis === "Y") {
             newLegend = {
-                ...legend,
+                ...state.present.legend,
                 yValueMin: minValue,
                 yValueMax: maxValue,
             };
         }
 
-        setLegend(newLegend);
-
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+            geoJSON: newGeoJSON,
+        });
         const key = uuidv4();
         setMapKey(key);
     };
@@ -392,21 +483,33 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
                 feature.properties.name = newName;
             }
         });
-        setgeoJSON(newGeoJSON);
+        setMapState({
+            ...state.present,
+            geoJSON: newGeoJSON,
+        });
         const key = uuidv4();
         setMapKey(key);
     };
 
     const updateTags = (tags: string[]) => {
-        setTags(tags);
+        setMapState({
+            ...state.present,
+            tags: tags,
+        });
     };
 
     const updateDescription = (desc: string) => {
-        setDescription(desc);
+        setMapState({
+            ...state.present,
+            description: desc,
+        });
     };
 
     const updateTitle = (title: string) => {
-        setTitle(title);
+        setMapState({
+            ...state.present,
+            title: title,
+        });
     };
     const contextValue: MapContextType = {
         mapId,
@@ -438,6 +541,11 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         updateLegendColorBivX,
         updateLegendColorBivY,
         updateFeaturePropertyBiv,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
+        updateLegendColorsBiv,
     };
 
     return (
