@@ -13,26 +13,7 @@ interface MapCreateLoadingProps {
     ontitle: string;
     ontags: string;
 }
-async function convertFileToGeoJson(file: File): Promise<GeoJsonObject> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
 
-        reader.onload = (event) => {
-            try {
-                const geoJson = JSON.parse(event?.target?.result as string);
-                resolve(geoJson);
-            } catch (error) {
-                reject(new Error("Error parsing the file as JSON"));
-            }
-        };
-
-        reader.onerror = () => {
-            reject(new Error("Error reading the file"));
-        };
-
-        reader.readAsText(file);
-    });
-}
 
 const mapTypeConvert = (mapType: string) => {
     let type;
@@ -73,17 +54,7 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                 return;
             }
             try {
-                // Convert the file to a GeoJSON object
-                // const geoJson = await convertFileToGeoJson(uploadedFile);
-                // let type = mapTypeConvert(mapType) as string;
-
-                // // Encode the GeoJSON object
-                // const buffer = geobuf.encode(
-                //     geoJson as FeatureCollection,
-                //     new Pbf()
-                // );
-
-                // Check if buffer is not null before proceeding
+               
                 var formData = new FormData();
                 // Append your text fields
                 formData.append("name", ontitle);
@@ -94,11 +65,9 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                 // Append your binary data (buffer)
                 formData.append(
                     "uploadedFile",
-                    // new Blob([buffer], { type: "application/octet-stream" })
                     uploadedFile
                 );
-                //console.log("3");
-                //console.log(formData);
+         
 
                 try {
                     const response = await fetch("/api/createMap", {

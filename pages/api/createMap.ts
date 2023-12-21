@@ -49,23 +49,29 @@ const handler: NextApiHandler = async (
             }
 
             processedData = fs.readFileSync(files.uploadedFile.filepath);
+            let gj;
             if (fileType === "geojson" || fileType === "json") {
-
+                processedData = await fsPromises.readFile(
+                    files.uploadedFile.filepath,
+                    "utf8"
+                );
+                gj = JSON.parse(processedData);
             } else if (fileType === "kml") {
                 processedData = await FileUtils.processKML(
                     files.uploadedFile.filepath
                 );
+
+                let processed = JSON.stringify(processedData);
+                gj = JSON.parse(processed);
             } else if (fileType === "shp" || fileType == "zip") {
                 processedData = await FileUtils.processSHP(
                     files.uploadedFile.filepath
                 );
-            }else if(fileType === ".mintmaps"){
-                
+
+                let processed = JSON.stringify(processedData);
+                gj = JSON.parse(processed);
+            } else if (fileType === ".mintmaps") {
             }
-
-            let processed = JSON.stringify(processedData);
-            const gj = JSON.parse(processed);
-
             const uint8 = geobuf.encode(gj as FeatureCollection, new Pbf());
             const buffer = Buffer.from(uint8);
 
