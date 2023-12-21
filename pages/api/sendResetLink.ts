@@ -35,7 +35,7 @@ export default async function handler(
 
         // Send the email with the reset link
         //https://mintmaps.site//reset-password?token=${resetToken}
-        const resetLink = `http://localhost:3000/passwordresetform?token=${resetToken}`;
+        const resetLink = `http://mintmaps.site/passwordresetform?token=${resetToken}`;
         await sendResetEmail(email, resetLink);
 
         res.status(200).json({ message: "Reset link sent to email" });
