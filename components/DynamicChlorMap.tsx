@@ -82,7 +82,7 @@ const DynamicChlorMap: FC<{
         return {
             fillColor: color,
             weight: 2,
-            opacity: 1,
+            opacity: 0.7,
             color: "white",
             fillOpacity: 0.7,
         };

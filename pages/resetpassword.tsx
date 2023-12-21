@@ -38,7 +38,7 @@ const ResetPasswordPage = () => {
         }
     };
 
-    if(!authContext.isLoggedIn) return <InvalidAuthError />;
+    //if(!authContext.isLoggedIn) return <InvalidAuthError />;
     return (
         <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.form}>
