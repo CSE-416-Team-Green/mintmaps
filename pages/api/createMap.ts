@@ -47,6 +47,7 @@ const handler: NextApiHandler = async (
             if (!file) {
                 return res.status(400).json({ error: "No file upload failed" });
             }
+            console.log(fileType);
 
             processedData = fs.readFileSync(files.uploadedFile.filepath);
             let gj;
@@ -70,7 +71,44 @@ const handler: NextApiHandler = async (
 
                 let processed = JSON.stringify(processedData);
                 gj = JSON.parse(processed);
-            } else if (fileType === ".mintmaps") {
+            } else if (fileType === "mintmap") {
+                const fileBuffer = await fsPromises.readFile(
+                    files.uploadedFile.filepath
+                );
+                const fileContent = fileBuffer.toString("utf8");
+
+                const mm = JSON.parse(fileContent);
+                const geoJSONBuffer = Buffer.from(mm.geoJSON.data);
+
+                const newMap = new MapModel({
+                    name: mm.name,
+                    tags: mm.tags ?? [],
+                    geoJSON: geoJSONBuffer,
+                    maptype,
+                    createdBy: email,
+                    description: mm.description,
+                    legend: mm.legend,
+                    selectedProperty: mm.selectedProperty ?? "",
+                    selectedPropertyBiv: mm.selectedPropertyBiv ?? "",
+                    selectedPropertyIndex: mm.selectedPropertyIndex ?? "",
+                    selectedPropertyIndexBiv: mm.selectedPropertyIndexBiv ?? 0,
+                });
+
+                console.log(newMap); 
+                try {
+                    await newMap.save();
+                    res.status(200).json({
+                        message: "Map created successfully",
+                        map: newMap,
+                    });
+                    return;
+                } catch (dbErr) {
+                    console.error("Database save error:", dbErr);
+                    res.status(500).json({
+                        message: "Error saving to database",
+                    });
+                    return;
+                }
             }
             const uint8 = geobuf.encode(gj as FeatureCollection, new Pbf());
             const buffer = Buffer.from(uint8);
