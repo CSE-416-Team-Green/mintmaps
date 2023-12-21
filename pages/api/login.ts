@@ -27,7 +27,7 @@ export default async function handler(
         const { email, password } = req.body;
 
         // check if there is an existing account with this email
-        const hasAccount = await User.findOne({ email: email });
+        const hasAccount = await User.findOne({ email: email.toLowerCase() });
 
         if (hasAccount) {
             // check if account type is email

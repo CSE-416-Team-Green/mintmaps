@@ -42,7 +42,7 @@ export default async function handler(
                 const newUser = new User({
                     userName: userName,
                     accountType: "email",
-                    email: email,
+                    email: email.toLowerCase(),
                     password: hashedPassword,
                     salt: salt,
                     settings: newSettings._id,

@@ -19,7 +19,7 @@ export default async function handler(
         await connectDb();
 
         // Look up the user by email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -35,7 +35,7 @@ export default async function handler(
 
         // Send the email with the reset link
         //https://mintmaps.site//reset-password?token=${resetToken}
-        const resetLink = `http://localhost:3000/passwordresetform?token=${resetToken}`;
+        const resetLink = `http://mintmaps.site/passwordresetform?token=${resetToken}`;
         await sendResetEmail(email, resetLink);
 
         res.status(200).json({ message: "Reset link sent to email" });

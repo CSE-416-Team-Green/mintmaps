@@ -13,26 +13,6 @@ interface MapCreateLoadingProps {
     ontitle: string;
     ontags: string;
 }
-async function convertFileToGeoJson(file: File): Promise<GeoJsonObject> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            try {
-                const geoJson = JSON.parse(event?.target?.result as string);
-                resolve(geoJson);
-            } catch (error) {
-                reject(new Error("Error parsing the file as JSON"));
-            }
-        };
-
-        reader.onerror = () => {
-            reject(new Error("Error reading the file"));
-        };
-
-        reader.readAsText(file);
-    });
-}
 
 
 const mapTypeConvert = (mapType: string) => {
@@ -74,56 +54,41 @@ const MapCreateLoading: React.FC<MapCreateLoadingProps> = ({
                 return;
             }
             try {
-                // Convert the file to a GeoJSON object
-                const geoJson = await convertFileToGeoJson(uploadedFile);
-                let type = mapTypeConvert(mapType) as string;
+               
+                var formData = new FormData();
+                // Append your text fields
+                formData.append("name", ontitle);
+                formData.append("maptype", mapTypeConvert(mapType) as string);
+                formData.append("tag", ontags);
+                formData.append("email", localStorage.getItem("email") ?? "");
 
-                // Encode the GeoJSON object
-                const buffer = geobuf.encode(
-                    geoJson as FeatureCollection,
-                    new Pbf()
+                // Append your binary data (buffer)
+                formData.append(
+                    "uploadedFile",
+                    uploadedFile
                 );
+         
 
-                // Check if buffer is not null before proceeding
-                if (buffer) {
-                    var formData = new FormData();
-                    // Append your text fields
-                    formData.append("name", ontitle);
-                    formData.append("maptype", type);
-                    formData.append("tag", ontags);
-                    formData.append("email", localStorage.getItem("email") ?? '');
+                try {
+                    const response = await fetch("/api/createMap", {
+                        method: "POST",
+                        body: formData,
+                    });
 
-                    // Append your binary data (buffer)
-                    formData.append(
-                        "geojson",
-                        new Blob([buffer], { type: "application/octet-stream" })
-                    );
-                    //console.log("3");
-                    //console.log(formData);
-
-                    try {
-                        const response = await fetch("/api/createMap", {
-                            method: "POST",
-                            body: formData,
-                        });
-
-                        if (response.ok) {
-                            // Handle successful upload
-                            const responseData = await response.json();
-                            localStorage.setItem("mapId", responseData.map._id);
-                        } else {
-                            // Handle server errors
-                            throw new Error("Server responded with an error");
-                        }
-                    } catch (err) {
-                        if (err instanceof Error) {
-                            setError(err.message);
-                        }
-                    } finally {
-                        setLoading(false);
+                    if (response.ok) {
+                        // Handle successful upload
+                        const responseData = await response.json();
+                        localStorage.setItem("mapId", responseData.map._id);
+                    } else {
+                        // Handle server errors
+                        throw new Error("Server responded with an error");
                     }
-                } else {
-                    throw new Error("Failed to encode the GeoJSON data");
+                } catch (err) {
+                    if (err instanceof Error) {
+                        setError(err.message);
+                    }
+                } finally {
+                    setLoading(false);
                 }
             } catch (err) {
                 if (err instanceof Error) {

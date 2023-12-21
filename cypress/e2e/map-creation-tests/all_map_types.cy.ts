@@ -1,6 +1,21 @@
 describe("All map types should be available for map creation", () => {
     beforeEach(() => {
+        cy.visit("http://localhost:3000/login");
+        cy.contains("Email")
+            .parent()
+            .find("input")
+            .type("rabdulaz.accts@gmail.com");
+
+        cy.contains("Password").parent().find("input").type("12345");
+
+        cy.contains("Log in").click();
+        cy.on("window:alert", () => true);
+
+        cy.url().should("include", "/home"); // Replace '/map-creation' with the expected URL segment
         cy.visit("http://localhost:3000/map-creation");
+        cy.contains("Select a preset map").click();
+        cy.contains("Africa").click();
+
         cy.contains("Next").click();
     });
 
