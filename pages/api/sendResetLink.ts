@@ -19,7 +19,7 @@ export default async function handler(
         await connectDb();
 
         // Look up the user by email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
