@@ -3,6 +3,12 @@ import fs from "fs";
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import connectDb from "@/db";
 import MapModel from "@/models/Map";
+import { FileUtils } from "../../utils/fileConversionUtils";
+import Pbf from "pbf";
+import geobuf from "geobuf";
+import { GeoJsonObject, FeatureCollection } from "geojson";
+import path from "path";
+import { promises as fsPromises } from "fs";
 
 export const config = {
     api: {
@@ -31,24 +37,44 @@ const handler: NextApiHandler = async (
             }
 
             const { name, tag, maptype, email } = fields;
-            let geojsonBuffer = null;
+            const file = files.uploadedFile;
+            const fileType = file.originalFilename
+                .split(".")
+                .pop()
+                .toLowerCase();
+            let processedData;
 
-            if (files.geojson) {
-                try {
-                    geojsonBuffer = fs.readFileSync(files.geojson.filepath);
-                    fs.unlinkSync(files.geojson.filepath); // Cleanup the temporary file
-                } catch (fileErr) {
-                    console.error("File handling error:", fileErr);
-                    return res
-                        .status(500)
-                        .json({ message: "Error handling the file" });
-                }
+            if (!file) {
+                return res.status(400).json({ error: "No file upload failed" });
             }
+
+            processedData = fs.readFileSync(files.uploadedFile.filepath);
+            if (fileType === "geojson" || fileType === "json") {
+
+            } else if (fileType === "kml") {
+                processedData = await FileUtils.processKML(
+                    files.uploadedFile.filepath
+                );
+            } else if (fileType === "shp" || fileType == "zip") {
+                processedData = await FileUtils.processSHP(
+                    files.uploadedFile.filepath
+                );
+            }else if(fileType === ".mintmaps"){
+                
+            }
+
+            let processed = JSON.stringify(processedData);
+            const gj = JSON.parse(processed);
+
+            const uint8 = geobuf.encode(gj as FeatureCollection, new Pbf());
+            const buffer = Buffer.from(uint8);
+
+            fs.unlinkSync(files.uploadedFile.filepath);
 
             const newMap = new MapModel({
                 name,
                 tags: tag ? tag.split(",") : [],
-                geoJSON: geojsonBuffer,
+                geoJSON: buffer,
                 maptype,
                 createdBy: email,
             });
