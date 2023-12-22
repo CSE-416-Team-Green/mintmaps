@@ -106,16 +106,28 @@ The new property will then be available in the Data to Map dropdown, and will ha
 
 ![complete](/public/whenupload.png)
 
+## Uploading a profile picture
 
+To upload a profile picture navigate to your edit profile page by clicking on your profile picture in the header and then clicking on the edit button on the top right. After you click on choose file you will be prompted to upload a new profile picture. Click on save changes once you are satisfied with your new profile picture.
 
+![profile-picture](/public/profile-picture.png)
 
+## Editing your profile
 
+To edit your profile info navigate to your edit profile page by clicking on your profile picture in the header and then clicking on the edit button on the top right. You will be able to edit your name, and bio by using the fields under profile picture. Click on save changes once you are satisfied with your changes.
 
+![profile-edit](/public/profile-edit.png)
 
+## Resetting your password
 
+To reset your password navigate to your edit profile page by clicking on your profile picture in the header and then clicking on the edit button on the top right. Click on the reset password button. You will be redirected to a page where you can enter your email.
 
+![email-reset](/public/email-reset.png)
 
+After you enter your email you will be sent an email with a link to reset your password. Click on the link and you will be redirected to a page where you can enter your new password.
 
+## Deleting your account
 
+To delete your account navigate to your edit profile page by clicking on your profile picture in the header and then clicking on the edit button on the top right. Click on the delete account button. You will then be prompted to confirm the deletion of your account.
 
-
+![delete-account](/public/delete-account.png)
