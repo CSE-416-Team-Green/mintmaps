@@ -1,8 +1,10 @@
 import { FC } from 'react';
-import { Box, Avatar } from '@mui/material';
+import { Box, Avatar, IconButton } from '@mui/material';
 
 const ProfileUser: FC<{
     username: string;
+    profilePic: string;
+    userId: string;
 }> = (props) => {
     return (
         <Box sx={{
@@ -11,7 +13,9 @@ const ProfileUser: FC<{
             alignItems: 'center',
             columnGap: '10px',
         }}>
-            <Avatar />
+            <IconButton href={`/user-profile/${props.userId}`}>
+                <Avatar src={props.profilePic} />
+            </IconButton>
             <Box sx={{
                 fontSize: '20px',
             }}>

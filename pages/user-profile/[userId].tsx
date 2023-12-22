@@ -140,19 +140,19 @@ export default function UserProfile() {
                                 alignItems={"left"}
                                 rowSpacing={1.5}
                             >
-                                <Grid item xs={3}>
+                                <Grid item xs={5}>
                                     <div className={styles.usernameText}>
                                         {username}
                                     </div>
                                 </Grid>
                                 {isOwnProfile ? (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <div style={{ minWidth: 120, minHeight: 40, visibility: 'hidden' }}>
                                             {/* Invisible Placeholder */}
                                         </div>
                                     </Grid>
                                 ) : (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <Button
                                             sx={{ minWidth: 120, minHeight: 40 }}
                                             variant="contained"
@@ -226,6 +226,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "user" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("user")}
                                 >
@@ -238,6 +239,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "liked" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("liked")}
                                 >
@@ -250,6 +252,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "saved" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("saved")}
                                 >
@@ -262,6 +265,7 @@ export default function UserProfile() {
                                         paddingTop: "30px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "following" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("following")}
                                 >
@@ -275,6 +279,7 @@ export default function UserProfile() {
                                         paddingBottom: "250px",
                                         fontSize: "25px",
                                         cursor: "pointer",
+                                        color: currentTab == "followers" ? "#2ecc71": "gray"
                                     }}
                                     onClick={() => handleTabChange("followers")}
                                 >

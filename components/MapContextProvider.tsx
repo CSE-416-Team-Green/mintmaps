@@ -12,82 +12,10 @@ import { FeatureCollection } from "geojson";
 import { useRouter } from "next/navigation";
 import { interpolateColor, interpolateNumber } from "@/libs/interpolate";
 import useUndo from "use-undo";
+import { MapContextType, MapType } from "@/types/Types";
 
 interface CustomProviderProps {
     children: React.ReactNode;
-}
-
-interface Legend {
-    title: string;
-    valueMin: number;
-    valueMax: number;
-    colorMin: string;
-    colorMax: string;
-    sizeMin: number;
-    sizeMax: number;
-    xTitle: string;
-    yTitle: string;
-    xValueMin: number;
-    xValueMax: number;
-    xColorMin: string;
-    xColorMax: string;
-    yValueMin: number;
-    yValueMax: number;
-    yColorMin: string;
-    yColorMax: string;
-}
-
-type MapType =
-    | "point"
-    | "heat"
-    | "choropleth"
-    | "bivariate-choropleth"
-    | "proportional-symbol";
-
-interface MapContextType {
-    mapId: string;
-    onChange: () => void;
-    saveMap: () => void;
-    setMap: (map: any) => void;
-    loadMap: (id: string) => Promise<void>;
-    legend: Partial<Legend>;
-    mapType: MapType | null;
-    geoJSON: GeoJsonObject;
-    hasMap: boolean;
-    mapKey: string;
-    selectedProperty: string;
-    selectedPropertyIndex: number;
-    selectProperty: (event: SelectChangeEvent) => void;
-    updateLegendColor: (colorMin: string, colorMax: string) => void;
-    updateFeatureProperty: (name: string, newValue: any) => void;
-    updateFeatureName: (oldName: string, newName: string) => void;
-    tags: string[];
-    title: string;
-    description: string;
-    updateTags: (tags: string[]) => void;
-    updateDescription: (desc: string) => void;
-    updateTitle: (title: string) => void;
-    selectedPropertyBiv: string;
-    selectedPropertyIndexBiv: number;
-    selectPropertyXBiv: (event: SelectChangeEvent) => void;
-    selectPropertyYBiv: (event: SelectChangeEvent) => void;
-    updateLegendColorBivX: (colorMin: string, colorMax: string) => void;
-    updateLegendColorBivY: (colorMin: string, colorMax: string) => void;
-    updateFeaturePropertyBiv: (
-        name: string,
-        newValue: any,
-        axis: string
-    ) => void;
-    undo: () => void;
-    redo: () => void;
-    canUndo: boolean;
-    canRedo: boolean;
-    updateLegendColorsBiv: (
-        xColorMin: string,
-        xColorMax: string,
-        yColorMin: string,
-        yColorMax: string
-    ) => void;
 }
 
 const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
@@ -122,6 +50,9 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     const [selectedPropertyIndexBiv, setSelectedPropertyIndexBiv] =
         React.useState(0);
     const router = useRouter();
+    const [readyForPoint, setReadyForPoint] = React.useState(false);
+    const [newPointName, setNewPointName] = React.useState("");
+
     const [
         state,
         { set: setMapState, reset: resetState, undo, redo, canUndo, canRedo },
@@ -165,6 +96,28 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
     }, [state.present]);
 
     const onChange = () => {};
+
+    const addNewProperty = (propertyName: string, initialValue: any) => {
+        const newGeoJSON = JSON.parse(JSON.stringify(geoJSON));
+
+        if (
+            newGeoJSON.features.some(
+                (feature: any) => propertyName in feature.properties
+            )
+        ) {
+            console.warn(`Property '${propertyName}' already exists.`);
+            return;
+        }
+
+        newGeoJSON.features.forEach((feature: any) => {
+            feature.properties[propertyName] = parseFloat(initialValue);
+        });
+
+        setMapState({
+            ...state.present,
+            geoJSON: newGeoJSON,
+        });
+    };
 
     const saveMap = async () => {
         const updatedMap = {
@@ -329,6 +282,22 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             yColorMax: yColorMax,
             xColorMin: xColorMin,
             xColorMax: xColorMax,
+        };
+
+        setMapState({
+            ...state.present,
+            legend: newLegend,
+        });
+        const key = uuidv4();
+        setMapKey(key);
+    };
+
+    const updateLegendPoint = (color: string, size: number) => {
+        const newLegend = {
+            ...state.present.legend,
+            colorMax: color,
+            colorMin: color,
+            sizeMax: size,
         };
 
         setMapState({
@@ -511,6 +480,37 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
             title: title,
         });
     };
+
+    const setPointIntake = (name: string) => {
+        setReadyForPoint(true);
+        setNewPointName(name);
+    };
+    const addNewPoint = (coords: any, name: string) => {
+        const newPoint = {
+            type: "Feature",
+            properties: {
+                name: name,
+            },
+            geometry: {
+                type: "Point",
+                coordinates: [coords.lng, coords.lat],
+            },
+        };
+
+        if (geoJSON && geoJSON.features) {
+            const newGeoJSON = {
+                ...geoJSON,
+                features: [...geoJSON.features, newPoint],
+            };
+
+            setMapState({
+                ...state.present,
+                geoJSON: newGeoJSON,
+            });
+        }
+        setReadyForPoint(false);
+        setNewPointName("");
+    };
     const contextValue: MapContextType = {
         mapId,
         onChange,
@@ -546,6 +546,12 @@ const MapContextProvider: React.FC<CustomProviderProps> = ({ children }) => {
         canUndo,
         canRedo,
         updateLegendColorsBiv,
+        addNewProperty,
+        readyForPoint,
+        addNewPoint,
+        setPointIntake,
+        newPointName,
+        updateLegendPoint,
     };
 
     return (

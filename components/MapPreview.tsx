@@ -21,6 +21,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { FC } from 'react';
 import MapModel from '@/models/Map';
 import AuthContext from './authContext';
+import FormatDateText from "@/utils/dateTextUtils";
 
 const MapPreview: FC<{
     map: any
@@ -51,7 +52,8 @@ const MapPreview: FC<{
         }).then((response) => {
             response.json().then(data => {
                 userInfo = data;
-                setProfilePic(userInfo.profilePic);
+                if(userInfo?.profilePic)
+                    setProfilePic(userInfo.profilePic);
             });
         });
     }
@@ -154,8 +156,11 @@ const MapPreview: FC<{
                            
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography sx={{float:'right', fontSize:'12px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
-                                {mapInfo.uploadDate}
+                            <Typography sx={{float:'right', fontSize:'10px', overflow:'hidden', textOverflow: 'ellipsis', width: '80px', height: '20px'}}>
+                                    {FormatDateText.formatDateText(
+                                        mapInfo.uploadDate,
+                                        ""
+                                    )}
                             </Typography>
                         </Grid>
                     </Grid>

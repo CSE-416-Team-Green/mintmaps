@@ -10,6 +10,7 @@ import SearchResults from "@/components/SearchResults";
 
 export default function Home() {
     const [recentMaps, setRecentMaps] = React.useState<string[]>([]);
+    const [featuredMaps, setFeaturedMaps] = React.useState<string[]>([]);
 
     React.useEffect(() => {
         const fetchUserData = async () => {
@@ -28,8 +29,36 @@ export default function Home() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setRecentMaps(data.reverse() ?? []); //TODO GET RID OF REVERSE HERE< DO IT IN BACK END
-                    //console.log(recentMaps);
+                    setRecentMaps(data ?? []);
+                } else {
+                    throw new Error("Failed to fetch data");
+                }
+            } catch (error) {
+                console.error("Error performing search:", error);
+                alert("An error occurred while performing your search.");
+            }
+        };
+        fetchUserData();
+    }, []);
+    
+    React.useEffect(() => {
+        const fetchUserData = async () => {
+            const payload = {
+                type: "",
+                filter: "",
+                sort: "featured",
+                searchTerm: "",
+            };
+            try {
+                const response = await fetch("/api/searchMaps", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setFeaturedMaps(data ?? []);
                 } else {
                     throw new Error("Failed to fetch data");
                 }
@@ -56,14 +85,8 @@ export default function Home() {
                 <Container>
                     <div className={styles.homeText}>Featured</div>
                     <div className={styles.homeBox}>
-                        <Grid
-                            container
-                            direction={"row"}
-                            alignItems={"left"}
-                            justifyContent={"left"}
-                        ></Grid>
+                        <SearchResults maps={featuredMaps} />
                     </div>
-                    <div className={styles.homeText}>Following</div>
                     <div className={styles.homeBox}>
                         <Grid
                             container

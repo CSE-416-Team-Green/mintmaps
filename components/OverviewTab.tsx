@@ -19,39 +19,6 @@ const OverviewTab = () => {
     return (
         <Box>
             <RegionAccordion geoJSON={mapContext.geoJSON as FeatureCollection} />
-            {/* {items.map((item, index) => (
-                <Accordion>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                columnGap: "8px",
-                            }}
-                        >
-                            {index < 3 ? <CropIcon /> : <PushPinIcon />}
-                            {item}
-                        </Box>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                width: "100%",
-                                rowGap: "16px",
-                            }}
-                        >
-                            <TextField label="Name" variant="outlined" />
-                            <TextField
-                                label="Data"
-                                variant="outlined"
-                                multiline
-                            />
-                        </Box>
-                    </AccordionDetails>
-                </Accordion>
-            ))} */}
         </Box>
     );
 };
