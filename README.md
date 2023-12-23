@@ -45,6 +45,14 @@ Once in the application you will be sent to the home page, where you can see rec
 
 ![home](/public/home.png)
 
+On the top of the screen in the header, you will see the search bar. By clicking the filter button to the right of the search bar, you can change which parameters to seach by.
+
+![searchbar](/public/searchbar.png)
+
+By default, you will be searching by title, for all map types, and sorting by maps with the most views. However, these parameters can be changed at any time from this filter menu. In order to search simply type a search term in the search box and hit the search icon on the left of the bar. You will then be brought to the search results page where you can see the results.
+
+![searchresults](/public/searchresults.png)
+
 ## Map Info
 
 You can click on any map you see and go to our map info page where you can like, comment, download, and perform other social features
@@ -56,6 +64,14 @@ The map info page also has all of our export and forking features
 ![export](/public/export.png)
 
 In this area you can like and dislike, export as an image first selecting your desired format, share via a link, fork the application, download our custom .mintmaps file, and bookmark the map to save for later. You may also follow the user who created the map if you like. When viewing a map you created a special Pencil icon will be available if youd like to edit it further. 
+
+## View profile
+
+By clicking on someone's name or profile picture, you will be sent to their profile. On this screen, you will see their profile information, as well as many tabs to sort through their maps, followers, and users that they are following. You will also be able to follow the user or click the share button to get a link to their profile copied to your clipboard.
+
+![userprofile](/public/userprofile.png)
+
+![userfollowers](/public/userfollowers.png)
 
 ## Creating a new map
 
